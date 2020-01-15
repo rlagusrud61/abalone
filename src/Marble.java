@@ -1,10 +1,13 @@
 
-public enum Marble {
-    EMPTY,
-    RED,
-    BlUE,
-    BlACK,
-    WHITE
 
-}
+
+    public enum Marble {
+        EMPTY,
+        RED,
+        BLUE,
+        BLACK,
+        WHITE
+    }
+
+
 

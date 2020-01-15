@@ -4,10 +4,10 @@
     public enum Marble {
         EMPTY,
         RED,
-        BlUE,
-        BlACK,
+        BLUE,
+        BLACK,
         WHITE
     }
 
 
-}
+

@@ -52,17 +52,18 @@ public class Board {
         for (int i = 0; i < fields.length; i++) {
             fields[i] = Marble.EMPTY;
         }
-        for (int i = 0; i < 12; i++ ) {
+        for (int i = 0; i < 12; i++) {
             fields[i] = Marble.BlACK;
         }
-        for (int i = 14; i < 17; i++ ) {
+        for (int i = 14; i < 17; i++) {
             fields[i] = Marble.BlACK;
         }
-        for (int i = 51; i < fields.length; i++ ) {
+        for (int i = 51; i < fields.length; i++) {
             fields[i] = Marble.WHITE;
         }
-        for (int i = 46; i < 48; i++ ) {
+        for (int i = 46; i < 48; i++) {
             fields[i] = Marble.WHITE;
         }
     }
+
 }

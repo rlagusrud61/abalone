@@ -36,8 +36,8 @@ public abstract class Player {
     /**
      * Returns the mark of the player.
      */
-    public Mark getMark() {
-        return mark;
+    public Marble getMarble() {
+        return marble;
     }
 
     /**
@@ -60,7 +60,7 @@ public abstract class Player {
      */
     public void makeMove(Board board) {
         int choice = determineMove(board);
-        board.setField(choice, getMark());
+        board.setField(choice, getMarble());
     }
 
 }

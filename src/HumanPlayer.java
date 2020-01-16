@@ -27,7 +27,7 @@ public class HumanPlayer extends Player {
      * @requires board is not null
      * @ensures the returned in is a valid field index and that field is empty
      */
-    public int determineMove(Board board) {
+    public int[] determineMove(Board board) {
         while (true) {
             String prompt = "> " + getName() + " (" + getMarble().toString() + ")"
                     + ", what is your choice? ";
@@ -35,104 +35,137 @@ public class HumanPlayer extends Player {
             System.out.println(prompt);
             String input = TextIO.getlnString();
             String[] commands = input.split(";");
+            int marble1 = 0;
             int marble2 = 0;
             int marble3 = 0;
+            int index = 0;
+            int[] result = new int[commands.length - 1];
             int[] intcommands = new int[commands.length];
             boolean valid = board.isField(intcommands[1]);
-            if (commands.length > 2) {
-                marble2 = intcommands[2];
-                valid = board.isField(intcommands[1]) && board.isField(marble2);
-            }
-            if (commands.length > 3) {
-                marble3 = intcommands[3];
-                valid = board.isField(intcommands[1]) && board.isField(marble2) && board.isField(marble3);
-
-            }
             for (int i = 0; i < commands.length; i++) {
                 intcommands[i] = Integer.parseInt(commands[i]);
             }
-            int[] rowcol = board.convertToRowCol(intcommands[1]);
-            int[] rowcoltest = rowcol;
-            while (valid) {
-                switch (intcommands[0]) {
-                    case 0:
-
-                        if (rowcol[0] > 4) {
-                            rowcoltest[0] = rowcoltest[0] - 1;
-                            rowcoltest[1] = rowcoltest[1] + 1;
-                        } else {
-                            rowcoltest[0] = rowcoltest[0] - 1;
-
-                        }
-                        if (board.isEmptyField(rowcoltest) || board.convertToInt(rowcoltest) == marble2 || board.convertToInt(rowcoltest) == marble3) {
-
-                            return board.convertToInt(rowcoltest);
-                        }
-
-                        break;
-                    case 1:
-                        rowcoltest[1] = rowcoltest[1] + 1;
-                        if (board.isEmptyField(rowcoltest)) {
-                            return board.convertToInt(rowcoltest);
-                        }
-                        break;
-                    case 2:
-                        if (rowcol[0] < 4) {
-                            rowcoltest[0] = rowcoltest[0] + 1;
-                            rowcoltest[1] = rowcoltest[1] + 1;
-                        } else {
-                            rowcoltest[0] = rowcoltest[0] + 1;
-
-                        }
-                        if (board.isEmptyField(rowcoltest)) {
-
-                            return board.convertToInt(rowcoltest);
-                        }
-                        break;
-                    case 3:
-                        if (rowcol[0] > 4) {
-                            rowcoltest[0] = rowcoltest[0] + 1;
-                            rowcoltest[1] = rowcoltest[1] - 1;
-                        } else {
-                            rowcoltest[0] = rowcoltest[0] + 1;
-
-                        }
-                        if (board.isEmptyField(rowcoltest)) {
-
-                            return board.convertToInt(rowcoltest);
-                        }
-                        break;
-                    case 4:
-                        rowcoltest[1] = rowcoltest[1] - 1;
-                        if (board.isEmptyField(rowcoltest)) {
-                            return board.convertToInt(rowcoltest);
-                        }
-                        break;
-
-                    case 5:
-                        if (rowcol[0] < 4) {
-                            rowcoltest[0] = rowcoltest[0] - 1;
-                            rowcoltest[1] = rowcoltest[1] - 1;
-                        } else {
-                            rowcoltest[0] = rowcoltest[0] - 1;
-
-                        }
-                        if (board.isEmptyField(rowcoltest)) {
-
-                            return board.convertToInt(rowcoltest);
-                        }
-
-                        break;
+            for (int i = 1; i < intcommands.length; i++) {
+                marble1 = intcommands[i];
+                if (commands.length > 2) {
+                    if (i + 1 > 3) {
+                        marble2 = intcommands[(i + 1) & 3];
+                    } else {
+                        marble2 = intcommands[i + 1];
+                    }
+                    valid = board.isField(marble1) && board.isField(marble2);
                 }
-                System.out.println("ERROR: field " + input
-                        + " is no valid choice.");
-                System.out.println(prompt);
-                input = TextIO.getlnString();
+                if (commands.length > 3) {
+                    if (i + 2 > 3) {
+                        marble3 = intcommands[(i + 2) % 3];
+                    } else {
+                        marble3 = intcommands[i + 2];
+                    }
+                    valid = board.isField(intcommands[1]) && board.isField(marble2) && board.isField(marble3);
+
+                }
+
+                int[] rowcol = board.convertToRowCol(marble1);
+                int[] rowcoltest = rowcol;
+
+                    switch (intcommands[0]) {
+                        case 0:
+
+                            if (rowcol[0] > 4) {
+                                rowcoltest[0] = rowcoltest[0] - 1;
+                                rowcoltest[1] = rowcoltest[1] + 1;
+                            } else {
+                                rowcoltest[0] = rowcoltest[0] - 1;
+
+                            }
+                            if (board.isEmptyField(rowcoltest) || board.convertToInt(rowcoltest) == marble2 || board.convertToInt(rowcoltest) == marble3) {
+
+                                result[i] = board.convertToInt(rowcoltest);
+                            } else {
+                                valid = false;
+                            }
+
+                            break;
+                        case 1:
+                            rowcoltest[1] = rowcoltest[1] + 1;
+                            if (board.isEmptyField(rowcoltest)) {
+                                result[i] = board.convertToInt(rowcoltest);
+                            } else {
+                                valid = false;
+                            }
+                            break;
+                        case 2:
+                            if (rowcol[0] < 4) {
+                                rowcoltest[0] = rowcoltest[0] + 1;
+                                rowcoltest[1] = rowcoltest[1] + 1;
+                            } else {
+                                rowcoltest[0] = rowcoltest[0] + 1;
+
+                            }
+                            if (board.isEmptyField(rowcoltest)) {
+
+                                result[i] = board.convertToInt(rowcoltest);
+                                ;
+                            } else {
+                                valid = false;
+                            }
+                            break;
+                        case 3:
+                            if (rowcol[0] > 4) {
+                                rowcoltest[0] = rowcoltest[0] + 1;
+                                rowcoltest[1] = rowcoltest[1] - 1;
+                            } else {
+                                rowcoltest[0] = rowcoltest[0] + 1;
+
+                            }
+                            if (board.isEmptyField(rowcoltest)) {
+
+                                result[i] = board.convertToInt(rowcoltest);
+                                ;
+                            } else {
+                                valid = false;
+                            }
+                            break;
+                        case 4:
+                            rowcoltest[1] = rowcoltest[1] - 1;
+                            if (board.isEmptyField(rowcoltest)) {
+                                result[i] = board.convertToInt(rowcoltest);
+                            } else {
+                                valid = false;
+                            }
+                            break;
+
+                        case 5:
+                            if (rowcol[0] < 4) {
+                                rowcoltest[0] = rowcoltest[0] - 1;
+                                rowcoltest[1] = rowcoltest[1] - 1;
+                            } else {
+                                rowcoltest[0] = rowcoltest[0] - 1;
+
+                            }
+                            if (board.isEmptyField(rowcoltest)) {
+
+                                result[i] = board.convertToInt(rowcoltest);
+                            } else {
+                                valid = false;
+                            }
+
+                            break;
+
+                    }
+                    if (valid) {
+                        return result;
+                    }
+                    System.out.println("ERROR: field " + input
+                            + " is no valid choice.");
+                    System.out.println(prompt);
+                    input = TextIO.getlnString();
+
+
 
             }
-
         }
-    }
 
     }
+}
 

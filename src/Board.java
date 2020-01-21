@@ -2,15 +2,12 @@
 
 public class Board {
 
-    public static void main(String[] args) {
-        System.out.println("Hello");
-        Board board = new Board();
-        System.out.println(board.getField(11));
-        System.out.println(board.getField(40));
-    }
+    private int deadBlackCount;
+    private int deadWhiteCount;
+    private int deadRedCount;
+    private int deadBlueCount;
+    private int[] rowSizes = new int[]{5, 6, 7, 8, 9, 8, 7, 6, 5};
 
-    private int blackcount;
-    private int whitecount;
     private Marble[] fields;
 
 
@@ -20,13 +17,17 @@ public class Board {
         reset2P();
     }
 
-    private int[] size = new int[]{5, 6, 7, 8, 9, 8, 7, 6, 5};
-
+    public static void main(String[] args) {
+        System.out.println("Hello");
+        Board board = new Board();
+        board.reset3P();
+        System.out.println(board.getField(12));
+    }
 
     public int convertToInt(int[] cord) {
         int result = 0;
         for (int i = 0; i < cord[0]; i++) {
-            result += size[i];
+            result += rowSizes[i];
         }
         result += cord[2] + 1;
         return result;
@@ -37,8 +38,8 @@ public class Board {
         int col = a;
         int row = 0;
         for (int i = 0; i < 9; i++) {
-            if (col > size[i]) {
-                col = col - size[i];
+            if (col > rowSizes[i]) {
+                col = col - rowSizes[i];
                 row = i;
             }
         }
@@ -70,6 +71,40 @@ public class Board {
             fields[i] = Marble.WHITE;
         }
     }
+
+    public void reset3P() {
+        //Set all fields to empty
+        for (int i = 0; i < fields.length; i++) {
+            fields[i] = Marble.EMPTY;
+        }
+
+        //Set fields to blue
+        for (int i = 51; i < fields.length; i++) {
+            fields[i] = Marble.BLUE;
+        }
+
+        //Set fields to White and Black
+        int index = 0;
+        for (int i = 0; i < 5; i++) {
+            int rowSize = rowSizes[i];
+
+            setField(index, Marble.WHITE);
+            setField(index + 1, Marble.WHITE);
+            setField(index + rowSize - 2, Marble.BLACK);
+            setField(index + rowSize - 1, Marble.BLACK);
+            index += rowSize;
+        }
+        setField(36, Marble.WHITE);
+        setField(43, Marble.BLACK);
+
+
+    }
+
+    public void reset4P() {
+
+    }
+
+    //TODO Implement and reset4P()
 
     public boolean isField(int index) {
 
@@ -174,9 +209,9 @@ public class Board {
     }
 
     public boolean isWinner(Marble m) {
-        if (m == Marble.BLACK && blackcount == 6) {
+        if (m == Marble.BLACK && deadBlackCount == 6) {
             return true;
-        } else if (m == Marble.WHITE && whitecount == 6) {
+        } else if (m == Marble.WHITE && deadWhiteCount == 6) {
             return true;
         } else {
             return false;
@@ -198,12 +233,14 @@ public class Board {
         }
         return false;
     }
+
     /**
      * Sets the content of field i to the mark m.
-     * @requires i to be a valid field
-     * @ensures field i to be set to Mark m
+     *
      * @param i the field number (see NUMBERING)
      * @param m the mark to be placed
+     * @requires i to be a valid field
+     * @ensures field i to be set to Mark m
      */
     public void setField(int i, Marble m) {
 
@@ -215,16 +252,37 @@ public class Board {
     /**
      * Sets the content of the field represented by the (row,col) pair to the
      * mark m.
+     *
+     * @param cord coordinates of the field to be set
+     * @param m    the mark to be placed
      * @requires (cord) to be a valid field
      * @ensures field (cord) to be set to Mark m
-     * @param cord coordinates of the field to be set
-     * @param m the mark to be placed
      */
-    public void setField(int cord[], Marble m) {
+    public void setField(int[] cord, Marble m) {
         fields[convertToInt(cord)] = m;
 
 
     }
+
+    /**
+     * Returns a String representation of this board. In addition to the current
+     * situation, the String also shows the numbering of the fields.
+     *
+     * @return the game situation as String
+     */
+    public String toString() {
+        String s = "";
+        for (int i = 0; i < DIM; i++) {
+            String row = rowToString(i);
+            s = s + row + DELIM + NUMBERING[i * 2];
+            if (i < DIM - 1) {
+                s = s + "\n" + LINE + DELIM + NUMBERING[i * 2 + 1] + "\n";
+            }
+        }
+        return s;
+    }
+
+
 }
 
 

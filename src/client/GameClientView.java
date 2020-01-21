@@ -1,7 +1,7 @@
 package client;
 
-import ss.week7.hotel.exceptions.ExitProgram;
-import ss.week7.hotel.exceptions.ServerUnavailableException;
+import exceptions.ExitProgram;
+import exceptions.ServerUnavailableException;
 
 import java.net.InetAddress;
 
@@ -10,7 +10,7 @@ import java.net.InetAddress;
  *
  * @author Wim Kamerman
  */
-public interface HotelClientView {
+public interface GameClientView {
 
     /**
      * Asks for user input continuously and handles communication accordingly using
@@ -21,7 +21,7 @@ public interface HotelClientView {
      *
      * @throws ServerUnavailableException in case of IO exceptions.
      */
-    public void start() throws ServerUnavailableException;
+    public void start() throws ServerUnavailableException, ServerUnavailableException;
 
     /**
      * Split the user input on a space and handle it accordingly.
@@ -35,7 +35,7 @@ public interface HotelClientView {
      * @throws ServerUnavailableException if an IO error occurs in taking the
      *                                    corresponding actions.
      */
-    public void handleUserInput(String input) throws ExitProgram, ServerUnavailableException;
+    public void handleUserInput(String input) throws ExitProgram, ServerUnavailableException, ExitProgram;
 
     /**
      * Writes the given message to standard output.

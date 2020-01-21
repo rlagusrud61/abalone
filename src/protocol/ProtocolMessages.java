@@ -1,9 +1,9 @@
 package protocol;
 
 /**
- * Protocol for Networked Hotel Application.
+ * Protocol for Networked Abalone Game Application.
  *
- * @author Wim Kamerman
+ * @author Hyeon Kyeong Kim
  */
 public class ProtocolMessages {
 
@@ -26,13 +26,17 @@ public class ProtocolMessages {
      * The following chars are both used by the TUI to receive user input, and the
      * server and client to distinguish messages.
      */
-    public static final char EXIT = 'x';
-    public static final char IN = 'i';
-    public static final char OUT = 'o';
-    public static final char ROOM = 'r';
-    public static final char ACT = 'a';
-    public static final char PRINT = 'p';
-    public static final char BILL = 'b';
-    public static final char HELP = 'h';
+    public static final char JOIN = 'j';
+    public static final String INVALID = "iv";
+    public static final String START = "start";
+    public static final String MOVE = "move";
+    public static final String BOARD = "board";
+    public static final String NEXT = "next";
+    public static final String END = "end";
+    public static final char YES = 'y';
+    public static final char NO = 'n';
+    public static final String NOREMATCH = "norematch";
+    public static final String REMATCH = "game";
+    public static final String DISCONNECT = "disconnect";
 
 }

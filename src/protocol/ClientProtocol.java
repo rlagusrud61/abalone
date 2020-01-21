@@ -4,7 +4,7 @@ import exceptions.ProtocolException;
 import exceptions.ServerUnavailableException;
 
 /**
- * Defines the methods that the Client should support.
+ * Defines the methods that the Game Client should support.
  *
  * @author Jochem Groen, Hyeon Kyeong Kim
  */
@@ -13,12 +13,13 @@ public interface ClientProtocol {
     /**
      * Handles the following server-client handshake: 1. Client sends
      * ProtocolMessages.HELLO to server 2. Server returns one line containing
-     * ProtocolMessages.HELLO + ProtocolMessages.DELIMITER + (hotelName)
+     * ProtocolMessages.HELLO + ProtocolMessages.DELIMITER + (playerName) + ProtocolMessages.DELIMITER +
+     * (amountOfPlayers)
      * <p>
      * This method sends the HELLO and checks whether the server response is valid
-     * (must contain HELLO and the name of the hotel). - If the response is not
+     * (must contain HELLO, name of the player and the amount of players). - If the response is not
      * valid, this method throws a ProtocolException. - If the response is valid, a
-     * welcome message including the hotel name is forwarded to the view.
+     * welcome message including the player is forwarded to the view.
      *
      * @throws ServerUnavailableException if IO errors occur.
      * @throws ProtocolException          if the server response is invalid.
@@ -26,18 +27,17 @@ public interface ClientProtocol {
     public void handleHello() throws ServerUnavailableException, ProtocolException;
 
     /**
-     * Sends a checkIn request to the server.
+     * Sends a move request to the server.
      * <p>
-     * Given the name of a guest, the doIn() method sends the following message to
-     * the server: ProtocolMessages.IN + ProtocolMessages.DELIMITER + guestName
+     * Given the name of a guest, the doMove() method sends the following message to
+     * the server: ProtocolMessages.MOVE + ProtocolMessages.DELIMITER + <direction> + [<marble1>, <marble2>, <marble3>]
      * <p>
      * The result (one line) is then retrieved and forwarded to the view.
      *
-     * @param guestName Name of the guest
      * @throws ServerUnavailableException if IO errors occur.
-     * @requires guestName != null
      */
-    public void doIn(String guestName) throws ServerUnavailableException;
+    public void doMove() throws ServerUnavailableException;
+
 
     /**
      * Sends a checkOut request to the server.

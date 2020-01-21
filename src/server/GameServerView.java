@@ -5,7 +5,7 @@ package server;
  *
  * @author Wim Kamerman
  */
-public interface HotelServerView {
+public interface GameServerView {
 
     /**
      * Writes the given message to standard output.

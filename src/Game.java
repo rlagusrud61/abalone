@@ -1,4 +1,4 @@
-public interface Game {
+public abstract class Game {
 
     /**
      * The board.
@@ -31,7 +31,9 @@ public interface Game {
      * @param s1 the second player
      * @requires s0 and s1 to be non-null
      */
-    public Game(Player s0, Player s1);
+    public Game(Player s0, Player s1) {
+
+    }
 
     // -- Commands ---------------------------------------------------
 
@@ -48,7 +50,7 @@ public interface Game {
      */
     private void reset() {
         current = 0;
-        board.reset();
+        board.reset2P();
     }
 
     /**
@@ -59,7 +61,7 @@ public interface Game {
      */
     private void play() {
         while (!board.gameOver() && !board.hasWinner()) {
-            board.setField(players[current].determineMove(board), players[current].getMark());
+            board.setField(players[current].determineMove(board), players[current].getMarble());
             current = (current == 0) ? 1 : 0;
             update();
         }
@@ -80,10 +82,10 @@ public interface Game {
      */
     private void printResult() {
         if (board.hasWinner()) {
-            Player winner = board.isWinner(players[0].getMark()) ? players[0]
+            Player winner = board.isWinner(players[0].getMarble()) ? players[0]
                     : players[1];
             System.out.println("Player " + winner.getName() + " ("
-                    + winner.getMark().toString() + ") has won!");
+                    + winner.getMarble().toString() + ") has won!");
         } else {
             System.out.println("Draw. There is no winner!");
         }

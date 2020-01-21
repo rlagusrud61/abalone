@@ -9,7 +9,7 @@ import java.util.Scanner;
  *
  * @author Wim Kamerman
  */
-public class HotelServerTUI implements HotelServerView {
+public class GameServerTUI implements GameServerView {
 
     /**
      * The PrintWriter to write messages to
@@ -19,7 +19,7 @@ public class HotelServerTUI implements HotelServerView {
     /**
      * Constructs a new HotelServerTUI. Initializes the console.
      */
-    public HotelServerTUI() {
+    public GameServerTUI() {
         console = new PrintWriter(System.out, true);
     }
 

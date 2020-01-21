@@ -28,12 +28,14 @@ public class HumanPlayer extends Player {
      * @ensures the returned in is a valid field index and that field is empty
      */
     public int[] determineMove(Board board) {
-        while (true) {
+        boolean valid = true;
+
             String prompt = "> " + getName() + " (" + getMarble().toString() + ")"
                     + ", what is your choice? ";
 
             System.out.println(prompt);
             String input = TextIO.getlnString();
+        while (true) {
             String[] commands = input.split(";");
             int marble1 = 0;
             int marble2 = 0;
@@ -41,18 +43,21 @@ public class HumanPlayer extends Player {
             int index = 0;
             int[] result = new int[commands.length - 1];
             int[] intcommands = new int[commands.length];
-            boolean valid = board.isField(intcommands[1]);
+
+            valid = board.isField(intcommands[1]);
             for (int i = 0; i < commands.length; i++) {
                 intcommands[i] = Integer.parseInt(commands[i]);
             }
-            for (int i = 1; i < intcommands.length; i++) {
+            for (int i = 1; i < intcommands.length - 1; i++) {
                 marble1 = intcommands[i];
+                board.setField(marble1, Marble.EMPTY);
                 if (commands.length > 2) {
                     if (i + 1 > 3) {
                         marble2 = intcommands[(i + 1) & 3];
                     } else {
                         marble2 = intcommands[i + 1];
                     }
+                    board.setField(marble2, Marble.EMPTY);
                     valid = board.isField(marble1) && board.isField(marble2);
                 }
                 if (commands.length > 3) {
@@ -61,7 +66,8 @@ public class HumanPlayer extends Player {
                     } else {
                         marble3 = intcommands[i + 2];
                     }
-                    valid = board.isField(intcommands[1]) && board.isField(marble2) && board.isField(marble3);
+                    board.setField(marble3, Marble.EMPTY);
+                    valid = board.isField(marble1) && board.isField(marble2) && board.isField(marble3);
 
                 }
 
@@ -155,12 +161,12 @@ public class HumanPlayer extends Player {
                     }
                     if (valid) {
                         return result;
+                    } else {
+                        System.out.println("ERROR: field " + input
+                                + " is no valid choice.");
+                        System.out.println(prompt);
+                        input = TextIO.getlnString();
                     }
-                    System.out.println("ERROR: field " + input
-                            + " is no valid choice.");
-                    System.out.println(prompt);
-                    input = TextIO.getlnString();
-
 
 
             }

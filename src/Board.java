@@ -36,7 +36,7 @@ public class Board {
         for (int i = 0; i < cord[0]; i++) {
             result += rowSizes[i];
         }
-        result += cord[1] + 1;
+        result += cord[1];
         return result;
     }
 

@@ -303,6 +303,9 @@ public class Board {
         int row = rowindex;
         int col = 0;
         int[] cord = new int[] {row,col};
+        for(int i = 10; i > rowSizes[row]; i--) {
+            s = "   " + s;
+        }
         for (int i = 0; i < rowSizes[row]; i++) {
             cord[1]= i;
             s = s + getField(cord) + " ┃ ";

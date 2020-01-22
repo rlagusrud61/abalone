@@ -1,7 +1,8 @@
 
 
 public class Board {
-
+    private int deadBlackCount;
+    private int deadWhiteCount;
     private int[] rowSizes = new int[]{5, 6, 7, 8, 9, 8, 7, 6, 5};
     private int[] redMarble4 = new int[]{1, 2, 3, 4, 7, 8, 9, 14, 15};
     private int[] blackMarble4 = new int[]{11, 17, 18, 24, 25, 26, 33, 34, 35};
@@ -19,8 +20,8 @@ public class Board {
     public static void main(String[] args) {
         System.out.println("Hello");
         Board board = new Board();
-        board.reset4P();
-        System.out.println(board.getField(15));
+        board.reset2P();
+        System.out.println(board.toString());
     }
 
     /**
@@ -35,7 +36,7 @@ public class Board {
         for (int i = 0; i < cord[0]; i++) {
             result += rowSizes[i];
         }
-        result += cord[2] + 1;
+        result += cord[1] + 1;
         return result;
     }
 
@@ -226,6 +227,7 @@ public class Board {
     }
 
     public boolean isWinner(Marble m) {
+
         if (m == Marble.BLACK && deadBlackCount == 6) {
             return true;
         } else if (m == Marble.WHITE && deadWhiteCount == 6) {
@@ -289,12 +291,21 @@ public class Board {
      */
     public String toString() {
         String s = "";
-        for (int i = 0; i < DIM; i++) {
+        for (int i = 0; i < rowSizes.length; i++) {
             String row = rowToString(i);
-            s = s + row + DELIM + NUMBERING[i * 2];
-            if (i < DIM - 1) {
-                s = s + "\n" + LINE + DELIM + NUMBERING[i * 2 + 1] + "\n";
-            }
+            s = s + row +"\n";
+        }
+        return s;
+    }
+
+    public  String rowToString(int rowindex) {
+        String s = "";
+        int row = rowindex;
+        int col = 0;
+        int[] cord = new int[] {row,col};
+        for (int i = 0; i < rowSizes[row]; i++) {
+            cord[1]= i;
+            s = s + getField(cord) + " ┃ ";
         }
         return s;
     }

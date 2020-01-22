@@ -76,6 +76,7 @@ public class Game2P {
      */
     private void play() {
         while(!board.gameOver()) {
+            BoardText.printBoard();
             System.out.println(board);
             if(current == 0) {
                 players[0].makeMove(board);

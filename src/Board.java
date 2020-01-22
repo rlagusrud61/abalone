@@ -50,6 +50,7 @@ public class Board {
                 row = i;
             }
         }
+        row = row + 1;
         int[] result = new int[]{row, col};
         return result;
     }
@@ -74,7 +75,7 @@ public class Board {
         for (int i = 50; i < fields.length; i++) {
             fields[i] = Marble.WHITE;
         }
-        for (int i = 45; i < 47; i++) {
+        for (int i = 45; i < 48; i++) {
             fields[i] = Marble.WHITE;
         }
     }

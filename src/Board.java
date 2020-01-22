@@ -62,19 +62,19 @@ public class Board {
     }
 
     public void reset2P() {
-        for (int i = 0; i < fields.length; i++) {
+        for (int i = 0; i < fields.length - 1; i++) {
             fields[i] = Marble.EMPTY;
         }
-        for (int i = 0; i < 12; i++) {
+        for (int i = 0; i < 11; i++) {
             fields[i] = Marble.BLACK;
         }
-        for (int i = 14; i < 17; i++) {
+        for (int i = 13; i < 16; i++) {
             fields[i] = Marble.BLACK;
         }
-        for (int i = 51; i < fields.length; i++) {
+        for (int i = 50; i < fields.length; i++) {
             fields[i] = Marble.WHITE;
         }
-        for (int i = 46; i < 48; i++) {
+        for (int i = 45; i < 47; i++) {
             fields[i] = Marble.WHITE;
         }
     }

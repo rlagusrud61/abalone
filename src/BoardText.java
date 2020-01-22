@@ -19,6 +19,10 @@ public class BoardText {
             "       \\\\ ┃ 56 ┃ 57 ┃ 58 ┃ 59 ┃ 60 ┃ //"
     };
 
+    /**
+     * Prints the board on the console.
+     */
+
     public static void printBoard() {
         for (int i = 0; i < 8; i++) {
             System.out.println(NUMBERING[i] + '\n');

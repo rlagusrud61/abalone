@@ -62,7 +62,11 @@ public class HumanPlayer extends Player {
                     }
 
                     board.setField(marble2, Marble.EMPTY);
-                    valid = board.isField(marble1) && board.isField(marble2) && board.getField(marble1).equals(getMarble()) && board.getField(marble2).equals(getMarble()) && isNeighbour(marble1, marble2);
+                    valid = board.isField(marble1)
+                            && board.isField(marble2)
+                            && board.getField(marble1).equals(getMarble())
+                            && board.getField(marble2).equals(getMarble())
+                            && isNeighbour(marble1, marble2);
                 }
                 if (commands.length > 3) {
                     if (i + 2 > 3) {
@@ -71,15 +75,15 @@ public class HumanPlayer extends Player {
                         marble3 = intcommands[i + 2];
                     }
                     board.setField(marble3, Marble.EMPTY);
-                    valid = board.isField(marble1) &&
-                            board.isField(marble2) &&
-                            board.isField(marble3) &&
-                            board.getField(marble1).equals(getMarble()) &&
-                            board.getField(marble2).equals(getMarble()) &&
-                            board.getField(marble3).equals(getMarble()) &&
-                            isNeighbour(marble1, marble2) &&
-                            isNeighbour(marble2, marble3) &&
-                            isInLine(marble1, marble2, marble3);
+                    valid = board.isField(marble1)
+                            && board.isField(marble2)
+                            && board.isField(marble3)
+                            && board.getField(marble1).equals(getMarble())
+                            && board.getField(marble2).equals(getMarble())
+                            && board.getField(marble3).equals(getMarble())
+                            && isNeighbour(marble1, marble2)
+                            && isNeighbour(marble2, marble3)
+                            && isInLine(marble1, marble2, marble3);
 
 
                 }
@@ -99,7 +103,9 @@ public class HumanPlayer extends Player {
                             rowcoltest[0] = rowcoltest[0] - 1;
 
                         }
-                        if (board.isEmptyField(rowcoltest) || board.convertToInt(rowcoltest) == marble2 || board.convertToInt(rowcoltest) == marble3) {
+                        if (board.isEmptyField(rowcoltest)
+                                || board.convertToInt(rowcoltest) == marble2
+                                || board.convertToInt(rowcoltest) == marble3) {
 
                             result[i - 1] = board.convertToInt(rowcoltest);
                         } else {
@@ -173,6 +179,9 @@ public class HumanPlayer extends Player {
 
                         break;
 
+                    default:
+                        break;
+
                 }
                 if (valid) {
                     return result;
@@ -189,12 +198,18 @@ public class HumanPlayer extends Player {
 
     }
 
-
-    public boolean isNeighbour(int a, int b) {
-        int[] rowcolA = board.convertToRowCol(a);
-        int[] rowcolB = board.convertToRowCol(b);
+    /**
+     * Checks if two marbles are neighbours to each other.
+     *
+     * @param marble1 first marble
+     * @param marble2 second marble
+     * @return true if the two marbles are together, false if they are apart.
+     */
+    public boolean isNeighbour(int marble1, int marble2) {
+        int[] rowcolA = board.convertToRowCol(marble1);
+        int[] rowcolB = board.convertToRowCol(marble2);
         int[] rowcoltest = rowcolA;
-        if (Math.abs(a - b) == 1) {
+        if (Math.abs(marble1 - marble2) == 1) {
             return true;
         } else {
             rowcoltest[0] = rowcolA[0] - 1;
@@ -244,6 +259,14 @@ public class HumanPlayer extends Player {
         return false;
     }
 
+    /**Checks if marbles 1,2,3 are in a straight line.
+     *
+     * @param marble1 first marble
+     * @param marble2 second marble
+     * @param marble3 third marble
+     * @return true if marbles 1,2,3 are in line, false if they are not.
+     */
+
     public boolean isInLine(int marble1, int marble2, int marble3) {
         int difference12 = Math.abs(marble1 - marble2);
         int difference23 = Math.abs(marble2 - marble3);
@@ -256,7 +279,6 @@ public class HumanPlayer extends Player {
         } else if (difference12 == 8 && difference23 == 9) {
             return true;
         }
-
         return false;
     }
 }

@@ -2,6 +2,9 @@ import utils.TextIO;
 
 public class Game2P {
 
+    private int deadBlackCount;
+    private int deadWhiteCount;
+
     public static final int NUMBER_PLAYERS = 2;
 
     /**

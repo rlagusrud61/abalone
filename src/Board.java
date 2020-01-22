@@ -2,28 +2,34 @@
 
 public class Board {
 
-    private int deadBlackCount;
-    private int deadWhiteCount;
-    private int deadRedCount;
-    private int deadBlueCount;
     private int[] rowSizes = new int[]{5, 6, 7, 8, 9, 8, 7, 6, 5};
-
+    private int[] redMarble4 = new int[]{1, 2, 3, 4, 7, 8, 9, 14, 15};
+    private int[] blackMarble4 = new int[]{11, 17, 18, 24, 25, 26, 33, 34, 35};
+    private int[] blueMarble4 = new int[]{47, 48, 53, 54, 55, 58, 59, 60, 61};
+    private int[] whiteMarble4 = new int[]{27, 28, 29, 36, 37, 38, 44, 45, 51};
     private Marble[] fields;
 
 
     public Board() {
 
         fields = new Marble[61];
-        reset2P();
+        //reset2P();
     }
 
     public static void main(String[] args) {
         System.out.println("Hello");
         Board board = new Board();
-        board.reset3P();
-        System.out.println(board.getField(12));
+        board.reset4P();
+        System.out.println(board.getField(15));
     }
 
+    /**
+     * Converts a coordinate (row, column) into a int index.
+     *
+     * @param cord
+     * @return
+     * @requires cord != null;
+     */
     public int convertToInt(int[] cord) {
         int result = 0;
         for (int i = 0; i < cord[0]; i++) {
@@ -96,15 +102,26 @@ public class Board {
         }
         setField(36, Marble.WHITE);
         setField(43, Marble.BLACK);
-
-
     }
 
     public void reset4P() {
-
+        for (int i = 0; i < fields.length; i++) {
+            fields[i] = Marble.EMPTY;
+        }
+        for (int i : redMarble4) {
+            fields[i] = Marble.RED;
+        }
+        for (int i : blackMarble4) {
+            fields[i] = Marble.BLACK;
+        }
+        for (int i : blueMarble4) {
+            fields[i] = Marble.BLUE;
+        }
+        for (int i : whiteMarble4) {
+            fields[i] = Marble.WHITE;
+        }
     }
 
-    //TODO Implement and reset4P()
 
     public boolean isField(int index) {
 
@@ -270,17 +287,17 @@ public class Board {
      *
      * @return the game situation as String
      */
-    public String toString() {
-        String s = "";
-        for (int i = 0; i < DIM; i++) {
-            String row = rowToString(i);
-            s = s + row + DELIM + NUMBERING[i * 2];
-            if (i < DIM - 1) {
-                s = s + "\n" + LINE + DELIM + NUMBERING[i * 2 + 1] + "\n";
-            }
-        }
-        return s;
-    }
+//    public String toString() {
+//        String s = "";
+//        for (int i = 0; i < DIM; i++) {
+//            String row = rowToString(i);
+//            s = s + row + DELIM + NUMBERING[i * 2];
+//            if (i < DIM - 1) {
+//                s = s + "\n" + LINE + DELIM + NUMBERING[i * 2 + 1] + "\n";
+//            }
+//        }
+//        return s;
+//    }
 
 
 }

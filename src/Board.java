@@ -20,7 +20,7 @@ public class Board {
     public static void main(String[] args) {
         System.out.println("Hello");
         Board board = new Board();
-        board.reset2P();
+        board.reset4P();
         System.out.println(board.toString());
     }
 
@@ -74,7 +74,7 @@ public class Board {
         for (int i = 50; i < fields.length; i++) {
             fields[i] = Marble.WHITE;
         }
-        for (int i = 45; i < 47; i++) {
+        for (int i = 45; i < 48; i++) {
             fields[i] = Marble.WHITE;
         }
     }
@@ -86,7 +86,7 @@ public class Board {
         }
 
         //Set fields to blue
-        for (int i = 51; i < fields.length; i++) {
+        for (int i = 50; i < fields.length; i++) {
             fields[i] = Marble.BLUE;
         }
 
@@ -101,8 +101,8 @@ public class Board {
             setField(index + rowSize - 1, Marble.BLACK);
             index += rowSize;
         }
-        setField(36, Marble.WHITE);
-        setField(43, Marble.BLACK);
+        setField(35, Marble.WHITE);
+        setField(42, Marble.BLACK);
     }
 
     public void reset4P() {
@@ -110,16 +110,16 @@ public class Board {
             fields[i] = Marble.EMPTY;
         }
         for (int i : redMarble4) {
-            fields[i] = Marble.RED;
+            fields[i - 1] = Marble.RED;
         }
         for (int i : blackMarble4) {
-            fields[i] = Marble.BLACK;
+            fields[i - 1] = Marble.BLACK;
         }
         for (int i : blueMarble4) {
-            fields[i] = Marble.BLUE;
+            fields[i - 1] = Marble.BLUE;
         }
         for (int i : whiteMarble4) {
-            fields[i] = Marble.WHITE;
+            fields[i - 1] = Marble.WHITE;
         }
     }
 
@@ -308,7 +308,7 @@ public class Board {
         }
         for (int i = 0; i < rowSizes[row]; i++) {
             cord[1]= i;
-            s = s + getField(cord) + " ┃ ";
+            s = s + getField(cord) + " ┃   ";
         }
         return s;
     }

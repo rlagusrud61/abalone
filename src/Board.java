@@ -1,7 +1,10 @@
 
 
 public class Board {
-
+    private int deadBlackCount;
+    private int deadWhiteCount;
+    private int deadRedCount;
+    private int deadBlueCount;
     private int[] rowSizes = new int[]{5, 6, 7, 8, 9, 8, 7, 6, 5};
     private int[] redMarble4 = new int[]{1, 2, 3, 4, 7, 8, 9, 14, 15};
     private int[] blackMarble4 = new int[]{11, 17, 18, 24, 25, 26, 33, 34, 35};
@@ -21,6 +24,7 @@ public class Board {
         Board board = new Board();
         board.reset4P();
         System.out.println(board.getField(15));
+
     }
 
     /**
@@ -35,13 +39,13 @@ public class Board {
         for (int i = 0; i < cord[0]; i++) {
             result += rowSizes[i];
         }
-        result += cord[2] + 1;
+        result += cord[1];
         return result;
     }
 
 
     public int[] convertToRowCol(int a) {
-        int col = a;
+        int col = a+1;
         int row = 0;
         for (int i = 0; i < 9; i++) {
             if (col > rowSizes[i]) {
@@ -49,11 +53,14 @@ public class Board {
                 row = i;
             }
         }
+        row = row + 1;
+        col = col - 1;
         int[] result = new int[]{row, col};
         return result;
     }
 
-    public boolean isValidMoveOne(int i) {
+    public boolean isValidMoveOne(int[] cord) {
+
         if (fields[i] == Marble.EMPTY) {
             return true;
         } else
@@ -125,7 +132,7 @@ public class Board {
 
     public boolean isField(int index) {
 
-        if (0 <= index && index < 62) {
+        if (0 <= index && index < 61) {
             return true;
         }
         return false;
@@ -289,7 +296,7 @@ public class Board {
      */
 //    public String toString() {
 //        String s = "";
-//        for (int i = 0; i < DIM; i++) {
+//        for (int i = 0; i < rowSizes.length; i++) {
 //            String row = rowToString(i);
 //            s = s + row + DELIM + NUMBERING[i * 2];
 //            if (i < DIM - 1) {

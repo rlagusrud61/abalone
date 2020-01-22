@@ -52,6 +52,7 @@ public class Game2P {
     public void start() {
         boolean continueGame = true;
         while (continueGame) {
+            BoardText.printBoard();
             reset();
             play();
             System.out.println("\n> Play another time? (y/n)?");
@@ -80,7 +81,7 @@ public class Game2P {
             if(current == 0) {
                 players[0].makeMove(board);
                 current++;
-                System.out.println(board.getField(16));
+                System.out.println(board.getField(15));
                 System.out.println(board.getField(23));
             }
             update();

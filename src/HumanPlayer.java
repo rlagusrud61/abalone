@@ -3,7 +3,7 @@ import utils.TextIO;
 public class HumanPlayer extends Player {
 
 
-Board board;
+    Board board;
     // -- Constructors -----------------------------------------------
 
     /**
@@ -17,7 +17,6 @@ Board board;
     public HumanPlayer(String name, Marble marble) {
         super(name, marble);
     }
-
 
 
     // -- Commands ---------------------------------------------------
@@ -34,11 +33,11 @@ Board board;
     public int[] determineMove(Board board) {
         boolean valid = true;
 
-            String prompt = "> " + getName() + " (" + getMarble().toString() + ")"
-                    + ", what is your choice? ";
+        String prompt = "> " + getName() + " (" + getMarble().toString() + ")"
+                + ", what is your choice? ";
 
-            System.out.println(prompt);
-            String input = TextIO.getlnString();
+        System.out.println(prompt);
+        String input = TextIO.getlnString();
         while (true) {
             String[] commands = input.split(";");
             int marble1 = 0;
@@ -63,7 +62,7 @@ Board board;
                     }
 
                     board.setField(marble2, Marble.EMPTY);
-                    valid = board.isField(marble1) && board.isField(marble2) && board.getField(marble1).equals(getMarble()) && board.getField(marble2).equals(getMarble()) && isNeighbour(marble1,marble2);
+                    valid = board.isField(marble1) && board.isField(marble2) && board.getField(marble1).equals(getMarble()) && board.getField(marble2).equals(getMarble()) && isNeighbour(marble1, marble2);
                 }
                 if (commands.length > 3) {
                     if (i + 2 > 3) {
@@ -79,8 +78,8 @@ Board board;
                             board.getField(marble2).equals(getMarble()) &&
                             board.getField(marble3).equals(getMarble()) &&
                             isNeighbour(marble1, marble2) &&
-                            isNeighbour(marble2,marble3) &&
-                            isInLine(marble1,marble2,marble3);
+                            isNeighbour(marble2, marble3) &&
+                            isInLine(marble1, marble2, marble3);
 
 
                 }
@@ -90,99 +89,99 @@ Board board;
                 System.out.println(rowcol[1]);
                 int[] rowcoltest = rowcol;
 
-                    switch (intcommands[0]) {
-                        case 0:
+                switch (intcommands[0]) {
+                    case 0:
 
-                            if (rowcol[0] > 4) {
-                                rowcoltest[0] = rowcoltest[0] - 1;
-                                rowcoltest[1] = rowcoltest[1] + 1;
-                            } else {
-                                rowcoltest[0] = rowcoltest[0] - 1;
-
-                            }
-                            if (board.isEmptyField(rowcoltest) || board.convertToInt(rowcoltest) == marble2 || board.convertToInt(rowcoltest) == marble3) {
-
-                                result[i-1] = board.convertToInt(rowcoltest);
-                            } else {
-                                valid = false;
-                            }
-
-                            break;
-                        case 1:
+                        if (rowcol[0] > 4) {
+                            rowcoltest[0] = rowcoltest[0] - 1;
                             rowcoltest[1] = rowcoltest[1] + 1;
-                            if (board.isEmptyField(rowcoltest)) {
-                                result[i-1] = board.convertToInt(rowcoltest);
-                            } else {
-                                valid = false;
-                            }
-                            break;
-                        case 2:
-                            if (rowcol[0] < 4) {
-                                rowcoltest[0] = rowcoltest[0] + 1;
-                                rowcoltest[1] = rowcoltest[1] + 1;
-                            } else {
-                                rowcoltest[0] = rowcoltest[0] + 1;
+                        } else {
+                            rowcoltest[0] = rowcoltest[0] - 1;
 
-                            }
-                            if (board.isEmptyField(rowcoltest)) {
+                        }
+                        if (board.isEmptyField(rowcoltest) || board.convertToInt(rowcoltest) == marble2 || board.convertToInt(rowcoltest) == marble3) {
 
-                                result[i-1] = board.convertToInt(rowcoltest);
-                                ;
-                            } else {
-                                valid = false;
-                            }
-                            break;
-                        case 3:
-                            if (rowcol[0] > 4) {
-                                rowcoltest[0] = rowcoltest[0] + 1;
-                                rowcoltest[1] = rowcoltest[1] - 1;
-                            } else {
-                                rowcoltest[0] = rowcoltest[0] + 1;
+                            result[i - 1] = board.convertToInt(rowcoltest);
+                        } else {
+                            valid = false;
+                        }
 
-                            }
-                            if (board.isEmptyField(rowcoltest)) {
-                                System.out.println(board.convertToInt(rowcoltest));
-                                result[i-1] = board.convertToInt(rowcoltest);
+                        break;
+                    case 1:
+                        rowcoltest[1] = rowcoltest[1] + 1;
+                        if (board.isEmptyField(rowcoltest)) {
+                            result[i - 1] = board.convertToInt(rowcoltest);
+                        } else {
+                            valid = false;
+                        }
+                        break;
+                    case 2:
+                        if (rowcol[0] < 4) {
+                            rowcoltest[0] = rowcoltest[0] + 1;
+                            rowcoltest[1] = rowcoltest[1] + 1;
+                        } else {
+                            rowcoltest[0] = rowcoltest[0] + 1;
 
-                            } else {
-                                valid = false;
-                            }
-                            break;
-                        case 4:
+                        }
+                        if (board.isEmptyField(rowcoltest)) {
+
+                            result[i - 1] = board.convertToInt(rowcoltest);
+                            ;
+                        } else {
+                            valid = false;
+                        }
+                        break;
+                    case 3:
+                        if (rowcol[0] > 4) {
+                            rowcoltest[0] = rowcoltest[0] + 1;
                             rowcoltest[1] = rowcoltest[1] - 1;
-                            if (board.isEmptyField(rowcoltest)) {
-                                result[i-1] = board.convertToInt(rowcoltest);
-                            } else {
-                                valid = false;
-                            }
-                            break;
+                        } else {
+                            rowcoltest[0] = rowcoltest[0] + 1;
 
-                        case 5:
-                            if (rowcol[0] < 4) {
-                                rowcoltest[0] = rowcoltest[0] - 1;
-                                rowcoltest[1] = rowcoltest[1] - 1;
-                            } else {
-                                rowcoltest[0] = rowcoltest[0] - 1;
+                        }
+                        if (board.isEmptyField(rowcoltest)) {
+                            System.out.println(board.convertToInt(rowcoltest));
+                            result[i - 1] = board.convertToInt(rowcoltest);
 
-                            }
-                            if (board.isEmptyField(rowcoltest)) {
+                        } else {
+                            valid = false;
+                        }
+                        break;
+                    case 4:
+                        rowcoltest[1] = rowcoltest[1] - 1;
+                        if (board.isEmptyField(rowcoltest)) {
+                            result[i - 1] = board.convertToInt(rowcoltest);
+                        } else {
+                            valid = false;
+                        }
+                        break;
 
-                                result[i-1] = board.convertToInt(rowcoltest);
-                            } else {
-                                valid = false;
-                            }
+                    case 5:
+                        if (rowcol[0] < 4) {
+                            rowcoltest[0] = rowcoltest[0] - 1;
+                            rowcoltest[1] = rowcoltest[1] - 1;
+                        } else {
+                            rowcoltest[0] = rowcoltest[0] - 1;
 
-                            break;
+                        }
+                        if (board.isEmptyField(rowcoltest)) {
 
-                    }
-                    if (valid) {
-                        return result;
-                    } else {
-                        System.out.println("ERROR: field " + input
-                                + " is no valid choice.");
-                        System.out.println(prompt);
-                        input = TextIO.getlnString();
-                    }
+                            result[i - 1] = board.convertToInt(rowcoltest);
+                        } else {
+                            valid = false;
+                        }
+
+                        break;
+
+                }
+                if (valid) {
+                    return result;
+                } else {
+                    System.out.println("ERROR: field " + input
+                            + " is no valid choice.");
+                    System.out.println(prompt);
+                    input = TextIO.getlnString();
+                }
 
 
             }
@@ -191,12 +190,11 @@ Board board;
     }
 
 
-
     public boolean isNeighbour(int a, int b) {
         int[] rowcolA = board.convertToRowCol(a);
         int[] rowcolB = board.convertToRowCol(b);
         int[] rowcoltest = rowcolA;
-        if (Math.abs(a-b) == 1) {
+        if (Math.abs(a - b) == 1) {
             return true;
         } else {
             rowcoltest[0] = rowcolA[0] - 1;
@@ -207,7 +205,7 @@ Board board;
             if (board.convertToInt(rowcoltest) == board.convertToInt(rowcolB)) {
                 return true;
             }
-            if(rowcolA[0] < 4) {
+            if (rowcolA[0] < 4) {
                 rowcoltest[0] = rowcolA[0] - 1;
                 rowcoltest[1] = rowcolA[1] - 1;
                 if (board.convertToInt(rowcoltest) == board.convertToInt(rowcolB)) {
@@ -243,6 +241,22 @@ Board board;
                 }
             }
         }
+        return false;
+    }
+
+    public boolean isInLine(int marble1, int marble2, int marble3) {
+        int difference12 = Math.abs(marble1 - marble2);
+        int difference23 = Math.abs(marble2 - marble3);
+        if (difference12 == 5 && difference23 == 6) {
+            return true;
+        } else if (difference12 == 6 && difference23 == 7) {
+            return true;
+        } else if (difference12 == 7 && difference23 == 8) {
+            return true;
+        } else if (difference12 == 8 && difference23 == 9) {
+            return true;
+        }
+
         return false;
     }
 }

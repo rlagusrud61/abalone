@@ -1,5 +1,6 @@
 public class BoardText {
 
+
     public static void main(String[] args) {
         BoardText board = new BoardText();
         board.printBoard();

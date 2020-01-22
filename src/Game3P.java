@@ -1,20 +1,20 @@
 import utils.TextIO;
 
-public class Game2P {
+public class Game3P {
 
+    public static final int NUMBER_PLAYERS = 3;
     private int deadBlackCount;
     private int deadWhiteCount;
-
-    public static final int NUMBER_PLAYERS = 2;
-
     /**
      * The board.
+     *
      * @invariant board is never null
      */
     private Board board;
 
     /**
      * The 2 players of the game.
+     *
      * @invariant the length of the array equals NUMBER_PLAYERS
      * @invariant all array items are never null
      */
@@ -22,6 +22,7 @@ public class Game2P {
 
     /**
      * Index of the current player.
+     *
      * @invariant the index is always between 0 and NUMBER_PLAYERS
      */
     private int current;
@@ -30,15 +31,17 @@ public class Game2P {
 
     /**
      * Creates a new Game object.
-     * @requires s0 and s1 to be non-null
+     *
      * @param s0 the first player
      * @param s1 the second player
+     * @requires s0 and s1 to be non-null
      */
-    public Game2P(Player s0, Player s1) {
+    public Game3P(Player s0, Player s1, Player s2) {
         board = new Board();
         players = new Player[NUMBER_PLAYERS];
         players[0] = s0;
         players[1] = s1;
+        players[2] = s2;
         current = 0;
     }
 
@@ -65,29 +68,34 @@ public class Game2P {
      */
     private void reset() {
         current = 0;
-        board.reset2P();
+        board.reset3P();
     }
 
     /**
-     * Plays the Tic Tac Toe game. <br>
+     * Plays the Abalone game. <br>
      * First the (still empty) board is shown. Then the game is played
      * until it is over. Players can make a move one after the other.
      * After each move, the changed game situation is printed.
      */
     private void play() {
-        while(!board.gameOver()) {
+        while (!board.gameOver()) {
             System.out.println(board);
-            if(current == 0) {
+            if (current == 0) {
                 players[0].makeMove(board);
                 current++;
             }
             update();
-            if(current == 1 && !board.gameOver()) {
+            if (current == 1 && !board.gameOver()) {
                 players[1].makeMove(board);
                 current++;
 
             }
-            if(current > 1) {
+            if (current == 2 && !board.gameOver()) {
+                players[2].makeMove(board);
+                current++;
+            }
+
+            if (current > 2) {
                 current = 0;
 
             }
@@ -106,6 +114,7 @@ public class Game2P {
 
     /**
      * Prints the result of the last game. <br>
+     *
      * @requires the game to be over
      */
     private void printResult() {

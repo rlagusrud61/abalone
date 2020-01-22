@@ -30,10 +30,10 @@ public enum Marble {
             case BLUE:
                 marble = "\u001B[34m" + "⚫" + RESET;
                 break;
-            case WHITE:
+            case BLACK:
                 marble = "\u001B[30m" + "⚫" + RESET;
                 break;
-            case BLACK:
+            case WHITE:
                 marble = "\u001B[97m" + "⚫" + RESET;
                 // BTW, BOLD "\033[1;30m" + BLACK  = WHITE??????????????
                 break;

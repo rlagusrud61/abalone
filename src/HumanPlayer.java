@@ -2,6 +2,8 @@ import utils.TextIO;
 
 public class HumanPlayer extends Player {
 
+
+Board board;
     // -- Constructors -----------------------------------------------
 
     /**
@@ -15,6 +17,8 @@ public class HumanPlayer extends Player {
     public HumanPlayer(String name, Marble marble) {
         super(name, marble);
     }
+
+
 
     // -- Commands ---------------------------------------------------
 
@@ -57,8 +61,9 @@ public class HumanPlayer extends Player {
                     } else {
                         marble2 = intcommands[i + 1];
                     }
+
                     board.setField(marble2, Marble.EMPTY);
-                    valid = board.isField(marble1) && board.isField(marble2) && board.getField(marble1).equals(getMarble()) && board.getField(marble2).equals(getMarble());
+                    valid = board.isField(marble1) && board.isField(marble2) && board.getField(marble1).equals(getMarble()) && board.getField(marble2).equals(getMarble()) && isNeighbour(marble1,marble2);
                 }
                 if (commands.length > 3) {
                     if (i + 2 > 3) {
@@ -67,7 +72,15 @@ public class HumanPlayer extends Player {
                         marble3 = intcommands[i + 2];
                     }
                     board.setField(marble3, Marble.EMPTY);
-                    valid = board.isField(marble1) && board.isField(marble2) && board.isField(marble3)&& board.getField(marble1).equals(getMarble()) && board.getField(marble2).equals(getMarble()) && board.getField(marble3).equals(getMarble());
+                    valid = board.isField(marble1) &&
+                            board.isField(marble2) &&
+                            board.isField(marble3) &&
+                            board.getField(marble1).equals(getMarble()) &&
+                            board.getField(marble2).equals(getMarble()) &&
+                            board.getField(marble3).equals(getMarble()) &&
+                            isNeighbour(marble1, marble2) &&
+                            isNeighbour(marble2,marble3) &&
+                            isInLine(marble1,marble2,marble3);
 
 
                 }
@@ -175,6 +188,62 @@ public class HumanPlayer extends Player {
             }
         }
 
+    }
+
+
+
+    public boolean isNeighbour(int a, int b) {
+        int[] rowcolA = board.convertToRowCol(a);
+        int[] rowcolB = board.convertToRowCol(b);
+        int[] rowcoltest = rowcolA;
+        if (Math.abs(a-b) == 1) {
+            return true;
+        } else {
+            rowcoltest[0] = rowcolA[0] - 1;
+            if (board.convertToInt(rowcoltest) == board.convertToInt(rowcolB)) {
+                return true;
+            }
+            rowcoltest[0] = rowcolA[0] + 1;
+            if (board.convertToInt(rowcoltest) == board.convertToInt(rowcolB)) {
+                return true;
+            }
+            if(rowcolA[0] < 4) {
+                rowcoltest[0] = rowcolA[0] - 1;
+                rowcoltest[1] = rowcolA[1] - 1;
+                if (board.convertToInt(rowcoltest) == board.convertToInt(rowcolB)) {
+                    return true;
+                }
+                rowcoltest[0] = rowcolA[0] + 1;
+                rowcoltest[1] = rowcolA[1] + 1;
+                if (board.convertToInt(rowcoltest) == board.convertToInt(rowcolB)) {
+                    return true;
+                }
+            } else if (rowcolA[0] > 4) {
+                rowcoltest[0] = rowcolA[0] - 1;
+                rowcoltest[1] = rowcolA[1] + 1;
+                if (board.convertToInt(rowcoltest) == board.convertToInt(rowcolB)) {
+                    return true;
+                }
+
+                rowcoltest[0] = rowcolA[0] + 1;
+                rowcoltest[1] = rowcolA[1] - 1;
+                if (board.convertToInt(rowcoltest) == board.convertToInt(rowcolB)) {
+                    return true;
+                }
+            } else {
+                rowcoltest[0] = rowcolA[0] + 1;
+                rowcoltest[1] = rowcolA[1] - 1;
+                if (board.convertToInt(rowcoltest) == board.convertToInt(rowcolB)) {
+                    return true;
+                }
+                rowcoltest[0] = rowcolA[0] - 1;
+                rowcoltest[1] = rowcolA[1] - 1;
+                if (board.convertToInt(rowcoltest) == board.convertToInt(rowcolB)) {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 }
 

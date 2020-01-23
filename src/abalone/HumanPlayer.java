@@ -98,7 +98,7 @@ public class HumanPlayer extends Player {
                             && board.getField(marble3).equals(getMarble())
                             && isNeighbour(intcommands[1], intcommands[2])
                             && isNeighbour(intcommands[2], intcommands[3]);
-                    System.out.println(isInLine(marble1, marble2, marble3));
+
 
 
                 }
@@ -129,7 +129,9 @@ public class HumanPlayer extends Player {
                         break;
                     case 1:
                         rowcoltest[1] = rowcoltest[1] + 1;
-                        if (board.isEmptyField(rowcoltest)) {
+
+                        if (board.isEmptyField(rowcoltest)  || board.convertToInt(rowcoltest) == marble2
+                                || board.convertToInt(rowcoltest) == marble3) {
                             result[i - 1] = board.convertToInt(rowcoltest);
                         } else {
                             valid = false;
@@ -143,7 +145,8 @@ public class HumanPlayer extends Player {
                             rowcoltest[0] = rowcoltest[0] + 1;
 
                         }
-                        if (board.isEmptyField(rowcoltest)) {
+                        if (board.isEmptyField(rowcoltest)  || board.convertToInt(rowcoltest) == marble2
+                                || board.convertToInt(rowcoltest) == marble3) {
 
                             result[i - 1] = board.convertToInt(rowcoltest);
                             ;
@@ -159,17 +162,22 @@ public class HumanPlayer extends Player {
                             rowcoltest[0] = rowcoltest[0] + 1;
 
                         }
-                        if (board.isEmptyField(rowcoltest)) {
+                        System.out.println(board.convertToInt(rowcoltest));
+                        System.out.println(marble2);
+                        if (board.isEmptyField(rowcoltest)  || board.convertToInt(rowcoltest) == marble2
+                                || board.convertToInt(rowcoltest) == marble3) {
 
                             result[i - 1] = board.convertToInt(rowcoltest);
 
                         } else {
                             valid = false;
                         }
+
                         break;
                     case 4:
                         rowcoltest[1] = rowcoltest[1] - 1;
-                        if (board.isEmptyField(rowcoltest)) {
+                        if (board.isEmptyField(rowcoltest)  || board.convertToInt(rowcoltest) == marble2
+                                || board.convertToInt(rowcoltest) == marble3) {
                             result[i - 1] = board.convertToInt(rowcoltest);
                         } else {
                             valid = false;
@@ -184,7 +192,8 @@ public class HumanPlayer extends Player {
                             rowcoltest[0] = rowcoltest[0] - 1;
 
                         }
-                        if (board.isEmptyField(rowcoltest)) {
+                        if (board.isEmptyField(rowcoltest)  || board.convertToInt(rowcoltest) == marble2
+                                || board.convertToInt(rowcoltest) == marble3) {
 
                             result[i - 1] = board.convertToInt(rowcoltest);
                         } else {

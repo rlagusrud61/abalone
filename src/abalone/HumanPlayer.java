@@ -57,20 +57,29 @@ public class HumanPlayer extends Player {
             for (int i = 1; i < intcommands.length; i++) {
                 marble1 = intcommands[i];
 
+                if (commands.length < 3) {
+                    if (i > 1) {
+                        marble1 = intcommands[i];
+                    }
+
+                    valid = board.isField(marble1)
+                            && board.getField(marble1).equals(getMarble());
+
+                }
+
                 if (commands.length == 3) {
                     if (i + 1 > 2) {
                         marble2 = intcommands[(i + 1) % 2];
                     } else {
                         marble2 = intcommands[i + 1];
                     }
-
-
                     valid = board.isField(marble1)
                             && board.isField(marble2)
                             && board.getField(marble2).equals(getMarble());
                           //  && isNeighbour(intcommands[1], intcommands[2]);
                     System.out.println(valid);
                 }
+
                 if (commands.length > 3) {
                     if (i + 2 > 3) {
                         marble3 = intcommands[(i + 2) % 3];
@@ -191,11 +200,15 @@ public class HumanPlayer extends Player {
             }
             if (valid) {
 
-                if (commands.length > 2) {
+                if (commands.length == 2) {
+                    board.setField(marble1, Marble.EMPTY);
+                }
+
+                if (commands.length == 3) {
                     board.setField(marble1, Marble.EMPTY);
                     board.setField(marble2, Marble.EMPTY);
                 }
-                if (commands.length > 3) {
+                if (commands.length == 4) {
                     System.out.println(marble1);
                     System.out.println(marble2);
                     System.out.println(marble3);

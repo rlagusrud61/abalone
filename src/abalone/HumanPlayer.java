@@ -49,14 +49,14 @@ public class HumanPlayer extends Player {
             int[] result = new int[commands.length];
             int[] intcommands = new int[commands.length];
 
-            valid = board.isField(intcommands[1]) && (board.getField(intcommands[1]).equals(getMarble()));
-            System.out.println(valid);
+
             for (int i = 0; i < commands.length; i++) {
                 intcommands[i] = Integer.parseInt(commands[i]);
             }
             for (int i = 1; i < intcommands.length; i++) {
                 marble1 = intcommands[i];
-
+                valid = board.isField(intcommands[1]) && (board.getField(intcommands[1]).equals(getMarble()));
+                System.out.println(valid);
                 if (commands.length < 3) {
                     if (i > 1) {
                         marble1 = intcommands[i];
@@ -111,8 +111,15 @@ public class HumanPlayer extends Player {
                     case 0:
 
                         if (rowcol[0] > 4) {
+                            System.out.println(marble1);
+                            System.out.println(rowcol[0]);
+                            System.out.println(rowcol[1]);
+                            System.out.println(board.convertToInt(rowcol));
                             rowcoltest[0] = rowcoltest[0] - 1;
                             rowcoltest[1] = rowcoltest[1] + 1;
+                            System.out.println("future " + board.convertToInt(rowcoltest));
+                            System.out.println(rowcoltest[0]);
+                            System.out.println(rowcoltest[1]);
                         } else {
                             rowcoltest[0] = rowcoltest[0] - 1;
 

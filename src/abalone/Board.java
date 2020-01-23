@@ -45,15 +45,20 @@ public class Board {
 
         int col = a;
         int row = 0;
+
         for (int i = 0; i < 9; i++) {
-            if (col > rowSizes[i]) {
+            if (col >= rowSizes[i]) {
                 col = col - rowSizes[i];
                 row += 1;
+
+            } else {
+                int[] result = new int[]{row, col};
+                return result;
             }
+
         }
 
-        int[] result = new int[]{row, col};
-        return result;
+return null;
     }
 
     public boolean isValidMoveOne(int i) {

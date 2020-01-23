@@ -45,7 +45,6 @@ public class HumanPlayer extends Player {
             int marble1 = 62;
             int marble2 = 62;
             int marble3 = 62;
-            int index = 0;
             int[] result = new int[commands.length];
             int[] intcommands = new int[commands.length];
 

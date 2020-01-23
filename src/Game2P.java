@@ -1,9 +1,6 @@
 import utils.TextIO;
 
-public class Game2P {
-
-    private int deadBlackCount;
-    private int deadWhiteCount;
+public class Game2P implements Game {
 
     public static final int NUMBER_PLAYERS = 2;
 
@@ -49,6 +46,7 @@ public class Game2P {
      * Asks after each ended game if the user want to continue. Continues until
      * the user does not want to play anymore.
      */
+    @Override
     public void start() {
         boolean continueGame = true;
         while (continueGame) {
@@ -63,7 +61,8 @@ public class Game2P {
      * Resets the game. <br>
      * The board is emptied and player[0] becomes the current player.
      */
-    private void reset() {
+    @Override
+    public void reset() {
         current = 0;
         board.reset2P();
     }
@@ -74,7 +73,8 @@ public class Game2P {
      * until it is over. Players can make a move one after the other.
      * After each move, the changed game situation is printed.
      */
-    private void play() {
+    @Override
+    public void play() {
         while(!board.gameOver()) {
             BoardText.printBoard();
             System.out.println(board);
@@ -103,7 +103,8 @@ public class Game2P {
     /**
      * Prints the game situation.
      */
-    private void update() {
+    @Override
+    public void update() {
         System.out.println("\ncurrent game situation: \n\n" + board.toString()
                 + "\n");
     }
@@ -112,7 +113,8 @@ public class Game2P {
      * Prints the result of the last game. <br>
      * @requires the game to be over
      */
-    private void printResult() {
+    @Override
+    public void printResult() {
         if (board.hasWinner()) {
             Player winner = board.isWinner(players[0].getMarble()) ? players[0]
                     : players[1];

@@ -1,10 +1,8 @@
 import utils.TextIO;
 
-public class Game3P {
+public class Game3P implements Game {
 
     public static final int NUMBER_PLAYERS = 3;
-    private int deadBlackCount;
-    private int deadWhiteCount;
     /**
      * The board.
      *
@@ -52,6 +50,7 @@ public class Game3P {
      * Asks after each ended game if the user want to continue. Continues until
      * the user does not want to play anymore.
      */
+    @Override
     public void start() {
         boolean continueGame = true;
         while (continueGame) {
@@ -66,7 +65,8 @@ public class Game3P {
      * Resets the game. <br>
      * The board is emptied and player[0] becomes the current player.
      */
-    private void reset() {
+    @Override
+    public void reset() {
         current = 0;
         board.reset3P();
     }
@@ -77,7 +77,8 @@ public class Game3P {
      * until it is over. Players can make a move one after the other.
      * After each move, the changed game situation is printed.
      */
-    private void play() {
+    @Override
+    public void play() {
         while (!board.gameOver()) {
             System.out.println(board);
             if (current == 0) {
@@ -107,7 +108,8 @@ public class Game3P {
     /**
      * Prints the game situation.
      */
-    private void update() {
+    @Override
+    public void update() {
         System.out.println("\ncurrent game situation: \n\n" + board.toString()
                 + "\n");
     }
@@ -117,12 +119,17 @@ public class Game3P {
      *
      * @requires the game to be over
      */
-    private void printResult() {
+    @Override
+    public void printResult() {
         if (board.hasWinner()) {
-            Player winner = board.isWinner(players[0].getMarble()) ? players[0]
-                    : players[1];
-            System.out.println("Speler " + winner.getName() + " ("
-                    + winner.getMarble().toString() + ") has won!");
+            for (int i = 0; i < players.length; i++) {
+                if (board.isWinner(players[i].getMarble())) {
+                    Player winner = players[i];
+                    System.out.println("Speler " + winner.getName() + " ("
+                            + winner.getMarble().toString() + ") has won!");
+                    ;
+                }
+            }
         } else {
             System.out.println("Draw. There is no winner!");
         }

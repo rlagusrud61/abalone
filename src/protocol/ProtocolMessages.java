@@ -1,7 +1,7 @@
 package protocol;
 
 /**
- * Protocol for Networked Abalone Game Application.
+ * Protocol for Networked abalone.Abalone abalone.Game Application.
  *
  * @author Hyeon Kyeong Kim
  */

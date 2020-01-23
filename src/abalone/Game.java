@@ -1,3 +1,5 @@
+package abalone;
+
 public interface Game {
 
     int deadBlackCount = 0;

@@ -1,3 +1,4 @@
+package abalone;
 
 public enum Marble {
     EMPTY,

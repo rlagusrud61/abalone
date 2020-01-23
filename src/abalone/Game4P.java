@@ -1,3 +1,5 @@
+package abalone;
+
 import utils.TextIO;
 
 public class Game4P implements Game {
@@ -28,7 +30,7 @@ public class Game4P implements Game {
     // -- Constructors -----------------------------------------------
 
     /**
-     * Creates a new Game object.
+     * Creates a new abalone.Game object.
      *
      * @param s0 the first player
      * @param s1 the second player
@@ -47,7 +49,7 @@ public class Game4P implements Game {
     // -- Commands ---------------------------------------------------
 
     /**
-     * Starts the Abalone game. <br>
+     * Starts the abalone.Abalone game. <br>
      * Asks after each ended game if the user want to continue. Continues until
      * the user does not want to play anymore.
      */
@@ -73,7 +75,7 @@ public class Game4P implements Game {
     }
 
     /**
-     * Plays the Abalone game. <br>
+     * Plays the abalone.Abalone game. <br>
      * First the (still empty) board is shown. Then the game is played
      * until it is over. Players can make a move one after the other.
      * After each move, the changed game situation is printed.

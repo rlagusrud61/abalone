@@ -4,7 +4,7 @@ import exceptions.ProtocolException;
 import exceptions.ServerUnavailableException;
 
 /**
- * Defines the methods that the Game Client should support.
+ * Defines the methods that the abalone.Game Client should support.
  *
  * @author Jochem Groen, Hyeon Kyeong Kim
  */

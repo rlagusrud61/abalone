@@ -1,4 +1,4 @@
-
+package abalone;
 
 public class Board {
     private int deadBlackCount;

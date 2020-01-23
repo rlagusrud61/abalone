@@ -1,6 +1,7 @@
+package abalone;
 
 /**
- * Abstract class for keeping a player in the Abalone Game.
+ * Abstract class for keeping a player in the abalone.Abalone abalone.Game.
  */
 public abstract class Player {
 
@@ -12,12 +13,12 @@ public abstract class Player {
     // -- Constructors -----------------------------------------------
 
     /**
-     * Creates a new Player object.
+     * Creates a new abalone.Player object.
      *
      * @requires name is not null
      * @requires mark is either XX or OO
      * @ensures the Name of this player will be name
-     * @ensures the Marble of this player will be marble
+     * @ensures the abalone.Marble of this player will be marble
      */
     public Player(String name, Marble marble) {
         this.name = name;
@@ -61,7 +62,7 @@ public abstract class Player {
     public void makeMove(Board board) {
         int[] choice = determineMove(board);
         for (int i = 0; i < choice.length; i++)
-        board.setField(choice[i], getMarble());
+            board.setField(choice[i], getMarble());
     }
 
 }

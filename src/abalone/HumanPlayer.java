@@ -1,3 +1,5 @@
+package abalone;
+
 import utils.TextIO;
 
 public class HumanPlayer extends Player {

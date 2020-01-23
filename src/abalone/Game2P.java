@@ -1,15 +1,19 @@
-public abstract class Game {
+package abalone;
+
+import utils.TextIO;
+
+public class Game2P implements Game {
+
+    public static final int NUMBER_PLAYERS = 2;
 
     /**
      * The board.
-     *
      * @invariant board is never null
      */
+    private Board board;
 
-    Board board = new Board();
     /**
      * The 2 players of the game.
-     *
      * @invariant the length of the array equals NUMBER_PLAYERS
      * @invariant all array items are never null
      */
@@ -17,22 +21,24 @@ public abstract class Game {
 
     /**
      * Index of the current player.
-     *
      * @invariant the index is always between 0 and NUMBER_PLAYERS
      */
-    int current;
+    private int current;
 
     // -- Constructors -----------------------------------------------
 
     /**
-     * Creates a new Game object.
-     *
+     * Creates a new abalone.Game object.
+     * @requires s0 and s1 to be non-null
      * @param s0 the first player
      * @param s1 the second player
-     * @requires s0 and s1 to be non-null
      */
-    public Game(Player s0, Player s1) {
-
+    public Game2P(Player s0, Player s1) {
+        board = new Board();
+        players = new Player[NUMBER_PLAYERS];
+        players[0] = s0;
+        players[1] = s1;
+        current = 0;
     }
 
     // -- Commands ---------------------------------------------------
@@ -42,13 +48,23 @@ public abstract class Game {
      * Asks after each ended game if the user want to continue. Continues until
      * the user does not want to play anymore.
      */
-    public void start();
+    @Override
+    public void start() {
+        boolean continueGame = true;
+        while (continueGame) {
+            reset();
+            play();
+            System.out.println("\n> Play another time? (y/n)?");
+            continueGame = TextIO.getBoolean();
+        }
+    }
 
     /**
      * Resets the game. <br>
      * The board is emptied and player[0] becomes the current player.
      */
-    private void reset() {
+    @Override
+    public void reset() {
         current = 0;
         board.reset2P();
     }
@@ -59,32 +75,49 @@ public abstract class Game {
      * until it is over. Players can make a move one after the other.
      * After each move, the changed game situation is printed.
      */
-    private void play() {
-        while (!board.gameOver() && !board.hasWinner()) {
-            board.setField(players[current].determineMove(board), players[current].getMarble());
-            current = (current == 0) ? 1 : 0;
+    @Override
+    public void play() {
+        while(!board.gameOver()) {
+            BoardText.printBoard();
+            System.out.println(board);
+            if(current == 0) {
+                players[0].makeMove(board);
+                current++;
+
+            }
             update();
+
+            if(current == 1 && !board.gameOver()) {
+                players[1].makeMove(board);
+                current++;
+            }
+            if(current > 1) {
+                current = 0;
+            }
+
         }
+        update();
+        printResult();
     }
 
     /**
      * Prints the game situation.
      */
-    private void update() {
-        System.out.println("\nCurrent game situation: \n\n" + board.toString()
-                + "\n");
+    @Override
+    public void update() {
+        System.out.println("\ncurrent game situation: \n\n" + board.toString() + "\n");
     }
 
     /**
      * Prints the result of the last game. <br>
-     *
      * @requires the game to be over
      */
-    private void printResult() {
+    @Override
+    public void printResult() {
         if (board.hasWinner()) {
             Player winner = board.isWinner(players[0].getMarble()) ? players[0]
                     : players[1];
-            System.out.println("Player " + winner.getName() + " ("
+            System.out.println("Speler " + winner.getName() + " ("
                     + winner.getMarble().toString() + ") has won!");
         } else {
             System.out.println("Draw. There is no winner!");

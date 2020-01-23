@@ -81,8 +81,7 @@ public class Game2P {
             if(current == 0) {
                 players[0].makeMove(board);
                 current++;
-                System.out.println(board.getField(16));
-                System.out.println(board.getField(23));
+
             }
             update();
 
@@ -95,8 +94,7 @@ public class Game2P {
                 current = 0;
 
             }
-            System.out.println(board.getField(16));
-            System.out.println(board.getField(23));
+
         }
         update();
         printResult();

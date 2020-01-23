@@ -3,7 +3,7 @@ import utils.TextIO;
 public class HumanPlayer extends Player {
 
 
-    Board board;
+    Board board = new Board();
     // -- Constructors -----------------------------------------------
 
     /**
@@ -40,9 +40,9 @@ public class HumanPlayer extends Player {
         String input = TextIO.getlnString();
         while (true) {
             String[] commands = input.split(";");
-            int marble1 = 0;
-            int marble2 = 0;
-            int marble3 = 0;
+            int marble1 = 62;
+            int marble2 = 62;
+            int marble3 = 62;
             int index = 0;
             int[] result = new int[commands.length];
             int[] intcommands = new int[commands.length];
@@ -53,20 +53,20 @@ public class HumanPlayer extends Player {
             }
             for (int i = 1; i < intcommands.length; i++) {
                 marble1 = intcommands[i];
-                board.setField(marble1, Marble.EMPTY);
-                if (commands.length > 2) {
-                    if (i + 1 > 3) {
-                        marble2 = intcommands[(i + 1) & 3];
+
+                if (commands.length == 3) {
+                    if (i + 1 > 2) {
+                        marble2 = intcommands[(i + 1) % 2];
                     } else {
                         marble2 = intcommands[i + 1];
                     }
 
-                    board.setField(marble2, Marble.EMPTY);
+
                     valid = board.isField(marble1)
                             && board.isField(marble2)
-                            && board.getField(marble1).equals(getMarble())
                             && board.getField(marble2).equals(getMarble())
-                            && isNeighbour(marble1, marble2);
+                            && isNeighbour(intcommands[1], intcommands[2]);
+
                 }
                 if (commands.length > 3) {
                     if (i + 2 > 3) {
@@ -74,23 +74,25 @@ public class HumanPlayer extends Player {
                     } else {
                         marble3 = intcommands[i + 2];
                     }
-                    board.setField(marble3, Marble.EMPTY);
+                    if (i + 1 > 3) {
+                        marble2 = intcommands[(i + 1) % 3];
+                    } else {
+                        marble2 = intcommands[i + 1];
+                    }
+
                     valid = board.isField(marble1)
                             && board.isField(marble2)
                             && board.isField(marble3)
-                            && board.getField(marble1).equals(getMarble())
-                            && board.getField(marble2).equals(getMarble())
                             && board.getField(marble3).equals(getMarble())
-                            && isNeighbour(marble1, marble2)
-                            && isNeighbour(marble2, marble3)
-                            && isInLine(marble1, marble2, marble3);
+                            && isNeighbour(intcommands[1], intcommands[2])
+                            && isNeighbour(intcommands[2], intcommands[3]);
+                    System.out.println(isInLine(marble1, marble2, marble3));
 
 
                 }
 
+
                 int[] rowcol = board.convertToRowCol(marble1);
-                System.out.println(rowcol[0]);
-                System.out.println(rowcol[1]);
                 int[] rowcoltest = rowcol;
 
                 switch (intcommands[0]) {
@@ -146,7 +148,7 @@ public class HumanPlayer extends Player {
 
                         }
                         if (board.isEmptyField(rowcoltest)) {
-                            System.out.println(board.convertToInt(rowcoltest));
+
                             result[i - 1] = board.convertToInt(rowcoltest);
 
                         } else {
@@ -183,17 +185,31 @@ public class HumanPlayer extends Player {
                         break;
 
                 }
-                if (valid) {
-                    return result;
-                } else {
-                    System.out.println("ERROR: field " + input
-                            + " is no valid choice.");
-                    System.out.println(prompt);
-                    input = TextIO.getlnString();
-                }
-
-
             }
+            if (valid) {
+
+                if (commands.length > 2) {
+                    board.setField(marble1, Marble.EMPTY);
+                    board.setField(marble2, Marble.EMPTY);
+                }
+                if (commands.length > 3) {
+                    System.out.println(marble1);
+                    System.out.println(marble2);
+                    System.out.println(marble3);
+
+                    board.setField(marble1, Marble.EMPTY);
+                    board.setField(marble2, Marble.EMPTY);
+                    board.setField(marble3, Marble.EMPTY);
+                }
+                return result;
+            } else {
+                System.out.println("ERROR: field " + input
+                        + " is no valid choice.");
+                System.out.println(prompt);
+                input = TextIO.getlnString();
+            }
+
+
         }
 
     }
@@ -259,7 +275,8 @@ public class HumanPlayer extends Player {
         return false;
     }
 
-    /**Checks if marbles 1,2,3 are in a straight line.
+    /**
+     * Checks if marbles 1,2,3 are in a straight line.
      *
      * @param marble1 first marble
      * @param marble2 second marble

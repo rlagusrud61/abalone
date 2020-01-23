@@ -42,6 +42,7 @@ public class Board {
 
 
     public int[] convertToRowCol(int a) {
+
         int col = a;
         int row = 0;
         for (int i = 0; i < 9; i++) {

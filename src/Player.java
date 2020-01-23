@@ -60,8 +60,6 @@ public abstract class Player {
      */
     public void makeMove(Board board) {
         int[] choice = determineMove(board);
-        System.out.println(choice[0]);
-        System.out.println(getMarble());
         for (int i = 0; i < choice.length; i++)
         board.setField(choice[i], getMarble());
     }

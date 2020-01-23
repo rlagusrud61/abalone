@@ -50,6 +50,7 @@ public class HumanPlayer extends Player {
             int[] intcommands = new int[commands.length];
 
             valid = board.isField(intcommands[1]) && (board.getField(intcommands[1]).equals(getMarble()));
+            System.out.println(valid);
             for (int i = 0; i < commands.length; i++) {
                 intcommands[i] = Integer.parseInt(commands[i]);
             }
@@ -66,9 +67,9 @@ public class HumanPlayer extends Player {
 
                     valid = board.isField(marble1)
                             && board.isField(marble2)
-                            && board.getField(marble2).equals(getMarble())
-                            && isNeighbour(intcommands[1], intcommands[2]);
-
+                            && board.getField(marble2).equals(getMarble());
+                          //  && isNeighbour(intcommands[1], intcommands[2]);
+                    System.out.println(valid);
                 }
                 if (commands.length > 3) {
                     if (i + 2 > 3) {

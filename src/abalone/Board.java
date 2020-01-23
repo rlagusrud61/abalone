@@ -48,10 +48,10 @@ public class Board {
         for (int i = 0; i < 9; i++) {
             if (col > rowSizes[i]) {
                 col = col - rowSizes[i];
-                row = i;
+                row += 1;
             }
         }
-        row = row + 1;
+
         int[] result = new int[]{row, col};
         return result;
     }

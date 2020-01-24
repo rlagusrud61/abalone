@@ -1,156 +1,63 @@
 package abalone;
 
 public class Board {
-    private int deadBlackCount;
-    private int deadWhiteCount;
-    private int[] rowSizes = new int[]{5, 6, 7, 8, 9, 8, 7, 6, 5};
-    private int[] redMarble4 = new int[]{1, 2, 3, 4, 7, 8, 9, 14, 15};
-    private int[] blackMarble4 = new int[]{11, 17, 18, 24, 25, 26, 33, 34, 35};
-    private int[] blueMarble4 = new int[]{47, 48, 53, 54, 55, 58, 59, 60, 61};
-    private int[] whiteMarble4 = new int[]{27, 28, 29, 36, 37, 38, 44, 45, 51};
+
+    public static final int[] ROW_SIZES = new int[]{5, 6, 7, 8, 9, 8, 7, 6, 5};
+
     private Marble[] fields;
 
-
     public Board() {
-
         fields = new Marble[61];
-        //reset2P();
     }
 
     public static void main(String[] args) {
-        System.out.println("Hello");
         Board board = new Board();
-        board.reset4P();
-        System.out.println(board.toString());
+        board.reset(BoardStates.getTwoPlayer());
+
+        boolean test = board.isInLine(new Coordinate(3, 3), new Coordinate(4, 5), new Coordinate(4, 5));
+        System.out.println(test);
+
+        System.out.println(board);
     }
 
     /**
      * Converts a coordinate (row, column) into a int index.
      *
-     * @param cord
+     * @param coord
      * @return
      * @requires cord != null;
      */
-    public int convertToInt(int[] cord) {
+    public int convertToInt(Coordinate coord) {
         int result = 0;
-        for (int i = 0; i < cord[0]; i++) {
-            result += rowSizes[i];
+        for (int i = 0; i < coord.y; i++) {
+            result += ROW_SIZES[i];
         }
-        result += cord[1];
+        result += coord.x;
         return result;
     }
 
+    private Coordinate convertToRowCol(int index) {
+        int counter = 0;
 
-    public int[] convertToRowCol(int a) {
+        for (int row : ROW_SIZES) {
+            for (int col = 0; col < ROW_SIZES[row]; col++) {
+                if (counter == index) {
+                    return new Coordinate(col, row);
+                }
 
-        int col = a;
-        int row = 0;
-
-        for (int i = 0; i < 9; i++) {
-            if (col >= rowSizes[i]) {
-                col = col - rowSizes[i];
-                row += 1;
-
-            } else {
-                int[] result = new int[]{row, col};
-                return result;
+                counter += 1;
             }
-
         }
 
-return null;
+        throw new IndexOutOfBoundsException();
     }
 
-    public boolean isValidMoveOne(int i) {
-        if (fields[i] == Marble.EMPTY) {
-            return true;
-        } else
-            return false;
+    private boolean isFieldEmpty(int i) {
+        return fields[i] == Marble.EMPTY;
     }
 
-    public void reset2P() {
-        for (int i = 0; i < fields.length - 1; i++) {
-            fields[i] = Marble.EMPTY;
-        }
-        for (int i = 0; i < 11; i++) {
-            fields[i] = Marble.BLACK;
-        }
-        for (int i = 13; i < 16; i++) {
-            fields[i] = Marble.BLACK;
-        }
-        for (int i = 50; i < fields.length; i++) {
-            fields[i] = Marble.WHITE;
-        }
-        for (int i = 45; i < 48; i++) {
-            fields[i] = Marble.WHITE;
-        }
-    }
-
-    public void reset3P() {
-        //Set all fields to empty
-        for (int i = 0; i < fields.length; i++) {
-            fields[i] = Marble.EMPTY;
-        }
-
-        //Set fields to blue
-        for (int i = 50; i < fields.length; i++) {
-            fields[i] = Marble.BLUE;
-        }
-
-        //Set fields to White and Black
-        int index = 0;
-        for (int i = 0; i < 5; i++) {
-            int rowSize = rowSizes[i];
-
-            setField(index, Marble.WHITE);
-            setField(index + 1, Marble.WHITE);
-            setField(index + rowSize - 2, Marble.BLACK);
-            setField(index + rowSize - 1, Marble.BLACK);
-            index += rowSize;
-        }
-        setField(35, Marble.WHITE);
-        setField(42, Marble.BLACK);
-    }
-
-    public void reset4P() {
-        for (int i = 0; i < fields.length; i++) {
-            fields[i] = Marble.EMPTY;
-        }
-        for (int i : redMarble4) {
-            fields[i - 1] = Marble.RED;
-        }
-        for (int i : blackMarble4) {
-            fields[i - 1] = Marble.BLACK;
-        }
-        for (int i : blueMarble4) {
-            fields[i - 1] = Marble.BLUE;
-        }
-        for (int i : whiteMarble4) {
-            fields[i - 1] = Marble.WHITE;
-        }
-    }
-
-
-    public boolean isField(int index) {
-
-        if (0 <= index && index < 62) {
-            return true;
-        }
-        return false;
-    }
-
-    /**
-     * Returns true of the (row,col) pair refers to a valid field on the board.
-     *
-     * @return true if 0 <= row < DIM && 0 <= col < DIM
-     * @ensures true when both row and col are within the board's bounds
-     */
-    public boolean isField(int[] input) {
-        int check = convertToInt(input);
-        if (isField(check)) {
-            return true;
-        }
-        return false;
+    private boolean isField(int index) {
+        return 0 <= index && index < 62;
     }
 
     /**
@@ -169,17 +76,22 @@ return null;
         return null;
     }
 
+    private boolean isField(Coordinate coord) {
+        return coord.y >= 0 && coord.y < ROW_SIZES.length
+                && coord.x < ROW_SIZES[coord.y] && coord.x >= 0;
+    }
+
     /**
      * Returns the content of the field referred to by the (row,col) pair.
      *
-     * @param cord the coordinates of the field
+     * @param coord the coordinates of the field
      * @return the mark on the field
      * @requires (row, col) to be a valid field
      * @ensures the result to be either EMPTY, XX or OO
      */
-    public Marble getField(int cord[]) {
-        if (isField(cord)) {
-            return fields[convertToInt(cord)];
+    public Marble getField(Coordinate coord) {
+        if (isField(coord)) {
+            return fields[convertToInt(coord)];
         }
 
         return null;
@@ -194,70 +106,7 @@ return null;
      * @ensures true when the Mark at index i is EMPTY
      */
     public boolean isEmptyField(int i) {
-        if (getField(i) == Marble.EMPTY) {
-            return true;
-        }
-
-        return false;
-    }
-
-    /**
-     * Returns true if the field referred to by the (row,col) pair it empty.
-     *
-     * @param cord the coordinates of the field
-     * @return true if the field is empty
-     * @requires (row, col) to be a valid field
-     * @ensures true when the Mark at (row, col) is EMPTY
-     */
-    public boolean isEmptyField(int[] cord) {
-        if (getField(cord) == Marble.EMPTY) {
-            return true;
-        }
-
-        return false;
-    }
-
-
-    /**
-     * Returns true if the game is over. The game is over when there is a winner
-     * or the whole board is full.
-     *
-     * @return true if the game is over
-     * @ensures true if the board is full or when there is a winner
-     */
-    public boolean gameOver() {
-        if (hasWinner()) {
-            return true;
-        }
-
-        return false;
-    }
-
-    public boolean isWinner(Marble m) {
-
-        if (m == Marble.BLACK && deadBlackCount == 6) {
-            return true;
-        } else if (m == Marble.WHITE && deadWhiteCount == 6) {
-            return true;
-        } else {
-            return false;
-        }
-
-    }
-
-    /**
-     * Returns true if the game has a winner. This is the case when one of the
-     * marks controls at least one row, column or diagonal.
-     *
-     * @return true if the student has a winner.
-     * @ensures true when either XX or OO has won
-     */
-    public boolean hasWinner() {
-        if (isWinner(Marble.WHITE) || isWinner(Marble.BLACK)) {
-            return true;
-
-        }
-        return false;
+        return getField(i) == Marble.EMPTY;
     }
 
     /**
@@ -269,25 +118,19 @@ return null;
      * @ensures field i to be set to Mark m
      */
     public void setField(int i, Marble m) {
-
         fields[i] = m;
-
-
     }
 
     /**
-     * Sets the content of the field represented by the (row,col) pair to the
-     * mark m.
+     * Returns true if the field referred to by the (row,col) pair it empty.
      *
-     * @param cord coordinates of the field to be set
-     * @param m    the mark to be placed
-     * @requires (cord) to be a valid field
-     * @ensures field (cord) to be set to Mark m
+     * @param coord the coordinates of the field
+     * @return true if the field is empty
+     * @requires (row, col) to be a valid field
+     * @ensures true when the Mark at (row, col) is EMPTY
      */
-    public void setField(int[] cord, Marble m) {
-        fields[convertToInt(cord)] = m;
-
-
+    public boolean isEmptyField(Coordinate coord) {
+        return getField(coord) == Marble.EMPTY;
     }
 
     /**
@@ -297,29 +140,81 @@ return null;
      * @return the game situation as String
      */
     public String toString() {
-        String s = "";
-        for (int i = 0; i < rowSizes.length; i++) {
+        StringBuilder s = new StringBuilder();
+        for (int i = 0; i < ROW_SIZES.length; i++) {
             String row = rowToString(i);
-            s = s + row +"\n";
+            s.append(row).append("\n");
         }
-        return s;
+        return s.toString();
     }
 
-    public  String rowToString(int rowindex) {
-        String s = "";
+    public String rowToString(int rowindex) {
+        StringBuilder s = new StringBuilder();
         int row = rowindex;
         int col = 0;
-        int[] cord = new int[] {row,col};
-        for(int i = 10; i > rowSizes[row]; i--) {
-            s = "   " + s;
+
+        for (int i = 10; i > ROW_SIZES[row]; i--) {
+            s.insert(0, "   ");
         }
-        for (int i = 0; i < rowSizes[row]; i++) {
-            cord[1]= i;
-            s = s + getField(cord) + " ┃   ";
+        for (int i = 0; i < ROW_SIZES[row]; i++) {
+            Coordinate coord = new Coordinate(col, row);
+            s.append(getField(coord).draw()).append(" ┃   ");
         }
-        return s;
+        return s.toString();
     }
 
+    public void reset(Marble[] state) {
+        this.fields = state;
+    }
+
+    public void makeMove(Move move) {
+        // Check if neighbours
+        if (move.getMarble3() != null) {
+
+        }
+    }
+
+    private boolean isNeighbour(Coordinate coord1, Coordinate coord2) {
+        if (Math.abs(coord1.x - coord2.x) == 1) {
+            int yDiff = Math.abs(coord1.y - coord2.y);
+            return yDiff == 0 || yDiff == 1;
+        }
+
+        if (Math.abs(coord1.x - coord2.x) == 0) {
+            return Math.abs(coord1.y - coord2.y) == 1;
+        }
+
+        return false;
+    }
+
+    private boolean isInLine(Coordinate coord1, Coordinate coord2, Coordinate coord3) {
+        for (Move.Direction direction : Move.Direction.values()) {
+            Coordinate pawn = new Coordinate(coord1);
+
+            int encounters = 0;
+            while (pawn.step(direction) != null) {
+                pawn = pawn.step((direction));
+
+                if (pawn.equals(coord2) || pawn.equals(coord3)) {
+                    encounters += 1;
+                }
+            }
+
+            while (pawn.step(direction.opposite()) != null) {
+                pawn = pawn.step(direction.opposite());
+
+                if (pawn.equals(coord2) || pawn.equals(coord3)) {
+                    encounters += 1;
+                }
+            }
+
+            if (encounters == 2) {
+                return true;
+            }
+        }
+
+        return false;
+    }
 
 }
 

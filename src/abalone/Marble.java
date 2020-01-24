@@ -7,24 +7,12 @@ public enum Marble {
     BLACK,
     WHITE;
 
+    public static final String RESET = "\u001B[0m";
 
-    public static void main(String[] args) {
-        System.out.println(Marble.EMPTY);
-        System.out.println(Marble.RED);
-        System.out.println(Marble.BLUE);
-        System.out.println(Marble.WHITE);
-        System.out.println(Marble.BLACK);
-
-    }
-
-    @Override
-    public String toString() {
+    public String draw() {
         String marble = null;
-        String RESET = "\u001B[0m";
+
         switch (this) {
-            case EMPTY:
-                marble = "⚪" + RESET;
-                break;
             case RED:
                 marble = "\u001B[31m" + "⚫" + RESET;
                 break;
@@ -38,10 +26,14 @@ public enum Marble {
                 marble = "\u001B[97m" + "⚫" + RESET;
                 // BTW, BOLD "\033[1;30m" + BLACK  = WHITE??????????????
                 break;
+            default:
+                marble = "⚪" + RESET;
+                break;
         }
 
         return marble;
     }
+
 }
 
 

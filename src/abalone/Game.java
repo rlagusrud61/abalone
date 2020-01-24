@@ -1,5 +1,7 @@
 package abalone;
 
+import java.util.List;
+
 public interface Game {
 
     int deadBlackCount = 0;
@@ -19,6 +21,7 @@ public interface Game {
      * @invariant all array items are never null
      */
     Player[] players = null;
+    List<List<Player>> teams = null;
 
     /**
      * Index of the current player.

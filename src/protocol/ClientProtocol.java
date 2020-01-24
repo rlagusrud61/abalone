@@ -24,110 +24,12 @@ public interface ClientProtocol {
      * @throws ServerUnavailableException if IO errors occur.
      * @throws ProtocolException          if the server response is invalid.
      */
-    public void handleHello() throws ServerUnavailableException, ProtocolException;
+    public void handleHello(String input) throws ServerUnavailableException, ProtocolException;
 
-    /**
-     * Sends a move request to the server.
-     * <p>
-     * Given the name of a guest, the doMove() method sends the following message to
-     * the server: ProtocolMessages.MOVE + ProtocolMessages.DELIMITER + <direction> + [<marble1>, <marble2>, <marble3>]
-     * <p>
-     * The result (one line) is then retrieved and forwarded to the view.
-     *
-     * @throws ServerUnavailableException if IO errors occur.
-     */
-    public void doMove() throws ServerUnavailableException;
+    public void sendMove(String input);
 
+    public void sendJoin(String name) throws ServerUnavailableException;
 
-    /**
-     * Sends a checkOut request to the server.
-     * <p>
-     * Given the name of a guest, the doOut() method sends the following message to
-     * the server: ProtocolMessages.OUT + ProtocolMessages.DELIMITER + guestName
-     * <p>
-     * The result (one line) is then retrieved and forwarded to the view.
-     *
-     * @param guestName Name of the guest
-     * @throws ServerUnavailableException if IO errors occur.
-     * @requires guestName != null
-     */
-    public void doOut(String guestName) throws ServerUnavailableException;
-
-    /**
-     * Sends a room request to the server.
-     * <p>
-     * Given the name of a guest, the doRoom() method sends the following message to
-     * the server: ProtocolMessages.ROOM + ProtocolMessages.DELIMITER + guestName
-     * <p>
-     * The result (one line) is then retrieved and forwarded to the view.
-     *
-     * @param guestName Name of the guest
-     * @throws ServerUnavailableException if IO errors occur.
-     * @requires guestName != null
-     */
-    public void doRoom(String guestName) throws ServerUnavailableException;
-
-    /**
-     * Sends a safe activation request to the server.
-     * <p>
-     * Given the name of a guest, the doAct() method sends the following message to
-     * the server: ProtocolMessages.ACT + ProtocolMessages.DELIMITER + guestName +
-     * ProtocolMessages.DELIMITER + password
-     * <p>
-     * The result (one line) is then retrieved and forwarded to the view.
-     *
-     * @param guestName Name of the guest
-     * @param password  (Optional) Password in case of a protected safe
-     * @throws ServerUnavailableException if IO errors occur.
-     * @requires guestName != null
-     */
-    public void doAct(String guestName, String password) throws ServerUnavailableException;
-
-    /**
-     * Requests the bill for a guest at the server.
-     * <p>
-     * Given the name of a guest and the number of nights of the stay, the doBill()
-     * method sends the following message to the server: ProtocolMessages.ACT +
-     * ProtocolMessages.DELIMITER + guestName + ProtocolMessages.DELIMITER +
-     * password
-     * <p>
-     * If nights is not an integer or not a positive number, a message is shown in
-     * the view and no request is sent to the server.
-     * <p>
-     * When a request is sent to the server, the result (multiple lines, ending with
-     * ProtocolMessages.EOT) is retrieved and forwarded to the view.
-     *
-     * @param guestName Name of the guest
-     * @param nights    Number of nights of the stay
-     * @throws ServerUnavailableException if IO errors occur.
-     * @requires guestName != null
-     * @requires nights to be integer and > 0
-     */
-    public void doBill(String guestName, String nights) throws ServerUnavailableException;
-
-    /**
-     * Requests the state of the hotel at the server. The state contains an overview
-     * of the rooms, its guests and the state of the safes.
-     * <p>
-     * The doPrint() method sends the following message to the server:
-     * ProtocolMessages.PRINT
-     * <p>
-     * The result (multiple lines, ending with ProtocolMessages.EOT) is retrieved
-     * and forwarded to the view
-     *
-     * @throws ServerUnavailableException if IO errors occur.
-     */
-    public void doPrint() throws ServerUnavailableException;
-
-    /**
-     * Sends a message to the server indicating that this client will exit:
-     * ProtocolMessages.EXIT;
-     * <p>
-     * Both the server and the client then close the connection. The client does
-     * this using the {@link #closeConnection()} method.
-     *
-     * @throws ServerUnavailableException if IO errors occur.
-     */
     public void sendExit() throws ServerUnavailableException, ServerUnavailableException;
 
 }

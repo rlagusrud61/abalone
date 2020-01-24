@@ -55,7 +55,7 @@ public class BoardStates {
         return fields;
     }
 
-    public static void getFourPlayer() {
+    public static Marble[] getFourPlayer() {
         Marble[] fields = new Marble[61];
 
         Arrays.fill(fields, Marble.EMPTY);
@@ -77,6 +77,8 @@ public class BoardStates {
         for (int i : whiteMarble4) {
             fields[i - 1] = Marble.WHITE;
         }
+        return fields;
+
     }
 
 }

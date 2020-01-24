@@ -13,10 +13,8 @@ public class Board {
     public static void main(String[] args) {
         Board board = new Board();
         board.reset(BoardStates.getTwoPlayer());
-
         boolean test = board.isInLine(new Coordinate(3, 3), new Coordinate(4, 5), new Coordinate(4, 5));
         System.out.println(test);
-
         System.out.println(board);
     }
 

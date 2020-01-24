@@ -15,7 +15,7 @@ public interface ServerProtocol {
      *
      * @return String to be sent to client as a handshake response.
      */
-    public String getHello();
+    public String getHello(String name);
 
     /**
      * Given the name of a guest, the checkIn command of the hotel application is

@@ -45,173 +45,243 @@ public class HumanPlayer extends Player {
             int marble1 = 62;
             int marble2 = 62;
             int marble3 = 62;
+            int sumitoMarble = 62;
+            boolean inline = false;
+            boolean sumito = false;
+
+            int count = 0;
             int[] result = new int[commands.length];
             int[] intcommands = new int[commands.length];
-
-
-            for (int i = 0; i < commands.length; i++) {
-                intcommands[i] = Integer.parseInt(commands[i]);
+            if (commands.length < 2) {
+                valid = false;
             }
-            for (int i = 1; i < intcommands.length; i++) {
-                marble1 = intcommands[i];
-                valid = board.isField(intcommands[1]) && (board.getField(intcommands[1]).equals(getMarble()));
-                System.out.println(valid);
-                if (commands.length < 3) {
-                    if (i > 1) {
-                        marble1 = intcommands[i];
-                    }
-
-                    valid = board.isField(marble1)
-                            && board.getField(marble1).equals(getMarble());
-
+            if (valid) {
+                for (int i = 0; i < commands.length; i++) {
+                    intcommands[i] = Integer.parseInt(commands[i]);
                 }
-
-                if (commands.length == 3) {
-                    if (i + 1 > 2) {
-                        marble2 = intcommands[(i + 1) % 2];
-                    } else {
-                        marble2 = intcommands[i + 1];
-                    }
-                    valid = board.isField(marble1)
-                            && board.isField(marble2)
-                            && board.getField(marble2).equals(getMarble());
-                          //  && isNeighbour(intcommands[1], intcommands[2]);
+                for (int i = 1; i < intcommands.length; i++) {
+                    marble1 = intcommands[i];
+                    valid = board.isField(intcommands[1]) && (board.getField(intcommands[1]).equals(getMarble()));
                     System.out.println(valid);
-                }
 
-                if (commands.length > 3) {
-                    if (i + 2 > 3) {
-                        marble3 = intcommands[(i + 2) % 3];
-                    } else {
-                        marble3 = intcommands[i + 2];
-                    }
-                    if (i + 1 > 3) {
-                        marble2 = intcommands[(i + 1) % 3];
-                    } else {
-                        marble2 = intcommands[i + 1];
+                    if (commands.length == 2) {
+                        if (i > 1) {
+                            marble1 = intcommands[i];
+                        }
+
+                        valid = board.isField(marble1)
+                                && board.getField(marble1).equals(getMarble());
+
                     }
 
-                    valid = board.isField(marble1)
-                            && board.isField(marble2)
-                            && board.isField(marble3)
-                            && board.getField(marble3).equals(getMarble())
-                            && isNeighbour(intcommands[1], intcommands[2])
-                            && isNeighbour(intcommands[2], intcommands[3]);
+                    if (commands.length == 3) {
+                        if (i + 1 > 2) {
+                            marble2 = intcommands[(i + 1) % 2];
+                        } else {
+                            marble2 = intcommands[i + 1];
+                        }
+                        valid = board.isField(marble1)
+                                && board.isField(marble2)
+                                && board.getField(marble2).equals(getMarble());
+                        //  && isNeighbour(intcommands[1], intcommands[2]);
+                        System.out.println(valid);
+                    }
+
+                    if (commands.length > 3) {
+                        if (i + 2 > 3) {
+                            marble3 = intcommands[(i + 2) % 3];
+                        } else {
+                            marble3 = intcommands[i + 2];
+                        }
+                        if (i + 1 > 3) {
+                            marble2 = intcommands[(i + 1) % 3];
+                        } else {
+                            marble2 = intcommands[i + 1];
+                        }
+
+                        valid = board.isField(marble1)
+                                && board.isField(marble2)
+                                && board.isField(marble3)
+                                && board.getField(marble3).equals(getMarble())
+                                && isNeighbour(intcommands[1], intcommands[2]);
 
 
 
-                }
+                    }
+if (commands.length > 4) {
+    valid = false;
+}
 
+                    int[] rowcol = board.convertToRowCol(marble1);
+                    int[] rowcoltest = rowcol;
 
-                int[] rowcol = board.convertToRowCol(marble1);
-                int[] rowcoltest = rowcol;
+                    switch (intcommands[0]) {
+                        case 0:
 
-                switch (intcommands[0]) {
-                    case 0:
+                            if (rowcol[0] > 4) {
+                                rowcoltest[0] = rowcoltest[0] - 1;
+                                rowcoltest[1] = rowcoltest[1] + 1;
+                            } else {
+                                rowcoltest[0] = rowcoltest[0] - 1;
 
-                        if (rowcol[0] > 4) {
-                            System.out.println(marble1);
-                            System.out.println(rowcol[0]);
-                            System.out.println(rowcol[1]);
-                            System.out.println(board.convertToInt(rowcol));
-                            rowcoltest[0] = rowcoltest[0] - 1;
+                            }
+                            if(board.isEmptyField(rowcoltest) || board.convertToInt(rowcoltest) == marble2
+                                    || board.convertToInt(rowcoltest) == marble3 || !board.getField(board.convertToInt(rowcoltest)).equals(getMarble()) && !board.getField(board.convertToInt(rowcoltest)).equals(Marble.EMPTY)) {
+
+                                result[i - 1] = board.convertToInt(rowcoltest);
+                                if ( board.convertToInt(rowcoltest) == marble2
+                                        || board.convertToInt(rowcoltest) == marble3) {
+                                    inline = true;
+                                }
+                                if (!board.getField(board.convertToInt(rowcoltest)).equals(getMarble()) && !board.getField(board.convertToInt(rowcoltest)).equals(Marble.EMPTY)) {
+                                    count++;
+                                    sumitoMarble = board.convertToInt(rowcoltest);
+                                }
+                                if (count == 1 && inline) {
+                                    sumito = true;
+                                }
+
+                            } else {
+                                valid = false;
+                            }
+
+                            break;
+                        case 1:
                             rowcoltest[1] = rowcoltest[1] + 1;
-                            System.out.println("future " + board.convertToInt(rowcoltest));
-                            System.out.println(rowcoltest[0]);
-                            System.out.println(rowcoltest[1]);
-                        } else {
-                            rowcoltest[0] = rowcoltest[0] - 1;
 
-                        }
-                        if (board.isEmptyField(rowcoltest)
-                                || board.convertToInt(rowcoltest) == marble2
-                                || board.convertToInt(rowcoltest) == marble3) {
+                            if (board.isEmptyField(rowcoltest) || board.convertToInt(rowcoltest) == marble2
+                                    || board.convertToInt(rowcoltest) == marble3 || !board.getField(board.convertToInt(rowcoltest)).equals(getMarble()) && !board.getField(board.convertToInt(rowcoltest)).equals(Marble.EMPTY)) {
 
-                            result[i - 1] = board.convertToInt(rowcoltest);
-                        } else {
-                            valid = false;
-                        }
+                                result[i - 1] = board.convertToInt(rowcoltest);
+                                if ( board.convertToInt(rowcoltest) == marble2
+                                        || board.convertToInt(rowcoltest) == marble3) {
+                                    inline = true;
+                                }
+                                if (!board.getField(board.convertToInt(rowcoltest)).equals(getMarble()) && !board.getField(board.convertToInt(rowcoltest)).equals(Marble.EMPTY)) {
+                                    count++;
+                                    sumitoMarble = board.convertToInt(rowcoltest);
+                                }
+                                if (count == 1 && inline) {
+                                    sumito = true;
+                                }
+                            } else {
+                                valid = false;
+                            }
+                            break;
+                        case 2:
+                            if (rowcol[0] < 4) {
+                                rowcoltest[0] = rowcoltest[0] + 1;
+                                rowcoltest[1] = rowcoltest[1] + 1;
+                            } else {
+                                rowcoltest[0] = rowcoltest[0] + 1;
 
-                        break;
-                    case 1:
-                        rowcoltest[1] = rowcoltest[1] + 1;
+                            }
+                            if (board.isEmptyField(rowcoltest) || board.convertToInt(rowcoltest) == marble2
+                                    || board.convertToInt(rowcoltest) == marble3 || !board.getField(board.convertToInt(rowcoltest)).equals(getMarble()) && !board.getField(board.convertToInt(rowcoltest)).equals(Marble.EMPTY)) {
 
-                        if (board.isEmptyField(rowcoltest)  || board.convertToInt(rowcoltest) == marble2
-                                || board.convertToInt(rowcoltest) == marble3) {
-                            result[i - 1] = board.convertToInt(rowcoltest);
-                        } else {
-                            valid = false;
-                        }
-                        break;
-                    case 2:
-                        if (rowcol[0] < 4) {
-                            rowcoltest[0] = rowcoltest[0] + 1;
-                            rowcoltest[1] = rowcoltest[1] + 1;
-                        } else {
-                            rowcoltest[0] = rowcoltest[0] + 1;
+                                result[i - 1] = board.convertToInt(rowcoltest);
+                                if ( board.convertToInt(rowcoltest) == marble2
+                                        || board.convertToInt(rowcoltest) == marble3) {
+                                    inline = true;
+                                }
+                                if (!board.getField(board.convertToInt(rowcoltest)).equals(getMarble()) && !board.getField(board.convertToInt(rowcoltest)).equals(Marble.EMPTY)) {
+                                    count++;
+                                    sumitoMarble = board.convertToInt(rowcoltest);
+                                }
+                                if (count == 1 && inline) {
+                                    sumito = true;
+                                }
+                            } else {
+                                valid = false;
+                            }
+                            break;
+                        case 3:
+                            if (rowcol[0] > 4) {
+                                rowcoltest[0] = rowcoltest[0] + 1;
+                                rowcoltest[1] = rowcoltest[1] - 1;
+                            } else {
+                                rowcoltest[0] = rowcoltest[0] + 1;
 
-                        }
-                        if (board.isEmptyField(rowcoltest)  || board.convertToInt(rowcoltest) == marble2
-                                || board.convertToInt(rowcoltest) == marble3) {
+                            }
+                            if (board.isEmptyField(rowcoltest) || board.convertToInt(rowcoltest) == marble2
+                                    || board.convertToInt(rowcoltest) == marble3 || !board.getField(board.convertToInt(rowcoltest)).equals(getMarble()) && !board.getField(board.convertToInt(rowcoltest)).equals(Marble.EMPTY)) {
 
-                            result[i - 1] = board.convertToInt(rowcoltest);
-                            ;
-                        } else {
-                            valid = false;
-                        }
-                        break;
-                    case 3:
-                        if (rowcol[0] > 4) {
-                            rowcoltest[0] = rowcoltest[0] + 1;
+                                result[i - 1] = board.convertToInt(rowcoltest);
+                                if ( board.convertToInt(rowcoltest) == marble2
+                                        || board.convertToInt(rowcoltest) == marble3) {
+                                    inline = true;
+                                }
+                                if (!board.getField(board.convertToInt(rowcoltest)).equals(getMarble()) && !board.getField(board.convertToInt(rowcoltest)).equals(Marble.EMPTY)) {
+                                    count++;
+                                    sumitoMarble = board.convertToInt(rowcoltest);
+                                }
+                                if (count == 1 && inline) {
+                                    sumito = true;
+                                }
+
+                            } else {
+                                valid = false;
+                            }
+
+                            break;
+                        case 4:
                             rowcoltest[1] = rowcoltest[1] - 1;
-                        } else {
-                            rowcoltest[0] = rowcoltest[0] + 1;
+                            if (board.isEmptyField(rowcoltest) || board.convertToInt(rowcoltest) == marble2
+                                    || board.convertToInt(rowcoltest) == marble3 || !board.getField(board.convertToInt(rowcoltest)).equals(getMarble()) && !board.getField(board.convertToInt(rowcoltest)).equals(Marble.EMPTY)) {
 
-                        }
-                        System.out.println(board.convertToInt(rowcoltest));
-                        System.out.println(marble2);
-                        if (board.isEmptyField(rowcoltest)  || board.convertToInt(rowcoltest) == marble2
-                                || board.convertToInt(rowcoltest) == marble3) {
+                                result[i - 1] = board.convertToInt(rowcoltest);
+                                if ( board.convertToInt(rowcoltest) == marble2
+                                        || board.convertToInt(rowcoltest) == marble3) {
+                                    inline = true;
+                                }
+                                if (!board.getField(board.convertToInt(rowcoltest)).equals(getMarble()) && !board.getField(board.convertToInt(rowcoltest)).equals(Marble.EMPTY)) {
+                                    count++;
+                                    sumitoMarble = board.convertToInt(rowcoltest);
+                                }
+                                if (count == 1 && inline) {
+                                    sumito = true;
+                                }
+                            } else {
+                                valid = false;
+                            }
 
-                            result[i - 1] = board.convertToInt(rowcoltest);
+                        case 5:
+                            if (rowcol[0] < 4) {
+                                rowcoltest[0] = rowcoltest[0] - 1;
+                                rowcoltest[1] = rowcoltest[1] - 1;
+                            } else {
+                                rowcoltest[0] = rowcoltest[0] - 1;
 
-                        } else {
-                            valid = false;
-                        }
+                            }
+                            if (board.isEmptyField(rowcoltest) || board.convertToInt(rowcoltest) == marble2
+                                    || board.convertToInt(rowcoltest) == marble3 || !board.getField(board.convertToInt(rowcoltest)).equals(getMarble()) && !board.getField(board.convertToInt(rowcoltest)).equals(Marble.EMPTY)) {
 
-                        break;
-                    case 4:
-                        rowcoltest[1] = rowcoltest[1] - 1;
-                        if (board.isEmptyField(rowcoltest)  || board.convertToInt(rowcoltest) == marble2
-                                || board.convertToInt(rowcoltest) == marble3) {
-                            result[i - 1] = board.convertToInt(rowcoltest);
-                        } else {
-                            valid = false;
-                        }
-                        break;
+                                result[i - 1] = board.convertToInt(rowcoltest);
+                                if ( board.convertToInt(rowcoltest) == marble2
+                                        || board.convertToInt(rowcoltest) == marble3) {
 
-                    case 5:
-                        if (rowcol[0] < 4) {
-                            rowcoltest[0] = rowcoltest[0] - 1;
-                            rowcoltest[1] = rowcoltest[1] - 1;
-                        } else {
-                            rowcoltest[0] = rowcoltest[0] - 1;
+                                    inline = true;
+                                }
+                                if (!board.getField(board.convertToInt(rowcoltest)).equals(getMarble()) && !board.getField(board.convertToInt(rowcoltest)).equals(Marble.EMPTY)) {
+                                    count++;
+                                    sumitoMarble = board.convertToInt(rowcoltest);
+                                }
+                                if (count == 1 && inline) {
+                                    sumito = true;
+                                }
+                            } else {
+                                valid = false;
+                            }
+                            break;
 
-                        }
-                        if (board.isEmptyField(rowcoltest)  || board.convertToInt(rowcoltest) == marble2
-                                || board.convertToInt(rowcoltest) == marble3) {
+                        default:
+                            break;
 
-                            result[i - 1] = board.convertToInt(rowcoltest);
-                        } else {
-                            valid = false;
-                        }
-
-                        break;
-
-                    default:
-                        break;
-
+                    }
                 }
+            }
+           if(sumito){
+                valid =  sumito(board, intcommands[0], sumitoMarble, intcommands.length);
             }
             if (valid) {
 
@@ -222,8 +292,11 @@ public class HumanPlayer extends Player {
                 if (commands.length == 3) {
                     board.setField(marble1, Marble.EMPTY);
                     board.setField(marble2, Marble.EMPTY);
+
                 }
                 if (commands.length == 4) {
+
+
                     System.out.println(marble1);
                     System.out.println(marble2);
                     System.out.println(marble3);
@@ -231,6 +304,7 @@ public class HumanPlayer extends Player {
                     board.setField(marble1, Marble.EMPTY);
                     board.setField(marble2, Marble.EMPTY);
                     board.setField(marble3, Marble.EMPTY);
+
                 }
                 return result;
             } else {
@@ -327,6 +401,168 @@ public class HumanPlayer extends Player {
         } else if (difference12 == 8 && difference23 == 9) {
             return true;
         }
+        return false;
+    }
+
+
+    public boolean sumito(Board board, int direction, int marble, int length) {
+        int secondMarble = 62;
+        int[] rowcol = board.convertToRowCol(marble);
+        int[] rowcoltest = rowcol;
+
+        boolean valid = true;
+        int result = 0;
+
+
+            switch (direction) {
+                case 0:
+
+                    if (rowcol[0] > 4) {
+
+                        rowcoltest[0] = rowcoltest[0] - 1;
+                        rowcoltest[1] = rowcoltest[1] + 1;
+
+                    } else {
+                        rowcoltest[0] = rowcoltest[0] - 1;
+
+                    }
+                    if (board.isEmptyField(rowcoltest)) {
+
+                        result = board.convertToInt(rowcoltest);
+                    }
+                    if (!board.getField(rowcoltest).equals(getMarble()) && !board.getField(rowcoltest).equals(Marble.EMPTY) && length > 3) {
+                        result = board.convertToInt(rowcoltest);
+                        secondMarble = board.convertToInt(rowcoltest);
+
+
+                    } else {
+                        valid = false;
+                    }
+
+
+                    break;
+                case 1:
+                    rowcoltest[1] = rowcoltest[1] + 1;
+
+                    if (board.isEmptyField(rowcoltest)) {
+
+                        result = board.convertToInt(rowcoltest);
+                    }
+                    if (!board.getField(rowcoltest).equals(getMarble()) && !board.getField(rowcoltest).equals(Marble.EMPTY) && length > 3) {
+                        result = board.convertToInt(rowcoltest);
+                        secondMarble = board.convertToInt(rowcoltest);
+
+
+                    } else {
+                        valid = false;
+                    }
+
+                    break;
+                case 2:
+                    if (rowcol[0] < 4) {
+                        rowcoltest[0] = rowcoltest[0] + 1;
+                        rowcoltest[1] = rowcoltest[1] + 1;
+                    } else {
+                        rowcoltest[0] = rowcoltest[0] + 1;
+
+                    }
+                    if (board.isEmptyField(rowcoltest)) {
+
+                        result = board.convertToInt(rowcoltest);
+                    }
+                    if (!board.getField(rowcoltest).equals(getMarble()) && !board.getField(rowcoltest).equals(Marble.EMPTY) && length > 3) {
+                        result = board.convertToInt(rowcoltest);
+                        secondMarble = board.convertToInt(rowcoltest);
+
+
+                    } else {
+                        valid = false;
+                    }
+                case 3:
+                    if (rowcol[0] > 4) {
+                        rowcoltest[0] = rowcoltest[0] + 1;
+                        rowcoltest[1] = rowcoltest[1] - 1;
+                    } else {
+                        rowcoltest[0] = rowcoltest[0] + 1;
+                    }
+
+                        if (board.isEmptyField(rowcoltest)) {
+
+                            result = board.convertToInt(rowcoltest);
+                        }
+                        if (!board.getField(rowcoltest).equals(getMarble()) && !board.getField(rowcoltest).equals(Marble.EMPTY) && length > 3) {
+                            result = board.convertToInt(rowcoltest);
+                            secondMarble = board.convertToInt(rowcoltest);
+
+
+                        } else {
+                            valid = false;
+                        }
+
+                        break;
+                case 4:
+                    rowcoltest[1] = rowcoltest[1] - 1;
+
+                    if (board.isEmptyField(rowcoltest)) {
+
+                        result = board.convertToInt(rowcoltest);
+                    }
+                    if (!board.getField(rowcoltest).equals(getMarble()) && !board.getField(rowcoltest).equals(Marble.EMPTY) && length > 3) {
+                        result = board.convertToInt(rowcoltest);
+                        secondMarble = board.convertToInt(rowcoltest);
+
+
+                    } else {
+                        valid = false;
+                    }
+
+                    break;
+
+                case 5:
+                    if (rowcol[0] < 4) {
+                        rowcoltest[0] = rowcoltest[0] - 1;
+                        rowcoltest[1] = rowcoltest[1] - 1;
+                    } else {
+                        rowcoltest[0] = rowcoltest[0] - 1;
+
+                    }
+                    if (board.isEmptyField(rowcoltest)) {
+
+                        result = board.convertToInt(rowcoltest);
+                    }
+
+                    if (!board.getField(rowcoltest).equals(getMarble()) && !board.getField(rowcoltest).equals(Marble.EMPTY) && length > 3) {
+                        result = board.convertToInt(rowcoltest);
+                        secondMarble = board.convertToInt(rowcoltest);
+
+
+                    } else {
+                        valid = false;
+                    }
+
+
+                    break;
+
+                default:
+                    break;
+
+            }
+            if(valid) {
+
+                if (secondMarble != 62) {
+                    if (sumito(board, direction, secondMarble, length)) {
+                        board.setField(result, board.getField(marble));
+                        return true;
+                    }
+                } else {
+                    board.setField(result, board.getField(marble));
+                    return true;
+                }
+
+            } else {
+                return false;
+            }
+
         return false;
     }
 }

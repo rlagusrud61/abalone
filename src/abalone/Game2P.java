@@ -105,7 +105,8 @@ public class Game2P implements Game {
      */
     @Override
     public void update() {
-        System.out.println("\ncurrent game situation: \n\n" + board.toString() + "\n");
+        BoardText.printBoard();
+        System.out.println("\ncurrent game situation: \n\n" + board.toString()  + "\n");
     }
 
     /**

@@ -85,47 +85,32 @@ public class GameClientHandler implements Runnable {
     }
 
 
-    /**
-     * Handles commands received from the client by calling the according
-     * methods at the HotelServer. For example, when the message "i Name"
-     * is received, the method doIn() of HotelServer should be called
-     * and the output must be sent to the client.
-     * <p>
-     * If the received input is not valid, send an "Unknown Command"
-     * message to the server.
-     *
-     * @param msg command from client
-     * @throws IOException if an IO errors occur.
-     */
-
     private void handleCommand(String msg) throws IOException {
 
-        String command;
-        String first;
-        String second;
 
         String[] split = msg.split(ProtocolMessages.DELIMITER);
-        command = split[0];
-        first = null;
-        second = null;
+        String command = split[0];
+        String first = null;
+        String second = null;
 
         if (split.length > 1) {
             first = split[1];
             if (split.length > 2) {
                 second = split[2];
+
             }
         }
 
         switch (command) {
             case "h":
-                out.write(srv.getHello());
+                out.write(srv.getHello(first));
                 break;
 
-            case "i":
+            case "m":
                 if (first == null) {
-                    out.write("Guest name is invalid");
+                    out.write("Move is invalid");
                 } else {
-                    out.write(srv.doIn(first));
+                    out.write(srv.doMove(themarbles));
                 }
                 break;
 

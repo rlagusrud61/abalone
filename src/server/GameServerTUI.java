@@ -59,9 +59,9 @@ public class GameServerTUI implements GameServerView {
         Scanner userInput = new Scanner(System.in);
         String input = userInput.nextLine();
         showMessage(question);
-        if (input.contentEquals("yes")) {
+        if (input.contentEquals("y")) {
             return true;
-        } else if (input.contentEquals("no")) {
+        } else if (input.contentEquals("n")) {
             return false;
         } else {
             userInput.close();

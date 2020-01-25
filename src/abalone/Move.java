@@ -9,13 +9,12 @@ public class Move {
     private Marble[] friendlyMarbles;
     private Marble[] enemyMarbles;
 
-    public Move(Direction direction, Coordinate marble1, Coordinate marble2, Coordinate marble3, Marble[] friendlyMarbles, Marble[] enemyMarbles) {
+    public Move(Direction direction, Coordinate marble1, Coordinate marble2, Coordinate marble3) {
         this.direction = direction;
         this.marble1 = marble1;
         this.marble2 = marble2;
         this.marble3 = marble3;
-        this.friendlyMarbles = friendlyMarbles;
-        this.enemyMarbles = enemyMarbles;
+
     }
 
     public Direction getDirection() {
@@ -94,11 +93,6 @@ public class Move {
             }
         }
 
-        boolean isSameAxis() {
-            if (this == NE && this.opposite() == SW)
-                return false;
-
-        }
 
     }
 }

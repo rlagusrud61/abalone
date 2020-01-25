@@ -17,15 +17,15 @@ public interface ServerProtocol {
      */
     public String getHello(String name);
 
-    void invalid();
+    String invalid();
 
-    void doStart();
+    String doStart();
 
-    void doMove();
+    String doMove();
 
-    void nextTurn();
+    String nextTurn();
 
-    void doExit();
+    String doExit();
 
-    void noRematch();
+    String noRematch();
 }

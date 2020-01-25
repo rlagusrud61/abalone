@@ -8,7 +8,7 @@ public abstract class Player {
     // -- Instance variables -----------------------------------------
 
     private String name;
-    private Marble marble;
+    private MarbleColor marble;
 
     // -- Constructors -----------------------------------------------
 
@@ -20,7 +20,7 @@ public abstract class Player {
      * @ensures the Name of this player will be name
      * @ensures the abalone.Marble of this player will be marble
      */
-    public Player(String name, Marble marble) {
+    public Player(String name, MarbleColor marble) {
         this.name = name;
         this.marble = marble;
     }

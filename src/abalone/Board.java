@@ -5,6 +5,8 @@ public class Board {
     public static final int[] ROW_SIZES = new int[]{5, 6, 7, 8, 9, 8, 7, 6, 5};
 
     private Marble[] fields;
+    private int deadBlackCount;
+    private int deadWhiteCount;
 
     public Board() {
         fields = new Marble[61];
@@ -54,7 +56,7 @@ public class Board {
         return fields[i] == Marble.EMPTY;
     }
 
-    private boolean isField(int index) {
+    public boolean isField(int index) {
         return 0 <= index && index < 62;
     }
 
@@ -221,6 +223,14 @@ public class Board {
         throw new IllegalStateException("u cant do dis bitch");
         //TODO make a new exception for this shit
 
+    }
+
+    public boolean hasWinner() {
+        return (deadBlack == 6) ||
+    }
+
+    public boolean isWinner(Marble marble) {
+        if (hasWinner() &&)
     }
 }
 

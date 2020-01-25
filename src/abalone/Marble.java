@@ -7,11 +7,11 @@ public enum Marble {
     BLACK,
     WHITE;
 
+
     public static final String RESET = "\u001B[0m";
 
     public String draw() {
         String marble = null;
-
         switch (this) {
             case RED:
                 marble = "\u001B[31m" + "⚫" + RESET;

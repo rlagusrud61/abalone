@@ -77,8 +77,8 @@ public class GameClient implements ClientProtocol {
     public void createConnection() throws ExitProgram {
         clearConnection();
         while (serverSock == null) {
-            String host = "127.0.0.1";
-            int port = 8888;
+//            String host = "127.0.0.1";
+//            int port = ;
 
             // try to open a Socket to the server
             try {
@@ -210,67 +210,34 @@ public class GameClient implements ClientProtocol {
             e.printStackTrace();
         }
     }
-
     @Override
-    public void handleHello()
-            throws ServerUnavailableException, ProtocolException {
-        sendMessage(String.valueOf(ProtocolMessages.HELLO));
-        if (readLineFromServer().contains(String.valueOf(ProtocolMessages.HELLO))) {
-            System.out.println("Welcome to the Hotel booking system of hotel! Press 'h' for help menu: ");
-        } else {
-            throw new ProtocolException("Can't do the handshake");
-        }
+    public void handleHello(String input) throws ServerUnavailableException, ProtocolException {
+
     }
 
     @Override
-    public void doMove() throws ServerUnavailableException {
-        sendMessage(ProtocolMessages.IN + ProtocolMessages.DELIMITER + guestName);
-        System.out.println("> " + readLineFromServer());
-    }
+    public void sendMove(String input) {
 
-
-    @Override
-    public void doOut(String guestName) throws ServerUnavailableException {
-        sendMessage(ProtocolMessages.OUT + ProtocolMessages.DELIMITER + guestName);
-        System.out.println("> " + readLineFromServer());
     }
 
     @Override
-    public void doRoom(String guestName) throws ServerUnavailableException {
-        sendMessage(ProtocolMessages.ROOM + ProtocolMessages.DELIMITER + guestName);
-        System.out.println("> " + readLineFromServer());
+    public void sendJoin(String name) throws ServerUnavailableException {
+
     }
 
     @Override
-    public void doAct(String guestName, String password)
-            throws ServerUnavailableException {
-        sendMessage(ProtocolMessages.ACT + ProtocolMessages.DELIMITER + guestName + ProtocolMessages.DELIMITER + password);
-        System.out.println("> " + readLineFromServer());
+    public void sendRematch(String input) {
+
     }
 
     @Override
-    public void doBill(String guestName, String nights)
-            throws ServerUnavailableException {
-        boolean valid = true;
-        int night = 0;
-        try {
-            night = Integer.parseInt(nights);
-        } catch (NumberFormatException e) {
-            valid = false;
-        }
-        if (valid && night > 0) {
+    public void handleGameOver() {
 
-            sendMessage(ProtocolMessages.BILL + ProtocolMessages.DELIMITER + guestName + ProtocolMessages.DELIMITER + nights);
-            System.out.println("> " + readMultipleLinesFromServer());
-        } else {
-            System.out.println("Night is invalid");
-        }
     }
 
     @Override
-    public void doPrint() throws ServerUnavailableException {
-        sendMessage(String.valueOf(ProtocolMessages.PRINT));
-        System.out.println("> " + readMultipleLinesFromServer());
+    public void newGame() {
+
     }
 
     @Override

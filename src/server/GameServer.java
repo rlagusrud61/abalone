@@ -20,36 +20,15 @@ import java.util.List;
  */
 public class GameServer implements Runnable, ServerProtocol {
 
-    /**
-     * The name of the Hotel
-     */
-    private static final String HOTELNAME = "U Parkhotel";
-    /**
-     * The ServerSocket of this HotelServer
-     */
     private ServerSocket ssock;
-    /**
-     * List of HotelClientHandlers, one for each connected client
-     */
+
     private List<GameClientHandler> clients;
     /**
      * Next client number, increasing for every new connection
      */
     private int next_client_no;
-    /**
-     * The view of this HotelServer
-     */
+
     private GameServerTUI view;
-    /**
-     * The HOTEL
-     */
-    private Hotel hotel;
-
-    /**
-     * The Password
-     */
-
-    private Password safePassword;
 
     /**
      * Constructs a new HotelServer. Initializes the clients list,
@@ -60,7 +39,6 @@ public class GameServer implements Runnable, ServerProtocol {
         clients = new ArrayList<>();
         view = new GameServerTUI();
         next_client_no = 1;
-        safePassword = new Password();
     }
 
     /**
@@ -70,16 +48,6 @@ public class GameServer implements Runnable, ServerProtocol {
         GameServer server = new GameServer();
         System.out.println("Welcome to the Abalone Game! Starting...");
         new Thread(server).start();
-    }
-
-    /**
-     * Returns the name of the hotel
-     *
-     * @return the name of the hotel.
-     * @requires hotel != null;
-     */
-    public String getHotelName() {
-        return HOTELNAME;
     }
 
     /**
@@ -121,22 +89,10 @@ public class GameServer implements Runnable, ServerProtocol {
                 }
             }
         }
-        view.showMessage("See you later!");
+        view.showMessage("See you never!");
     }
 
-    /**
-     * Sets up a new Hotel using {@link #setupHotel()} and opens a new
-     * ServerSocket at localhost on a user-defined port.
-     * <p>
-     * The user is asked to input a port, after which a socket is attempted
-     * to be opened. If the attempt succeeds, the method ends, If the
-     * attempt fails, the user decides to try again, after which an
-     * ExitProgram exception is thrown or a new port is entered.
-     *
-     * @throws ExitProgram if a connection can not be created on the given
-     *                     port and the user decides to exit the program.
-     * @ensures a serverSocket is opened.
-     */
+
     public void setup() throws ExitProgram {
         // First, initialize the Hotel.
         setupHotel();
@@ -164,16 +120,6 @@ public class GameServer implements Runnable, ServerProtocol {
         }
     }
 
-    /**
-     * Asks the user for a hotel name and initializes
-     * a new Hotel with this name.
-     */
-    public void setupHotel() {
-        view.getString("What is the hotel name?");
-
-
-        // To be implemented.
-    }
 
     // ------------------ Server Methods --------------------------
 
@@ -186,105 +132,41 @@ public class GameServer implements Runnable, ServerProtocol {
         this.clients.remove(client);
     }
 
-    @Override
-    public String getHello() {
-        return ProtocolMessages.HELLO + ProtocolMessages.DELIMITER + HOTELNAME;
-    }
-
-    @Override
-    public synchronized String doIn(String guestName) {
-        Room checkin = hotel.checkIn(guestName);
-        if (guestName == null) {
-            return "Parameter is wrong (guest name is null)";
-        } else if (checkin == null) {
-            return "Checkin unsuccessful (no room assigned)";
-        } else {
-            return "Check in successful for guest " + guestName;
-        }
-    }
-
-    @Override
-    public synchronized String doOut(String guestName) {
-        Room checkout = hotel.checkOut(guestName);
-        if (guestName == null) {
-            return "Parameter is wrong (guest name is null)";
-        } else if (checkout == null) {
-            return "Check out unsuccessful";
-        } else {
-            return "Check out successful for guest " + guestName;
-        }
-    }
-
-    @Override
-    public synchronized String doRoom(String cmd) {
-        if (cmd == null) {
-            return "Parameter is wrong (guest name null)";
-        } else {
-            return "Guest has a room " + hotel.getRoom(cmd);
-        }
-    }
-
-    @Override
-    public synchronized String doAct(String guestName, String password) {
-        Safe safe = hotel.getRoom(guestName).getSafe();
-        if (guestName == null) {
-            return "Parameter is wrong (guest name is null)";
-        }
-        if (password == null) {
-            if (safe instanceof PricedSafe) {
-                return "Parameter is wrong (password required)";
-            } else {
-                safe.activate();
-            }
-            return "Safe has been activated for room " + hotel.getRoom(guestName) + " for guest " + guestName;
-
-        } else {
-
-            if (safe instanceof PricedSafe) {
-                String passwordTest = password;
-
-                if (passwordTest.equals(safePassword.getPassword())) {
-                    PricedSafe pricedSafe = (PricedSafe) safe;
-                    pricedSafe.activate(passwordTest);
-                    return "Safe has been activated for room " + hotel.getRoom(guestName) + " for guest " + guestName;
-                } else {
-                    return "Wrong password. Enter the correct password.";
-                }
-            } else {
-                return "Please don't enter a password for priced safe.";
-            }
-        }
-    }
-
-    @Override
-    public synchronized String doBill(String guestName, String nights) {
-        try {
-            int nightNum = Integer.parseInt(nights);
-            if (this.hotel.getRoom(guestName) instanceof PricedRoom) {
-                Printer p = new StringPrinter();
-                this.hotel.getBill(guestName, nightNum, p).close();
-                view.showMessage(((StringPrinter) p).getResult() + System.lineSeparator() + ProtocolMessages.EOT);
-                return ((StringPrinter) p).getResult() + System.lineSeparator() + ProtocolMessages.EOT;
-            } else {
-                return ("not priced room" + System.lineSeparator() + ProtocolMessages.EOT);
-            }
-        } catch (NumberFormatException e) {
-            return "Second argument is not an integer";
-        }
-
-    }
-
     // ------------------ Main --------------------------
 
+
     @Override
-    public synchronized String doPrint() {
-        view.showMessage("print");
-        Room print = hotel.getFreeRoom();
-        view.showMessage("print");
-        if (print != null) {
-            return "There's a free room in  " + print + "." + System.lineSeparator() + ProtocolMessages.EOT;
-        }
-        return hotel.toString() + System.lineSeparator() + ProtocolMessages.EOT;
+    public synchronized String getHello(String name) {
+        return null;
     }
 
+    @Override
+    public synchronized void invalid() {
+
+    }
+
+    @Override
+    public synchronized void doStart() {
+
+    }
+
+    @Override
+    public synchronized void doMove() {
+
+    }
+
+    @Override
+    public synchronized void nextTurn() {
+
+    }
+
+    @Override
+    public synchronized void doExit() {
+
+    }
+
+    @Override
+    public synchronized void noRematch() {
+
+    }
 }

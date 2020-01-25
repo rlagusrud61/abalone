@@ -94,5 +94,11 @@ public class Move {
             }
         }
 
+        boolean isSameAxis() {
+            if (this == NE && this.opposite() == SW)
+                return false;
+
+        }
+
     }
 }

@@ -168,6 +168,14 @@ public class Board {
     public void makeMove(Move move) {
         // Check if neighbours
         if (move.getMarble3() != null) {
+            if () {
+
+            } else if () {
+
+            }
+        } else if (move.getMarble2() != null) {
+
+        } else {
 
         }
     }
@@ -186,34 +194,34 @@ public class Board {
     }
 
     private boolean isInLine(Coordinate coord1, Coordinate coord2, Coordinate coord3) {
+        return getLineDirection(coord1, coord2, coord3) != null;
+    }
+
+
+    private Move.Direction getLineDirection(Coordinate coord1, Coordinate coord2, Coordinate coord3) {
         for (Move.Direction direction : Move.Direction.values()) {
             Coordinate pawn = new Coordinate(coord1);
-
             int encounters = 0;
             while (pawn.step(direction) != null) {
                 pawn = pawn.step((direction));
-
                 if (pawn.equals(coord2) || pawn.equals(coord3)) {
                     encounters += 1;
                 }
             }
-
             while (pawn.step(direction.opposite()) != null) {
                 pawn = pawn.step(direction.opposite());
-
                 if (pawn.equals(coord2) || pawn.equals(coord3)) {
                     encounters += 1;
                 }
             }
-
             if (encounters == 2) {
-                return true;
+                return direction;
             }
         }
+        throw new IllegalStateException("u cant do dis bitch");
+        //TODO make a new exception for this shit
 
-        return false;
     }
-
 }
 
 

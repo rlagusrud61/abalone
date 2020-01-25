@@ -3,7 +3,6 @@ package client;
 import exceptions.ExitProgram;
 import exceptions.ProtocolException;
 import exceptions.ServerUnavailableException;
-import protocol.ClientProtocol;
 import protocol.ProtocolMessages;
 
 import java.io.*;
@@ -15,7 +14,7 @@ import java.net.Socket;
  *
  * @author Wim Kamerman
  */
-public class GameClient implements ClientProtocol {
+public class GameClient {
 
     private Socket serverSock;
     private BufferedReader in;
@@ -49,7 +48,7 @@ public class GameClient implements ClientProtocol {
      * When errors occur, or when the user terminates a server connection, the
      * user is asked whether a new connection should be made.
      */
-    public void start() {
+    public void start() throws ExitProgram {
         try {
             createConnection();
             handleHello(view.getString("what is your name and with how many players do you want to play"));
@@ -61,7 +60,11 @@ public class GameClient implements ClientProtocol {
         } catch (ProtocolException e) {
             System.out.println("Protocol Message invalid");
         }
-        view.showMessage("Do you want a new connection ? y/n");
+
+        if (view.getBoolean("Do you want a new connection ? y/n")) {
+            start();
+        }
+        ;
     }
 
     /**
@@ -96,8 +99,9 @@ public class GameClient implements ClientProtocol {
                 System.out.println("ERROR: could not create a socket on "
                         + host + " and port " + port + ".");
 
-                //Do you want to try again? (ask user, to be implemented)
-                if (false) {
+                if (view.getBoolean("Want to try again?")) {
+                    createConnection();
+                } else {
                     throw new ExitProgram("User indicated to exit.");
                 }
             }
@@ -213,7 +217,6 @@ public class GameClient implements ClientProtocol {
         }
     }
 
-   @Override
     public void handleHello(String input)
             throws ServerUnavailableException, ProtocolException {
         sendMessage(String.valueOf(ProtocolMessages.HELLO + ProtocolMessages.DELIMITER + input));
@@ -225,23 +228,18 @@ public class GameClient implements ClientProtocol {
     }
 
 
-    }
-
-    @Override
-    public void sendMove(String input, int playerAmount)throws ServerUnavailableException {
+    public void sendMove(String input, int playerAmount) throws ServerUnavailableException {
         sendMessage(ProtocolMessages.MOVE + ProtocolMessages.DELIMITER + input + ProtocolMessages.DELIMITER + playerAmount);
         System.out.println("> " + readLineFromServer());
     }
 
 
-    @Override
-    public void sendJoin(String name , int playerAmount) throws ServerUnavailableException {
-        sendMessage(ProtocolMessages.NEW_GAME+ ProtocolMessages.DELIMITER + name + ProtocolMessages.DELIMITER + playerAmount);
+    public void sendJoin(String name, int playerAmount) throws ServerUnavailableException {
+        sendMessage(ProtocolMessages.NEW_GAME + ProtocolMessages.DELIMITER + name + ProtocolMessages.DELIMITER + playerAmount);
         System.out.println("> " + readLineFromServer());
     }
 
 
-    @Override
     public void sendExit() throws ServerUnavailableException {
         sendMessage(String.valueOf(ProtocolMessages.EXIT));
         closeConnection();

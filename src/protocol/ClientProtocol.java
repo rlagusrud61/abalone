@@ -26,9 +26,9 @@ public interface ClientProtocol {
      */
     public void handleHello(String input) throws ServerUnavailableException, ProtocolException;
 
-    public void sendMove(String input) throws ServerUnavailableException;
+    public void sendMove(String name, int playerAmount) throws ServerUnavailableException;
 
-    public void sendJoin(String name) throws ServerUnavailableException;
+    public void sendJoin(String name, int playerAmount) throws ServerUnavailableException;
 
     public void sendExit() throws ServerUnavailableException, ServerUnavailableException;
 

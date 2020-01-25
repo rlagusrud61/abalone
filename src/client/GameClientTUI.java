@@ -65,12 +65,12 @@ public class GameClientTUI implements GameClientView {
                    client.start();
                     break;
                 case "m":
-                    client.sendMove(param,secparam);
+                    client.sendMove(param,Integer.parseInt(secparam));
                 break;
                 case "g":
-                    client.sendJoin(param, secparam);
+                    client.sendJoin(param, Integer.parseInt(secparam));
 
-                case "x":
+                case "d":
                     throw new ExitProgram("Exiting the game...");
 
             }
@@ -144,15 +144,12 @@ public class GameClientTUI implements GameClientView {
     @Override
     public void printHelpMenu() {
 
-        System.out.println("Welcome to the Hotel booking system of the U Parkhotel");
+        System.out.println("Welcome to Abalone");
         System.out.println("Commands:");
-        System.out.println("i name ............... check in guest with name");
-        System.out.println("o name ............... check out guest with name");
-        System.out.println("r name ............... request room of guest");
-        System.out.println("a name password....... activate safe, password required for PricedSafe");
-        System.out.println("b name nights......... print bill for guest (name) and number of nights");
-        System.out.println("h .................... help (this menu)");
-        System.out.println("p .................... print state ");
-        System.out.println("x .................... exit");
+        System.out.println("h;name;playerAmount ............... connect with server");
+        System.out.println("m;direction,marbles ............ move marbles");
+        System.out.println("g;name;playerAmount ............... start new game");
+        System.out.println("d ....... disconnect from server");
+
     }
 }

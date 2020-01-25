@@ -1,6 +1,7 @@
 package server;
 
 
+import abalone.Player;
 import abalone.Game;
 import exceptions.ExitProgram;
 import protocol.ProtocolMessages;
@@ -22,8 +23,13 @@ import java.util.List;
  */
 public class GameServer implements Runnable, ServerProtocol {
 
-    private ServerSocket serverSocket;
-
+   /**
+     * The ServerSocket of this HotelServer
+     */
+    private ServerSocket ssock;
+    /**
+     * List of HotelClientHandlers, one for each connected client
+     */
     private List<GameClientHandler> clients;
     /**
      * Next client number, increasing for every new connection
@@ -41,6 +47,7 @@ public class GameServer implements Runnable, ServerProtocol {
         clients = new ArrayList<>();
         view = new GameServerTUI();
         next_client_no = 1;
+
     }
 
     /**
@@ -65,7 +72,7 @@ public class GameServer implements Runnable, ServerProtocol {
             try {
                 setup();
                 while (true) {
-                    Socket sock = serverSocket.accept();
+                    Socket sock = ssock.accept();
                     String name = "Client "
                             + String.format("%02d", next_client_no++);
                     view.showMessage("New client [" + name + "] connected!");
@@ -88,21 +95,23 @@ public class GameServer implements Runnable, ServerProtocol {
                 }
             }
         }
-        view.showMessage("See you never!");
+        view.showMessage("See you later!");
     }
 
 
     public void setup() throws ExitProgram {
+        // First, initialize the Hotel.
+        setupGame();
 
-        serverSocket = null;
-        while (serverSocket == null) {
+        ssock = null;
+        while (ssock == null) {
             int port = view.getInt("Please enter the server port.");
 
             // try to open a new ServerSocket
             try {
                 view.showMessage("Attempting to open a socket at 127.0.0.1 "
                         + "on port " + port + "...");
-                serverSocket = new ServerSocket(port, 0,
+                ssock = new ServerSocket(port, 0,
                         InetAddress.getByName("127.0.0.1"));
                 view.showMessage("Server started at port " + port);
             } catch (IOException e) {
@@ -129,17 +138,14 @@ public class GameServer implements Runnable, ServerProtocol {
         this.clients.remove(client);
     }
 
-    // ------------------ Main --------------------------
-
-
     @Override
     public synchronized String getHello(String name) {
         return ProtocolMessages.HELLO + ProtocolMessages.DELIMITER + name;
     }
 
     @Override
-    public synchronized String invalid() {
-
+    public synchronized String doMove(Player player) {
+       player.makeMove();
     }
 
     @Override

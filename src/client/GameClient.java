@@ -22,12 +22,14 @@ public class GameClient implements ClientProtocol {
     private BufferedWriter out;
     private GameClientTUI view;
 
+
     /**
      * Constructs a new HotelClient. Initialises the view.
      */
     public GameClient() {
         view = new GameClientTUI(this);
     }
+
 
     /**
      * This method starts a new HotelClient.
@@ -50,7 +52,7 @@ public class GameClient implements ClientProtocol {
     public void start() {
         try {
             createConnection();
-            handleHello();
+            handleHello(view.getString("what is your name and with how many players do you want to play"));
             view.start();
         } catch (ExitProgram e) {
 
@@ -77,8 +79,8 @@ public class GameClient implements ClientProtocol {
     public void createConnection() throws ExitProgram {
         clearConnection();
         while (serverSock == null) {
-//            String host = "127.0.0.1";
-//            int port = ;
+            String host = "127.0.0.1";
+            int port = 8888;
 
             // try to open a Socket to the server
             try {
@@ -210,35 +212,34 @@ public class GameClient implements ClientProtocol {
             e.printStackTrace();
         }
     }
-    @Override
-    public void handleHello(String input) throws ServerUnavailableException, ProtocolException {
+
+   @Override
+    public void handleHello(String input)
+            throws ServerUnavailableException, ProtocolException {
+        sendMessage(String.valueOf(ProtocolMessages.HELLO + ProtocolMessages.DELIMITER + input));
+        if (readLineFromServer().contains(String.valueOf(ProtocolMessages.HELLO))) {
+            System.out.println("Welcome to the Hotel booking system of hotel! Press 'h' for help menu: ");
+        } else {
+            throw new ProtocolException("Can't do the handshake");
+        }
+    }
+
 
     }
 
     @Override
-    public void sendMove(String input) {
-
+    public void sendMove(String input, int playerAmount)throws ServerUnavailableException {
+        sendMessage(ProtocolMessages.MOVE + ProtocolMessages.DELIMITER + input + ProtocolMessages.DELIMITER + playerAmount);
+        System.out.println("> " + readLineFromServer());
     }
+
 
     @Override
-    public void sendJoin(String name) throws ServerUnavailableException {
-
+    public void sendJoin(String name , int playerAmount) throws ServerUnavailableException {
+        sendMessage(ProtocolMessages.NEW_GAME+ ProtocolMessages.DELIMITER + name + ProtocolMessages.DELIMITER + playerAmount);
+        System.out.println("> " + readLineFromServer());
     }
 
-    @Override
-    public void sendRematch(String input) {
-
-    }
-
-    @Override
-    public void handleGameOver() {
-
-    }
-
-    @Override
-    public void newGame() {
-
-    }
 
     @Override
     public void sendExit() throws ServerUnavailableException {

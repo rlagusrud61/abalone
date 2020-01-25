@@ -53,7 +53,7 @@ public interface GameClientView {
     public InetAddress getIp();
 
     /**
-     * Prints the question and asks the user to input a String.
+     * Prints the question and asks t he user to input a String.
      *
      * @param question The question to show to the user
      * @return The user input as a String

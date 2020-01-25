@@ -1,8 +1,8 @@
 package server;
 
 
-import abalone.Player;
 import abalone.Game;
+import abalone.Player;
 import exceptions.ExitProgram;
 import protocol.ProtocolMessages;
 import protocol.ServerProtocol;
@@ -14,13 +14,7 @@ import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Server TUI for Networked Hotel Application
- * <p>
- * Intended Functionality: interactively set up & monitor a new server
- *
- * @author Wim Kamerman
- */
+
 public class GameServer implements Runnable, ServerProtocol {
 
    /**
@@ -28,7 +22,7 @@ public class GameServer implements Runnable, ServerProtocol {
      */
     private ServerSocket ssock;
     /**
-     * List of HotelClientHandlers, one for each connected client
+     * List of GameClientHandlers, one for each connected client
      */
     private List<GameClientHandler> clients;
     /**
@@ -38,12 +32,13 @@ public class GameServer implements Runnable, ServerProtocol {
 
     private GameServerTUI view;
 
+    private Game game;
     /**
      * Constructs a new HotelServer. Initializes the clients list,
      * the view and the next_client_no.
      */
     public GameServer() {
-        game = new Game();
+        game = new Game((Player) clients[0], clients[1]);
         clients = new ArrayList<>();
         view = new GameServerTUI();
         next_client_no = 1;
@@ -105,6 +100,7 @@ public class GameServer implements Runnable, ServerProtocol {
 
         ssock = null;
         while (ssock == null) {
+
             int port = view.getInt("Please enter the server port.");
 
             // try to open a new ServerSocket
@@ -126,6 +122,10 @@ public class GameServer implements Runnable, ServerProtocol {
         }
     }
 
+    private void setupGame() {
+
+    }
+
 
     // ------------------ Server Methods --------------------------
 
@@ -144,9 +144,10 @@ public class GameServer implements Runnable, ServerProtocol {
     }
 
     @Override
-    public synchronized String doMove(Player player) {
-       player.makeMove();
+    public String invalid() {
+        return null;
     }
+
 
     @Override
     public synchronized String doStart() {
@@ -155,6 +156,7 @@ public class GameServer implements Runnable, ServerProtocol {
 
     @Override
     public synchronized String doMove() {
+        player.makeMove();
     }
 
     @Override

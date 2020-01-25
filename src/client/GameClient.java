@@ -79,8 +79,8 @@ public class GameClient implements ClientProtocol {
     public void createConnection() throws ExitProgram {
         clearConnection();
         while (serverSock == null) {
-            String host = "127.0.0.1";
-            int port = 8888;
+            String host = view.getIp().toString();
+            int port = view.getInt("Enter the port number:");
 
             // try to open a Socket to the server
             try {
@@ -169,34 +169,34 @@ public class GameClient implements ClientProtocol {
         }
     }
 
-    /**
-     * Reads and returns multiple lines from the server until the end of
-     * the text is indicated using a line containing ProtocolMessages.EOT.
-     *
-     * @return the concatenated lines sent by the server.
-     * @throws ServerUnavailableException if IO errors occur.
-     */
-    public String readMultipleLinesFromServer()
-            throws ServerUnavailableException {
-        if (in != null) {
-            try {
-                // Read and return answer from Server
-                StringBuilder sb = new StringBuilder();
-                for (String line = in.readLine(); line != null
-                        && !line.equals(ProtocolMessages.EOT);
-                     line = in.readLine()) {
-                    sb.append(line + System.lineSeparator());
-                }
-                return sb.toString();
-            } catch (IOException e) {
-                throw new ServerUnavailableException("Could not read "
-                        + "from server.");
-            }
-        } else {
-            throw new ServerUnavailableException("Could not read "
-                    + "from server.");
-        }
-    }
+//    /**
+//     * Reads and returns multiple lines from the server until the end of
+//     * the text is indicated using a line containing ProtocolMessages.EOT.
+//     *
+//     * @return the concatenated lines sent by the server.
+//     * @throws ServerUnavailableException if IO errors occur.
+//     */
+//    public String readMultipleLinesFromServer()
+//            throws ServerUnavailableException {
+//        if (in != null) {
+//            try {
+//                // Read and return answer from Server
+//                StringBuilder sb = new StringBuilder();
+//                for (String line = in.readLine(); line != null
+//                        && !line.equals(ProtocolMessages.EOT);
+//                     line = in.readLine()) {
+//                    sb.append(line + System.lineSeparator());
+//                }
+//                return sb.toString();
+//            } catch (IOException e) {
+//                throw new ServerUnavailableException("Could not read "
+//                        + "from server.");
+//            }
+//        } else {
+//            throw new ServerUnavailableException("Could not read "
+//                    + "from server.");
+//        }
+//    }
 
     /**
      * Closes the connection by closing the In- and OutputStreams, as

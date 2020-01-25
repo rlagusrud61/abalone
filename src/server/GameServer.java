@@ -1,7 +1,9 @@
 package server;
 
 
+import abalone.Player;
 import exceptions.ExitProgram;
+import protocol.ProtocolMessages;
 import protocol.ServerProtocol;
 
 import java.io.IOException;
@@ -20,11 +22,7 @@ import java.util.List;
  */
 public class GameServer implements Runnable, ServerProtocol {
 
-    /**
-     * The name of the Hotel
-     */
-    private static final String HOTELNAME = "U Parkhotel";
-    /**
+   /**
      * The ServerSocket of this HotelServer
      */
     private ServerSocket ssock;
@@ -43,24 +41,20 @@ public class GameServer implements Runnable, ServerProtocol {
     /**
      * The HOTEL
      */
-    private Hotel hotel;
+    private Game game;
 
-    /**
-     * The Password
-     */
 
-    private Password safePassword;
 
     /**
      * Constructs a new HotelServer. Initializes the clients list,
      * the view and the next_client_no.
      */
     public GameServer() {
-        hotel = new Hotel(HOTELNAME);
+        game = new game(player1, player2);
         clients = new ArrayList<>();
         view = new GameServerTUI();
         next_client_no = 1;
-        safePassword = new Password();
+
     }
 
     /**
@@ -72,15 +66,7 @@ public class GameServer implements Runnable, ServerProtocol {
         new Thread(server).start();
     }
 
-    /**
-     * Returns the name of the hotel
-     *
-     * @return the name of the hotel.
-     * @requires hotel != null;
-     */
-    public String getHotelName() {
-        return HOTELNAME;
-    }
+
 
     /**
      * Opens a new socket by calling {@link #setup()} and starts a new
@@ -139,7 +125,7 @@ public class GameServer implements Runnable, ServerProtocol {
      */
     public void setup() throws ExitProgram {
         // First, initialize the Hotel.
-        setupHotel();
+        setupGame();
 
         ssock = null;
         while (ssock == null) {
@@ -168,7 +154,7 @@ public class GameServer implements Runnable, ServerProtocol {
      * Asks the user for a hotel name and initializes
      * a new Hotel with this name.
      */
-    public void setupHotel() {
+    public void setupGame() {
         view.getString("What is the hotel name?");
 
 
@@ -188,19 +174,12 @@ public class GameServer implements Runnable, ServerProtocol {
 
     @Override
     public String getHello() {
-        return ProtocolMessages.HELLO + ProtocolMessages.DELIMITER + HOTELNAME;
+        return ProtocolMessages.HELLO + ProtocolMessages.DELIMITER;
     }
 
     @Override
-    public synchronized String doIn(String guestName) {
-        Room checkin = hotel.checkIn(guestName);
-        if (guestName == null) {
-            return "Parameter is wrong (guest name is null)";
-        } else if (checkin == null) {
-            return "Checkin unsuccessful (no room assigned)";
-        } else {
-            return "Check in successful for guest " + guestName;
-        }
+    public synchronized String doMove(Player player) {
+       player.makeMove();
     }
 
     @Override

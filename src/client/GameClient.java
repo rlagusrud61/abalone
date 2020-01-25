@@ -22,12 +22,14 @@ public class GameClient implements ClientProtocol {
     private BufferedWriter out;
     private GameClientTUI view;
 
+
     /**
      * Constructs a new HotelClient. Initialises the view.
      */
     public GameClient() {
         view = new GameClientTUI(this);
     }
+
 
     /**
      * This method starts a new HotelClient.
@@ -50,7 +52,7 @@ public class GameClient implements ClientProtocol {
     public void start() {
         try {
             createConnection();
-            handleHello();
+            handleHello(view.getString("what is your name and with how many players do you want to play"));
             view.start();
         } catch (ExitProgram e) {
 
@@ -174,27 +176,27 @@ public class GameClient implements ClientProtocol {
      * @return the concatenated lines sent by the server.
      * @throws ServerUnavailableException if IO errors occur.
      */
-    public String readMultipleLinesFromServer()
-            throws ServerUnavailableException {
-        if (in != null) {
-            try {
-                // Read and return answer from Server
-                StringBuilder sb = new StringBuilder();
-                for (String line = in.readLine(); line != null
-                        && !line.equals(ProtocolMessages.EOT);
-                     line = in.readLine()) {
-                    sb.append(line + System.lineSeparator());
-                }
-                return sb.toString();
-            } catch (IOException e) {
-                throw new ServerUnavailableException("Could not read "
-                        + "from server.");
-            }
-        } else {
-            throw new ServerUnavailableException("Could not read "
-                    + "from server.");
-        }
-    }
+//    public String readMultipleLinesFromServer()
+//            throws ServerUnavailableException {
+//        if (in != null) {
+//            try {
+//                // Read and return answer from Server
+//                StringBuilder sb = new StringBuilder();
+//                for (String line = in.readLine(); line != null
+//                        && !line.equals(ProtocolMessages.EOT);
+//                     line = in.readLine()) {
+//                    sb.append(line + System.lineSeparator());
+//                }
+//                return sb.toString();
+//            } catch (IOException e) {
+//                throw new ServerUnavailableException("Could not read "
+//                        + "from server.");
+//            }
+//        } else {
+//            throw new ServerUnavailableException("Could not read "
+//                    + "from server.");
+//        }
+//    }
 
     /**
      * Closes the connection by closing the In- and OutputStreams, as
@@ -211,10 +213,10 @@ public class GameClient implements ClientProtocol {
         }
     }
 
-    @Override
-    public void handleHello()
+   @Override
+    public void handleHello(String input)
             throws ServerUnavailableException, ProtocolException {
-        sendMessage(String.valueOf(ProtocolMessages.HELLO));
+        sendMessage(String.valueOf(ProtocolMessages.HELLO + ProtocolMessages.DELIMITER + input));
         if (readLineFromServer().contains(String.valueOf(ProtocolMessages.HELLO))) {
             System.out.println("Welcome to the Hotel booking system of hotel! Press 'h' for help menu: ");
         } else {
@@ -222,56 +224,21 @@ public class GameClient implements ClientProtocol {
         }
     }
 
+
+
     @Override
-    public void doMove() throws ServerUnavailableException {
-        sendMessage(ProtocolMessages.IN + ProtocolMessages.DELIMITER + guestName);
+    public void sendMove(String input, int playerAmount)throws ServerUnavailableException {
+        sendMessage(ProtocolMessages.MOVE + ProtocolMessages.DELIMITER + input + ProtocolMessages.DELIMITER + playerAmount);
         System.out.println("> " + readLineFromServer());
     }
 
 
     @Override
-    public void doOut(String guestName) throws ServerUnavailableException {
-        sendMessage(ProtocolMessages.OUT + ProtocolMessages.DELIMITER + guestName);
+    public void sendJoin(String name , int playerAmount) throws ServerUnavailableException {
+        sendMessage(ProtocolMessages.NEW_GAME+ ProtocolMessages.DELIMITER + name + ProtocolMessages.DELIMITER + playerAmount);
         System.out.println("> " + readLineFromServer());
     }
 
-    @Override
-    public void doRoom(String guestName) throws ServerUnavailableException {
-        sendMessage(ProtocolMessages.ROOM + ProtocolMessages.DELIMITER + guestName);
-        System.out.println("> " + readLineFromServer());
-    }
-
-    @Override
-    public void doAct(String guestName, String password)
-            throws ServerUnavailableException {
-        sendMessage(ProtocolMessages.ACT + ProtocolMessages.DELIMITER + guestName + ProtocolMessages.DELIMITER + password);
-        System.out.println("> " + readLineFromServer());
-    }
-
-    @Override
-    public void doBill(String guestName, String nights)
-            throws ServerUnavailableException {
-        boolean valid = true;
-        int night = 0;
-        try {
-            night = Integer.parseInt(nights);
-        } catch (NumberFormatException e) {
-            valid = false;
-        }
-        if (valid && night > 0) {
-
-            sendMessage(ProtocolMessages.BILL + ProtocolMessages.DELIMITER + guestName + ProtocolMessages.DELIMITER + nights);
-            System.out.println("> " + readMultipleLinesFromServer());
-        } else {
-            System.out.println("Night is invalid");
-        }
-    }
-
-    @Override
-    public void doPrint() throws ServerUnavailableException {
-        sendMessage(String.valueOf(ProtocolMessages.PRINT));
-        System.out.println("> " + readMultipleLinesFromServer());
-    }
 
     @Override
     public void sendExit() throws ServerUnavailableException {

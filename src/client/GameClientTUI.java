@@ -62,52 +62,13 @@ public class GameClientTUI implements GameClientView {
 
             switch (command) {
                 case "h":
-                    printHelpMenu();
+                   client.start();
                     break;
-
-                case "i":
-                    if (param == null) {
-                        System.out.println("DO not try to break my server :( ");
-                    } else {
-                        client.doIn(param);
-                    }
-                    break;
-
-                case "o":
-                    if (param == null) {
-                        System.out.println(">:( you cant go out of here");
-                    }
-                    client.doOut(param);
-                    break;
-
-                case "r":
-                    if (param == null) {
-                        System.out.println("ERROR");
-                    }
-                    client.doRoom(param);
-                    break;
-
-                case "a":
-                    if (param == null) {
-                        System.out.println("Wrong guest name");
-                    }
-                    client.doAct(param, secparam);
-                    break;
-
-
-                case "b":
-                    if (param == null) {
-                        System.out.println("Wrong guest name");
-                    }
-                    if (secparam == null) {
-                        System.out.println("Wrong number of days");
-                    }
-                    client.doBill(param, secparam);
-                    break;
-
-                case "p":
-                    client.doPrint();
-                    break;
+                case "m":
+                    client.sendMove(param,secparam);
+                break;
+                case "g":
+                    client.sendJoin(param, secparam);
 
                 case "x":
                     throw new ExitProgram("Exiting the game...");

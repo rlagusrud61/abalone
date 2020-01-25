@@ -5,8 +5,8 @@ public class Board {
     public static final int[] ROW_SIZES = new int[]{5, 6, 7, 8, 9, 8, 7, 6, 5};
 
     private Marble[] fields;
-    private int deadBlackCount;
-    private int deadWhiteCount;
+    private int deadTeam1;
+    private int deadTeam2;
 
     public Board() {
         fields = new Marble[61];
@@ -226,11 +226,18 @@ public class Board {
     }
 
     public boolean hasWinner() {
-        return (deadBlack == 6) ||
+        return ((deadTeam1 == 6) || (deadWhiteCount == 6));
     }
 
     public boolean isWinner(Marble marble) {
-        if (hasWinner() &&)
+        if (hasWinner() && deadWhiteCount == 6) {
+            return true;
+        }
+    }
+
+    public boolean isValid() {
+
+        return false;
     }
 }
 

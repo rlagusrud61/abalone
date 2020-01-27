@@ -16,9 +16,6 @@ public class Move {
         return direction;
     }
 
-    public void setDirection(Direction direction) {
-        this.direction = direction;
-    }
 
     public Group getGroup() {
         return group;
@@ -36,19 +33,37 @@ public class Move {
         this.team = team;
     }
 
+
     /**
      * ENUM DIRECTION
      */
     public enum Direction {
         NE(0), E(1), SE(2), SW(3), W(4), NW(5);
 
-        private final int val;
-        private Board board;
+        public final int val;
 
         Direction(int val) {
             this.val = val;
         }
 
+        Direction intToDirection(int integer) {
+            switch (integer) {
+                case 0:
+                    return NE;
+                case 1:
+                    return E;
+                case 2:
+                    return SE;
+                case 3:
+                    return SW;
+                case 4:
+                    return W;
+                case 5:
+                    return NW;
+                default:
+                    throw new IllegalArgumentException("put valid integer");
+            }
+        }
 
         Direction opposite() {
             switch (this) {
@@ -84,33 +99,6 @@ public class Move {
                 default:
                     throw new IllegalStateException();
             }
-        }
-    }
-
-    public class MoveType {
-
-        public static final int SLIDE = 0;
-        public static final int PUSH = 1;
-        private Group movedMarbles;
-        private Group selectedMarbles;
-        private int moveType;
-
-        public MoveType(int moveType, Group selectedMarbles, Group movedMarbles) {
-            this.moveType = moveType;
-            this.selectedMarbles = selectedMarbles;
-            this.movedMarbles = movedMarbles;
-        }
-
-        public int getMoveType() {
-            return moveType;
-        }
-
-        public Group getMovedMarbles() {
-            return movedMarbles;
-        }
-
-        public Group getSelectedMarbles() {
-            return selectedMarbles;
         }
     }
 

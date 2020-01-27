@@ -2,18 +2,45 @@ package abalone;
 
 import utils.TextIO;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Abalone {
     public static void main(String[] args) {
-        Player s1;
-        Player s2;
+        List<Player> players = new ArrayList<>();
         Game game;
         System.out.println("Player 1?");
         String name1 = TextIO.getln();
-        s1 = new HumanPlayer(name1, Marble.WHITE);
+        players.add(new HumanPlayer(name1, Marble.WHITE));
 
-        System.out.println("Identify urself hooman number two");
+        System.out.println("Player 2?");
         String name2 = TextIO.getln();
-        s2 = new HumanPlayer(name2, Marble.BLACK);
+        players.add(new HumanPlayer(name2, Marble.BLACK));
+
+        System.out.println("Player 3? If not playing, type 'N'");
+        String name3 = TextIO.getln();
+        if (!name3.equals("N")) {
+            players.add(new HumanPlayer(name3, Marble.BLUE));
+        }
+
+        System.out.println("Player 4? If player 3 doesn't exist, you can't play. Type 'N'. ");
+        String name4 = TextIO.getln();
+        if (!name4.equals("N")) {
+            players.add(new HumanPlayer(name4, Marble.RED));
+        }
+
+        if (players.size() == 2) {
+            game = new Game(players.get(0), players.get(1));
+            game.start();
+        } else if (players.size() == 3) {
+            game = new Game(players.get(0), players.get(1), players.get(2));
+            game.start();
+        } else if (players.size() == 4) {
+            game = new Game(players.get(0), players.get(1), players.get(2), players.get(3));
+            game.start();
+        }
+
+
     }
 
 }

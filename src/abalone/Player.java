@@ -9,8 +9,16 @@ public abstract class Player {
 
     private String name;
     private Marble marble;
+    private Team team;
 
-    // -- Constructors -----------------------------------------------
+    public Team getTeam() {
+        return team;
+    }
+
+    public void setTeam(Team team) {
+        this.team = team;
+    }
+// -- Constructors -----------------------------------------------
 
     /**
      * Creates a new abalone.Player object.
@@ -30,6 +38,7 @@ public abstract class Player {
     /**
      * Returns the name of the player.
      */
+
     public String getName() {
         return name;
     }
@@ -49,7 +58,7 @@ public abstract class Player {
      * @requires board is not null and not full
      * @ensures the returned in is a valid field index and that field is empty
      */
-    public abstract int[] makeChoice(Board board);
+    public abstract Move makeChoice(Board board);
 
     // -- Commands ---------------------------------------------------
 //

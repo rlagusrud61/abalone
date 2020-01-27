@@ -33,7 +33,7 @@ public class BoardStates {
 
         //Set fields to blue
         for (int i = 50; i < fields.length; i++) {
-            fields[i] = Marble.BLUE;
+            fields[i] = Marble.BLACK;
         }
 
         //Set fields to White and Black
@@ -41,14 +41,14 @@ public class BoardStates {
         for (int i = 0; i < 5; i++) {
             int rowSize = Board.ROW_SIZES[i];
 
-            fields[index] = Marble.BLACK;
-            fields[index + 1] = Marble.BLACK;
+            fields[index] = Marble.BLUE;
+            fields[index + 1] = Marble.BLUE;
             fields[index + rowSize - 2] = Marble.WHITE;
             fields[index + rowSize - 1] = Marble.WHITE;
             index += rowSize;
         }
 
-        fields[35] = Marble.BLACK;
+        fields[35] = Marble.BLUE;
         fields[42] = Marble.WHITE;
 
         return fields;

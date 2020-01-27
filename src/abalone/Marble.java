@@ -1,7 +1,5 @@
 package abalone;
 
-import java.util.List;
-
 public enum Marble {
     EMPTY,
     WHITE,
@@ -9,9 +7,9 @@ public enum Marble {
     BLUE,
     RED;
 
-
-    private List<Marble> friendlyMarbles;
-    private List<Marble> enemyMarbles;
+//
+//    private List<Marble> friendlyMarbles;
+//    private List<Marble> enemyMarbles;
 
     public static final String RESET = "\u001B[0m";
 

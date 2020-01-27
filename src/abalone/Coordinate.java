@@ -17,6 +17,7 @@ public class Coordinate {
         this.y = coord.y;
     }
 
+
     public boolean isValidStep(Move.Direction direction) {
         int x = this.x;
         int y = this.y;

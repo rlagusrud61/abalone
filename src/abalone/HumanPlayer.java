@@ -2,36 +2,80 @@ package abalone;
 
 import utils.TextIO;
 
+import java.util.Arrays;
+
 public class HumanPlayer extends Player {
+
+
     public HumanPlayer(String name1, Marble marble) {
         super(name1, marble);
     }
 
     @Override
-    public int[] makeChoice(Board board) {
-        String prompt = "> " + getName() + " (" + getMarble().toString() + ")"
-                + ", what is your choice? Give direction (0-5), and list the marbles separated by commas (without space).";
+    public Move makeChoice(Board board) {
+        boolean isValidArg = true;
+        do {
+            String prompt = "> " + getName() + " (" + getMarble().toString() + ")"
+                    + ", what is your choice? Give direction (0-5), and list the marbles separated by commas (without space).";
 
-        System.out.println(prompt);
-        String choice = TextIO.getln();
-        String command = choice.split(";")[0];
-        String marbles = choice.split(";")[1];
-        String[] marbleSplit = marbles.split(",");
-        String firstMarble = marbleSplit[0];
-        if (marbleSplit.length > 1) {
-            String secondMarble = marbleSplit[1];
-            if (marbleSplit.length > 2) {
-                String thirdMarble = marbleSplit[2];
+            System.out.println(prompt);
+            String text = TextIO.getln();
+            int command = -1;
+            String marbles;
+            Integer[] marbleSplit = null;
+            try {
+                command = Integer.parseInt(text.split(";")[0]);
+                marbles = text.split(";")[1];
+                marbleSplit = Arrays.stream(marbles.split(",")).map(Integer::parseInt).toArray(Integer[]::new);
+            } catch (IllegalArgumentException e) {
+                isValidArg = false;
+                e.getMessage();
             }
-        }
+            if (isValidArg) {
+                Move.Direction direction;
+                switch (command) {
+                    case 0:
+                        direction = Move.Direction.NE;
+                        break;
+                    case 1:
+                        direction = Move.Direction.E;
+                        break;
+                    case 2:
+                        direction = Move.Direction.SE;
+                        break;
+                    case 3:
+                        direction = Move.Direction.SW;
+                        break;
+                    case 4:
+                        direction = Move.Direction.W;
+                        break;
+                    case 5:
+                        direction = Move.Direction.NW;
+                        break;
+                    default:
+                        throw new IllegalArgumentException("NOpe");
+                }
 
-//        boolean valid = false;
-//        while (!valid) {
-//            makeChoice(board);
-//            valid = board.isField(choice) && board.isEmpty(choice);
-//        }
-//        return choice;
-//    }
+                int firstMarble = marbleSplit[0];
+                Coordinate firstMarbleCoordinate = Board.convertToCoordinate(firstMarble);
+                Group soloGroup = new Group(firstMarbleCoordinate);
+                Move choice = new Move(direction, soloGroup, this.getTeam());
+                if (marbleSplit.length > 1) {
+                    int secondMarble = marbleSplit[1];
+                    Coordinate secondMarbleCoordinate = Board.convertToCoordinate(secondMarble);
+                    Group pairGroup = new Group(firstMarbleCoordinate, secondMarbleCoordinate);
+                    choice = new Move(direction, pairGroup, this.getTeam());
+
+                    if (marbleSplit.length > 2) {
+                        int thirdMarble = marbleSplit[2];
+                        Coordinate thirdMarbleCoordinate = Board.convertToCoordinate(thirdMarble);
+                        Group trioGroup = new Group(firstMarbleCoordinate, secondMarbleCoordinate, thirdMarbleCoordinate);
+                        choice = new Move(direction, trioGroup, this.getTeam());
+                    }
+                }
+                return choice;
+            }
+        } while (!isValidArg);
         return null;
     }
 }

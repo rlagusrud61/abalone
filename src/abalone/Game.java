@@ -2,6 +2,9 @@ package abalone;
 
 import utils.TextIO;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Class for maintaining the Tic Tac Toe game.
  * Lab assignment Module 2
@@ -16,19 +19,18 @@ public class Game {
 
     /**
      * The board.
+     *
      * @invariant board is never null
      */
     private Board board;
 
-    /**
-     * The 2 players of the game.
-     * @invariant the length of the array equals NUMBER_PLAYERS
-     * @invariant all array items are never null
-     */
+
     private Player[] players;
+    private List<Team> teams = new ArrayList<>();
 
     /**
      * Index of the current player.
+     *
      * @invariant the index is always between 0 and NUMBER_PLAYERS
      */
     private int current;
@@ -47,16 +49,50 @@ public class Game {
         players = new Player[TWO_PLAYERS];
         players[0] = s0;
         players[1] = s1;
+        List<Marble> white = new ArrayList<>();
+        white.add(Marble.WHITE);
+        Team team1 = new Team(white); // make a new team1
+        players[0].setTeam(team1); // assign team for the players
+        List<Marble> black = new ArrayList<>();
+        black.add(Marble.BLACK);
+        Team team2 = new Team(black);
+        players[1].setTeam(team2);
+
+
+        board.addTeamToBoard(team1);
+        board.addTeamToBoard(team2);
         current = 0;
+
     }
+
     public Game(Player s0, Player s1, Player s2) {
         board = new Board();
         players = new Player[THREE_PLAYERS];
         players[0] = s0;
         players[1] = s1;
         players[2] = s2;
+        List<Marble> white = new ArrayList<>();
+        white.add(Marble.WHITE);
+        Team team1 = new Team(white);
+        players[0].setTeam(team1);
+
+        List<Marble> black = new ArrayList<>();
+        black.add(Marble.BLACK);
+        Team team2 = new Team(black);
+        players[1].setTeam(team2);
+
+        List<Marble> blue = new ArrayList<>();
+        blue.add(Marble.BLUE);
+        Team team3 = new Team(blue);
+        players[2].setTeam(team3);
+
+
+        board.addTeamToBoard(team1);
+        board.addTeamToBoard(team2);
+        board.addTeamToBoard(team3);
         current = 0;
     }
+
     public Game(Player s0, Player s1, Player s2, Player s3) {
         board = new Board();
         players = new Player[FOUR_PLAYERS];
@@ -64,18 +100,35 @@ public class Game {
         players[1] = s1;
         players[2] = s2;
         players[3] = s3;
+        List<Marble> whiteBlue = new ArrayList<>();
+        whiteBlue.add(Marble.WHITE);
+        whiteBlue.add(Marble.BLUE);
+        Team team1 = new Team(whiteBlue);
+        players[0].setTeam(team1);
+        players[2].setTeam(team1);
+
+        List<Marble> blackRed = new ArrayList<>();
+        blackRed.add(Marble.BLACK);
+        blackRed.add(Marble.RED);
+        Team team2 = new Team(blackRed);
+        players[1].setTeam(team2);
+        players[3].setTeam(team2);
+
+
+        board.addTeamToBoard(team1);
+        board.addTeamToBoard(team2);
         current = 0;
     }
 
     // -- Commands ---------------------------------------------------
 
     /**
-     * Starts the Tic Tac Toe game. <br>
+     * Starts the Abalone game. <br>
      * Asks after each ended game if the user want to continue. Continues until
      * the user does not want to play anymore.
      */
     public void start() {
-        System.out.println(board.toString());
+        board.printBoard();
         boolean continueGame = true;
         while (continueGame) {
             reset();
@@ -91,11 +144,11 @@ public class Game {
      */
     private void reset() {
         current = 0;
-        if(players.length == TWO_PLAYERS)
+        if (players.length == TWO_PLAYERS)
             board.reset(BoardStates.getTwoPlayer());
         else if (players.length == THREE_PLAYERS)
             board.reset(BoardStates.getThreePlayer());
-        else if(players.length == FOUR_PLAYERS)
+        else if (players.length == FOUR_PLAYERS)
             board.reset(BoardStates.getFourPlayer());
     }
 
@@ -107,15 +160,19 @@ public class Game {
      */
     private void play() {
         while (!board.gameOver() && !board.hasWinner()) {
-            board.setField(players[current].determineMove(board), players[current].getMarble());
-            if (current++ >= players.length) {
+            update();
+            if (current >= players.length) {
                 current = 0;
             } else {
+                board.makeMove(players[current].makeChoice(board));
                 current++;
-                }
             }
-            update();
         }
+        update();
+        if (board.gameOver()) {
+            printResult();
+        }
+    }
 
 
     /**
@@ -128,6 +185,7 @@ public class Game {
 
     /**
      * Prints the result of the last game. <br>
+     *
      * @requires the game to be over
      */
     private void printResult() {
@@ -138,6 +196,12 @@ public class Game {
                     + winner.getMarble() + ") has won!");
         } else {
             System.out.println("Draw. There is no winner!");
+        }
+    }
+
+    private void assignTeam(Player player) {
+        if (players.length == 2) {
+
         }
     }
 }

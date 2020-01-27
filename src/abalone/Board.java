@@ -1,7 +1,6 @@
 package abalone;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 public class Board {
@@ -9,7 +8,7 @@ public class Board {
     public static final int[] ROW_SIZES = new int[]{5, 6, 7, 8, 9, 8, 7, 6, 5};
 
     private Marble[] fields;
-    private List<Team> teams;
+    public List<Team> playingTeams = new ArrayList<>(); // The teams that are currently playing in this board
     private int moveCounter;
 
 
@@ -36,53 +35,54 @@ public class Board {
 
         // Game start
         System.out.println(board.toString());
-
-        // Turn 1
-        board.makeMove(new Move(Move.Direction.NW,
-                new Group(
-                        board.convertToCoordinate(32),
-                        board.convertToCoordinate(23)),
-                new Team(Arrays.asList(Marble.BLACK, Marble.RED))
-        ));
-        System.out.println(board.toString());
-
-        // Turn 2
-        board.makeMove(new Move(Move.Direction.W,
-                new Group(
-                        board.convertToCoordinate(17),
-                        board.convertToCoordinate(15),
-                        board.convertToCoordinate(16)),
-                new Team(Arrays.asList(Marble.BLACK, Marble.RED))
-        ));
-        System.out.println(board.toString());
-
-        // Turn 3
-        board.makeMove(new Move(Move.Direction.NW,
-                new Group(
-                        board.convertToCoordinate(28),
-                        board.convertToCoordinate(37)),
-                new Team(Arrays.asList(Marble.BLACK, Marble.RED))
-        ));
-        System.out.println(board.toString());
-
-        // Turn 4
-        board.makeMove(new Move(Move.Direction.NW,
-                new Group(
-                        board.convertToCoordinate(28),
-                        board.convertToCoordinate(19)),
-                new Team(Arrays.asList(Marble.BLACK, Marble.RED))
-        ));
-        System.out.println(board.toString());
-
-        // Turn 5
-        System.out.println(board.makeMove(new Move(Move.Direction.W,
-                new Group(
-                        board.convertToCoordinate(14),
-                        board.convertToCoordinate(15),
-                        board.convertToCoordinate(16)),
-                new Team(Arrays.asList(Marble.BLACK, Marble.WHITE))
-        )));
-        System.out.println(board.toString());
+//
+//        // Turn 1
+//        board.makeMove(new Move(Move.Direction.NW,
+//                new Group(
+//                        board.convertToCoordinate(32),
+//                        board.convertToCoordinate(23)),
+//                new Team(Arrays.asList(Marble.BLACK, Marble.RED))
+//        ));
+//        System.out.println(board.toString());
+//
+//        // Turn 2
+//        board.makeMove(new Move(Move.Direction.W,
+//                new Group(
+//                        board.convertToCoordinate(17),
+//                        board.convertToCoordinate(15),
+//                        board.convertToCoordinate(16)),
+//                new Team(Arrays.asList(Marble.BLACK, Marble.RED))
+//        ));
+//        System.out.println(board.toString());
+//
+//        // Turn 3
+//        board.makeMove(new Move(Move.Direction.NW,
+//                new Group(
+//                        board.convertToCoordinate(28),
+//                        board.convertToCoordinate(37)),
+//                new Team(Arrays.asList(Marble.BLACK, Marble.RED))
+//        ));
+//        System.out.println(board.toString());
+//
+//        // Turn 4
+//        board.makeMove(new Move(Move.Direction.NW,
+//                new Group(
+//                        board.convertToCoordinate(28),
+//                        board.convertToCoordinate(19)),
+//                new Team(Arrays.asList(Marble.BLACK, Marble.RED))
+//        ));
+//        System.out.println(board.toString());
+//
+//        // Turn 5
+//        System.out.println(board.makeMove(new Move(Move.Direction.W,
+//                new Group(
+//                        board.convertToCoordinate(14),
+//                        board.convertToCoordinate(15),
+//                        board.convertToCoordinate(16)),
+//                new Team(Arrays.asList(Marble.BLACK, Marble.WHITE))
+//        )));
+//        System.out.println(board.toString());
+//    }
     }
 
 
@@ -100,7 +100,7 @@ public class Board {
      * @requires cord != null;
      */
 
-    public int convertToInt(Coordinate coord) {
+    public static int convertToInt(Coordinate coord) {
         int result = 0;
         for (int i = 0; i < coord.y; i++) {
             result += ROW_SIZES[i];
@@ -109,7 +109,8 @@ public class Board {
         return result;
     }
 
-    private Coordinate convertToCoordinate(int index) {
+
+    public static Coordinate convertToCoordinate(int index) {
         int counter = 0;
 
         for (int y = 0; y < ROW_SIZES.length; y++) {
@@ -123,6 +124,10 @@ public class Board {
         }
 
         throw new IndexOutOfBoundsException();
+    }
+
+    public void addTeamToBoard(Team team) {
+        playingTeams.add(team);
     }
 
     /**
@@ -233,12 +238,15 @@ public class Board {
         this.fields = marbles;
     }
 
+
     public boolean makeMove(Move move) {
+
+
         // Check if neighbours
         if (move.getGroup().size == 1 || move.getGroup().getLineDirection().isParallelTo(move.getDirection())) {
             Coordinate pawn = move.getGroup().getMarble1();
 
-            // Walk to Coordinate closest in move direction
+            // Walk to Coordinate closest in move direction , within the group
 
 //            while (pawn.step(move.getDirection()).equals(move.getGroup().getMarble1())
 //                    || move.getGroup().size >= 2 && pawn.step(move.getDirection()).equals(move.getGroup().getMarble2())
@@ -247,8 +255,9 @@ public class Board {
                 pawn = pawn.step(move.getDirection());
             }
 
+
             // Calculate our push strength (own marbles + friendly marbles)
-            List<Coordinate> friendlies = new ArrayList<Coordinate>();
+            List<Coordinate> friendlies = new ArrayList<>();
             while (move.getTeam().teamHas(getField(pawn.step(move.getDirection())))) {
                 pawn = pawn.step(move.getDirection());
                 friendlies.add(pawn);
@@ -343,8 +352,8 @@ public class Board {
                     for (Coordinate destination : move.getGroup().step(move.getDirection()).getMarbles()) {
                         setField(destination, color);
 
-                        moveCounter++;
                     }
+                    moveCounter++;
                 }
             }
         } else {
@@ -352,7 +361,7 @@ public class Board {
             return makeMoveSlide(move);
         }
 
-        return false;
+        return true;
     }
 
     private boolean makeMoveSlide(Move move) {
@@ -394,8 +403,8 @@ public class Board {
     }
 
     public boolean hasWinner() {
-        for (Team team : teams) {
-            if (team.getPoints() < 7) {
+        for (Team team : playingTeams) {
+            if (team.getPoints() > 5) {
                 return true;
             }
         }
@@ -404,18 +413,24 @@ public class Board {
 
     public boolean isWinner(Marble marble) {
         if (hasWinner()) {
-            for (Team team : teams) {
+            for (Team team : playingTeams) {
                 return team.teamHas(marble);
             }
         }
         return false;
     }
-    public boolean gameOver() {
-        if
-    }
 
     public boolean gameOver() {
-        return hasWinner() || (moveCounter < 97);
+        return hasWinner() || (moveCounter > 97);
+    }
+
+    public boolean isValidGroup(Move move) {
+        List<Coordinate> group = move.getGroup().getMarbles();
+        for (Coordinate marble : group) {
+            return marble != null;
+        }
+        System.out.println("Not a valid set of marbles");
+        return false;
     }
 }
 

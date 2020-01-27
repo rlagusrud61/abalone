@@ -30,7 +30,7 @@ public class Board {
 
     public static void main(String[] args) {
         Board board = new Board();
-        board.reset(BoardStates.getFourPlayer());
+        board.reset(BoardStates.getThreePlayer());
         printBoard();
 
         // Game start
@@ -223,7 +223,7 @@ public class Board {
         }
         for (int i = 0; i < ROW_SIZES[rowindex]; i++) {
             Coordinate coord = new Coordinate(i, rowindex);
-            s.append(getField(coord).draw()).append(" ┃   ");
+            s.append(getField(coord).draw()).append(" |  ");
         }
         return s.toString();
     }
@@ -234,8 +234,8 @@ public class Board {
 
     public boolean makeMove(Move move) {
         // Check if neighbours
-        if (move.getGroup().size == 1 || move.getGroup().getLineDirection().isParallelTo(move.getDirection())) {
-            Coordinate pawn = move.getGroup().getMarble1();
+        if (move.getGroup().getCoordinates().size() == 1 || move.getGroup().getLineDirection().isParallelTo(move.getDirection())) {
+            Coordinate pawn = move.getGroup().getFstCoord();
 
             // Walk to Coordinate closest in move direction
 
@@ -271,7 +271,7 @@ public class Board {
             }
 
             if (enemies.size() > 0) {
-                if (move.getGroup().getMarbles().size() + friendlies.size() > enemies.size()
+                if (move.getGroup().getCoordinates().size() + friendlies.size() > enemies.size()
                         && (last_empty || last_out_of_bounds)) {
                     // Successfull push
 
@@ -291,13 +291,13 @@ public class Board {
                     }
 
                     // Move player marbles
-                    Marble color = getField(move.getGroup().getMarble1());
+                    Marble color = getField(move.getGroup().getFstCoord());
                     Group move_group_dest = move.getGroup().step(move.getDirection());
 
-                    for (Coordinate coord : move.getGroup().getMarbles()) {
+                    for (Coordinate coord : move.getGroup().getCoordinates()) {
                         setField(coord, Marble.EMPTY);
                     }
-                    for (Coordinate coord : move_group_dest.getMarbles()) {
+                    for (Coordinate coord : move_group_dest.getCoordinates()) {
                         setField(coord, color);
                     }
                 } else {
@@ -318,24 +318,24 @@ public class Board {
 
                         // Move player marbles
                         Group move_group_dest = move.getGroup().step(move.getDirection());
-                        for (Coordinate coord : move.getGroup().getMarbles()) {
+                        for (Coordinate coord : move.getGroup().getCoordinates()) {
                             setField(coord, Marble.EMPTY);
                         }
-                        for (Coordinate coord : move_group_dest.getMarbles()) {
-                            setField(coord, getField(move.getGroup().getMarble1()));
+                        for (Coordinate coord : move_group_dest.getCoordinates()) {
+                            setField(coord, getField(move.getGroup().getFstCoord()));
                         }
                     } else {
                         throw new IllegalStateException("wa da fuq????");
                     }
                 } else {
                     // Case: Normal move
-                    Marble color = getField(move.getGroup().getMarble1());
+                    Marble color = getField(move.getGroup().getFstCoord());
 
-                    for (Coordinate original_marble : move.getGroup().getMarbles()) {
+                    for (Coordinate original_marble : move.getGroup().getCoordinates()) {
                         setField(original_marble, Marble.EMPTY);
                     }
 
-                    for (Coordinate destination : move.getGroup().step(move.getDirection()).getMarbles()) {
+                    for (Coordinate destination : move.getGroup().step(move.getDirection()).getCoordinates()) {
                         setField(destination, color);
                     }
                 }
@@ -353,19 +353,19 @@ public class Board {
         Group destination = marbles.step(move.getDirection());
 
         // Check if destinations are empty (if valid move)
-        for (Coordinate dest : destination.getMarbles()) {
+        for (Coordinate dest : destination.getCoordinates()) {
             if (!isEmpty(dest)) {
                 return false;
             }
         }
 
         // Set the destination fields
-        for (Coordinate dest : destination.getMarbles()) {
-            setField(dest, getField(marbles.getMarble1()));
+        for (Coordinate dest : destination.getCoordinates()) {
+            setField(dest, getField(marbles.getFstCoord()));
         }
 
         // Reset the original fields
-        for (Coordinate orig : marbles.getMarbles()) {
+        for (Coordinate orig : marbles.getCoordinates()) {
             setField(orig, Marble.EMPTY);
         }
 

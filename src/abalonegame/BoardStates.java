@@ -1,26 +1,29 @@
-package abalone;
+package abalonegame;
 
 import java.util.Arrays;
 
 public class BoardStates {
 
+    public static void main(String[] args) {
+
+    }
+
     public static Marble[] getTwoPlayer() {
         Marble[] fields = new Marble[61];
 
-        for (int i = 0; i < fields.length - 1; i++) {
-            fields[i] = Marble.EMPTY;
-        }
+        Arrays.fill(fields, Marble.EMPTY);
+
         for (int i = 0; i < 11; i++) {
             fields[i] = Marble.BLACK;
         }
         for (int i = 13; i < 16; i++) {
-            fields[i] = Marble.BLACK;
+            fields[i] = Marble.RED;
         }
         for (int i = 50; i < fields.length; i++) {
             fields[i] = Marble.WHITE;
         }
         for (int i = 45; i < 48; i++) {
-            fields[i] = Marble.WHITE;
+            fields[i] = Marble.BLUE;
         }
 
         return fields;

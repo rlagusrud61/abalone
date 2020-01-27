@@ -1,6 +1,6 @@
 package tests;
 
-import abalone.Board;
+import abalonegame.Board;
 
 public class BoardTest {
     /**

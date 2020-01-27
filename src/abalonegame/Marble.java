@@ -1,17 +1,23 @@
-package abalone;
+package abalonegame;
+
+import java.util.List;
 
 public enum Marble {
     EMPTY,
-    RED,
-    BLUE,
+    WHITE,
     BLACK,
-    WHITE;
+    BLUE,
+    RED;
 
+
+    private List<Marble> friendlyMarbles;
+    private List<Marble> enemyMarbles;
 
     public static final String RESET = "\u001B[0m";
 
+
     public String draw() {
-        String marble = null;
+        String marble;
         switch (this) {
             case RED:
                 marble = "\u001B[31m" + "⚫" + RESET;
@@ -20,10 +26,10 @@ public enum Marble {
                 marble = "\u001B[34m" + "⚫" + RESET;
                 break;
             case BLACK:
-                marble = "\u001B[30m" + "⚫" + RESET;
+                marble = "\u001B[97m" + "⚫" + RESET;
                 break;
             case WHITE:
-                marble = "\u001B[97m" + "⚫" + RESET;
+                marble = "\u001B[30m" + "⚫" + RESET;
                 // BTW, BOLD "\033[1;30m" + BLACK  = WHITE??????????????
                 break;
             default:

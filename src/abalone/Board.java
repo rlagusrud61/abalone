@@ -9,8 +9,9 @@ public class Board {
     public static final int[] ROW_SIZES = new int[]{5, 6, 7, 8, 9, 8, 7, 6, 5};
 
     private Marble[] fields;
-    private int deadTeam1;
-    private int deadTeam2;
+    private List<Team> teams;
+    private int moveCounter;
+
 
     public Board() {
         fields = new Marble[61];
@@ -41,7 +42,7 @@ public class Board {
                 new Group(
                         board.convertToCoordinate(32),
                         board.convertToCoordinate(23)),
-                new Team(Arrays.asList(Marble.BLACK, Marble.WHITE))
+                new Team(Arrays.asList(Marble.BLACK, Marble.RED))
         ));
         System.out.println(board.toString());
 
@@ -51,7 +52,7 @@ public class Board {
                         board.convertToCoordinate(17),
                         board.convertToCoordinate(15),
                         board.convertToCoordinate(16)),
-                new Team(Arrays.asList(Marble.BLACK, Marble.WHITE))
+                new Team(Arrays.asList(Marble.BLACK, Marble.RED))
         ));
         System.out.println(board.toString());
 
@@ -60,7 +61,7 @@ public class Board {
                 new Group(
                         board.convertToCoordinate(28),
                         board.convertToCoordinate(37)),
-                new Team(Arrays.asList(Marble.BLACK, Marble.WHITE))
+                new Team(Arrays.asList(Marble.BLACK, Marble.RED))
         ));
         System.out.println(board.toString());
 
@@ -69,7 +70,7 @@ public class Board {
                 new Group(
                         board.convertToCoordinate(28),
                         board.convertToCoordinate(19)),
-                new Team(Arrays.asList(Marble.BLACK, Marble.WHITE))
+                new Team(Arrays.asList(Marble.BLACK, Marble.RED))
         ));
         System.out.println(board.toString());
 
@@ -79,7 +80,7 @@ public class Board {
                         board.convertToCoordinate(14),
                         board.convertToCoordinate(15),
                         board.convertToCoordinate(16)),
-                new Team(Arrays.asList(Marble.BLACK, Marble.RED))
+                new Team(Arrays.asList(Marble.BLACK, Marble.WHITE))
         )));
         System.out.println(board.toString());
     }
@@ -248,7 +249,7 @@ public class Board {
 
             // Calculate our push strength (own marbles + friendly marbles)
             List<Coordinate> friendlies = new ArrayList<Coordinate>();
-            while (move.getTeam().inTeam(getField(pawn.step(move.getDirection())))) {
+            while (move.getTeam().teamHas(getField(pawn.step(move.getDirection())))) {
                 pawn = pawn.step(move.getDirection());
                 friendlies.add(pawn);
             }
@@ -256,7 +257,7 @@ public class Board {
             // Calculate enemy strength
             List<Coordinate> enemies = new ArrayList<>();
             while (pawn.isValidStep(move.getDirection()) && !isEmpty(pawn.step(move.getDirection()))
-                    && !move.getTeam().inTeam(getField(pawn.step(move.getDirection())))) {
+                    && !move.getTeam().teamHas(getField(pawn.step(move.getDirection())))) {
                 pawn = pawn.step(move.getDirection());
                 enemies.add(pawn);
             }
@@ -273,15 +274,16 @@ public class Board {
             if (enemies.size() > 0) {
                 if (move.getGroup().getMarbles().size() + friendlies.size() > enemies.size()
                         && (last_empty || last_out_of_bounds)) {
-                    // Successfull push
+                    // Successful push
 
                     // Move enemy marbles
                     for (Coordinate enemy : enemies) {
+                        Marble color = getField(enemy);
                         if (enemy.step(move.getDirection()) == null) {
-                            // TODO: Count lost marble
-                            System.out.println("bump!");
+                            move.getTeam().addPoints(1);
                         } else {
                             setField(enemy.step(move.getDirection()), getField(enemy));
+
                         }
                     }
 
@@ -300,6 +302,8 @@ public class Board {
                     for (Coordinate coord : move_group_dest.getMarbles()) {
                         setField(coord, color);
                     }
+                    moveCounter++;
+
                 } else {
                     return false;
                 }
@@ -324,6 +328,7 @@ public class Board {
                         for (Coordinate coord : move_group_dest.getMarbles()) {
                             setField(coord, getField(move.getGroup().getMarble1()));
                         }
+                        moveCounter++;
                     } else {
                         throw new IllegalStateException("wa da fuq????");
                     }
@@ -337,6 +342,8 @@ public class Board {
 
                     for (Coordinate destination : move.getGroup().step(move.getDirection()).getMarbles()) {
                         setField(destination, color);
+
+                        moveCounter++;
                     }
                 }
             }
@@ -368,6 +375,7 @@ public class Board {
         for (Coordinate orig : marbles.getMarbles()) {
             setField(orig, Marble.EMPTY);
         }
+        moveCounter++;
 
         return true;
     }
@@ -386,19 +394,25 @@ public class Board {
     }
 
     public boolean hasWinner() {
-        return ((deadTeam1 == 6) || (deadTeam2 == 6));
+        for (Team team : teams) {
+            if (team.getPoints() < 7) {
+                return true;
+            }
+        }
+        return false;
     }
 
     public boolean isWinner(Marble marble) {
-        if (hasWinner() && deadTeam2 == 6) {
-
-            return true;
+        if (hasWinner()) {
+            for (Team team : teams) {
+                return team.teamHas(marble);
+            }
         }
         return false;
     }
 
     public boolean gameOver() {
-        return hasWinner() == true;
+        return hasWinner() || (moveCounter < 97);
     }
 }
 

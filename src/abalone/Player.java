@@ -52,7 +52,7 @@ public abstract class Player {
     public abstract int[] determineMove(Board board);
 
     // -- Commands ---------------------------------------------------
-
+    public abstract int[] move(Board board);
     /**
      * Makes a move on the board. <br>
      *
@@ -60,7 +60,7 @@ public abstract class Player {
      * @requires board is not null and not full
      */
     public void makeMove(Board board) {
-        int[] choice = determineMove(board);
+        int[] choice = move(board);
         for (int i = 0; i < choice.length - 1; i++) {
             System.out.println(choice[i]);
             board.setField(choice[i], getMarble());

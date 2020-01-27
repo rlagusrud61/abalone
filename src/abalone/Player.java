@@ -49,22 +49,23 @@ public abstract class Player {
      * @requires board is not null and not full
      * @ensures the returned in is a valid field index and that field is empty
      */
-    public abstract int[] determineMove(Board board);
+    public abstract int[] makeChoice(Board board);
 
     // -- Commands ---------------------------------------------------
-
-    /**
-     * Makes a move on the board. <br>
-     *
-     * @param board the current board
-     * @requires board is not null and not full
-     */
-    public void makeMove(Board board) {
-        int[] choice = determineMove(board);
-        for (int i = 0; i < choice.length - 1; i++) {
-            System.out.println(choice[i]);
-            board.setField(choice[i], getMarble());
-        }
-    }
+//
+//    /**
+//     * Makes a move on the board. <br>
+//     *
+//     * @param board the current board
+//     * @requires board is not null and not full
+//     */
+//    public void makeMove(Board board) {
+//        int[] choice = determineMove(board);
+//        for (int i = 0; i < choice.length - 1; i++) {
+//            System.out.println(choice[i]);
+//            board.setField(choice[i], getMarble());
+//        }
+//    }
+//
 
 }

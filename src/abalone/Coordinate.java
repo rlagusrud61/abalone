@@ -17,6 +17,54 @@ public class Coordinate {
         this.y = coord.y;
     }
 
+    public boolean isValidStep(Move.Direction direction) {
+        int x = this.x;
+        int y = this.y;
+
+        switch (direction) {
+            case NE:
+                if (y == 0)
+                    return false;
+                if (x == Board.ROW_SIZES[y] - 1)
+                    return false;
+
+                return true;
+            case E:
+                if (x == Board.ROW_SIZES[y] - 1)
+                    return false;
+
+                return true;
+            case SE:
+                if (y == Board.ROW_SIZES.length - 1)
+                    return false;
+                if (x == Board.ROW_SIZES[y] - 1)
+                    return false;
+
+                return true;
+            case SW:
+                if (y == Board.ROW_SIZES.length - 1)
+                    return false;
+                if (x == 0)
+                    return false;
+
+                return true;
+            case W:
+                if (x == 0)
+                    return false;
+
+                return true;
+            case NW:
+                if (y == 0)
+                    return false;
+                if (x == 0)
+                    return false;
+
+                return true;
+            default:
+                return false;
+        }
+    }
+
     public Coordinate step(Move.Direction direction) {
         int x = this.x;
         int y = this.y;
@@ -54,7 +102,7 @@ public class Coordinate {
                 if (x == 0)
                     return null;
 
-                if (Board.ROW_SIZES[y + 1] > Board.ROW_SIZES[y])
+                if (Board.ROW_SIZES[y + 1] < Board.ROW_SIZES[y])
                     x -= 1;
                 y += 1;
                 break;
@@ -70,7 +118,7 @@ public class Coordinate {
                 if (x == 0)
                     return null;
 
-                if (Board.ROW_SIZES[y - 1] > Board.ROW_SIZES[y])
+                if (Board.ROW_SIZES[y - 1] < Board.ROW_SIZES[y])
                     x -= 1;
                 y -= 1;
                 break;

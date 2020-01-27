@@ -8,7 +8,7 @@ public class HumanPlayer extends Player {
     }
 
     @Override
-    public int[] determineMove(Board board) {
+    public int[] makeChoice(Board board) {
         String prompt = "> " + getName() + " (" + getMarble().toString() + ")"
                 + ", what is your choice? Give direction (0-5), and list the marbles separated by commas (without space).";
 
@@ -25,14 +25,13 @@ public class HumanPlayer extends Player {
             }
         }
 
-        boolean valid; //TODO check if it's empty
-        while (!valid) {
-            System.out.println("ERROR: field " + choice
-                    + " is no valid choice.");
-            System.out.println(prompt);
-            choice = TextIO.getln();
-            valid = board.isField(choice) && board.isEmptyField(choice);
-        }
-        return choice;
+//        boolean valid = false;
+//        while (!valid) {
+//            makeChoice(board);
+//            valid = board.isField(choice) && board.isEmpty(choice);
+//        }
+//        return choice;
+//    }
+        return null;
     }
 }

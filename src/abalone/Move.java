@@ -3,18 +3,13 @@ package abalone;
 public class Move {
 
     private Direction direction;
-    private Coordinate marble1;
-    private Coordinate marble2;
-    private Coordinate marble3;
-    private Marble[] friendlyMarbles;
-    private Marble[] enemyMarbles;
+    private Group group;
+    private Team team;
 
-    public Move(Direction direction, Coordinate marble1, Coordinate marble2, Coordinate marble3) {
+    public Move(Direction direction, Group group, Team team) {
         this.direction = direction;
-        this.marble1 = marble1;
-        this.marble2 = marble2;
-        this.marble3 = marble3;
-
+        this.group = group;
+        this.team = team;
     }
 
     public Direction getDirection() {
@@ -25,54 +20,35 @@ public class Move {
         this.direction = direction;
     }
 
-    public Coordinate getMarble1() {
-        return marble1;
+    public Group getGroup() {
+        return group;
     }
 
-    public void setMarble1(Coordinate marble1) {
-        this.marble1 = marble1;
+    public void setGroup(Group group) {
+        this.group = group;
     }
 
-    public Coordinate getMarble2() {
-        return marble2;
+    public Team getTeam() {
+        return team;
     }
 
-    public void setMarble2(Coordinate marble2) {
-        this.marble2 = marble2;
+    public void setTeam(Team team) {
+        this.team = team;
     }
 
-    public Coordinate getMarble3() {
-        return marble3;
-    }
-
-    public void setMarble3(Coordinate marble3) {
-        this.marble3 = marble3;
-    }
-
-    public Marble[] getFriendlyMarbles() {
-        return friendlyMarbles;
-    }
-
-    public void setFriendlyMarbles(Marble[] friendlyMarbles) {
-        this.friendlyMarbles = friendlyMarbles;
-    }
-
-    public Marble[] getEnemyMarbles() {
-        return enemyMarbles;
-    }
-
-    public void setEnemyMarbles(Marble[] enemyMarbles) {
-        this.enemyMarbles = enemyMarbles;
-    }
-
+    /**
+     * ENUM DIRECTION
+     */
     public enum Direction {
         NE(0), E(1), SE(2), SW(3), W(4), NW(5);
 
         private final int val;
+        private Board board;
 
         Direction(int val) {
             this.val = val;
         }
+
 
         Direction opposite() {
             switch (this) {
@@ -93,6 +69,49 @@ public class Move {
             }
         }
 
+        boolean isParallelTo(Move.Direction direction) {
+            switch (this) {
+                case NE:
+                case SW:
+                    return direction == NE || direction == SW;
+                case E:
+                case W:
+                    return direction == E || direction == W;
+                case NW:
+                case SE:
+                    return direction == SE || direction == NW;
 
+                default:
+                    throw new IllegalStateException();
+            }
+        }
     }
+
+    public class MoveType {
+
+        public static final int SLIDE = 0;
+        public static final int PUSH = 1;
+        private Group movedMarbles;
+        private Group selectedMarbles;
+        private int moveType;
+
+        public MoveType(int moveType, Group selectedMarbles, Group movedMarbles) {
+            this.moveType = moveType;
+            this.selectedMarbles = selectedMarbles;
+            this.movedMarbles = movedMarbles;
+        }
+
+        public int getMoveType() {
+            return moveType;
+        }
+
+        public Group getMovedMarbles() {
+            return movedMarbles;
+        }
+
+        public Group getSelectedMarbles() {
+            return selectedMarbles;
+        }
+    }
+
 }

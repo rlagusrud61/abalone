@@ -22,12 +22,8 @@
 //
 //    private BufferedReader in;
 //    private BufferedWriter out;
-//    private Socket sock;
+//    private Socket client;
 //
-//
-//    /**
-//     * The connected HotelServer
-//     */
 //
 //    private GameServer srv;
 //
@@ -42,18 +38,19 @@
 //    /**
 //     * Constructs a new HotelClientHandler. Opens the In- and OutputStreams.
 //     *
-//     * @param sock The client socket
-//     * @param srv  The connected server
-//     * @param name The name of this ClientHandler
+//     * @param client The client socket
+//     * @param srv    The connected server
+//     * @param name   The name of this ClientHandler
 //     */
 //
-//    public GameClientHandler(Socket sock, GameServer srv, String name) {
+//    //ArrayList<ClientHandler> clients
+//    public GameClientHandler(Socket client, GameServer srv, String name) {
 //        try {
 //            in = new BufferedReader(
-//                    new InputStreamReader(sock.getInputStream()));
+//                    new InputStreamReader(client.getInputStream()));
 //            out = new BufferedWriter(
-//                    new OutputStreamWriter(sock.getOutputStream()));
-//            this.sock = sock;
+//                    new OutputStreamWriter(client.getOutputStream()));
+//            this.client = client;
 //            this.srv = srv;
 //            this.name = name;
 //        } catch (IOException e) {
@@ -87,75 +84,75 @@
 //
 //    private void handleCommand(String msg) throws IOException {
 //
-//
-//        String[] split = msg.split(ProtocolMessages.DELIMITER);
-//        String command = split[0];
-//        String first = null;
-//        String second = null;
-//
-//        if (split.length > 1) {
-//            first = split[1];
-//            if (split.length > 2) {
-//                second = split[2];
-//
-//            }
-//        }
-//
-//        switch (command) {
-//            case "h":
-//                out.write(srv.getHello(first));
-//                break;
-//
-//            case "m":
-//                if (first == null) {
-//                    out.write("Move is invalid");
-//                } else {
-//                    out.write(srv.doMove(themarbles));
-//                }
-//                break;
-//
-//            case "o":
-//                if (first == null) {
-//                    System.out.println("Error Checking out");
-//                }
-//                out.write(srv.doOut(first));
-//                break;
-//
-//            case "r":
-//                if (first == null) {
-//                    System.out.println("ERROR");
-//                }
-//                out.write(srv.doRoom(first));
-//                break;
-//
-//            case "a":
-//                if (first == null) {
-//                    System.out.println("Wrong guest name");
-//                }
-//                out.write(srv.doAct(first, second));
-//                break;
-//
-//
-//            case "b":
-//                if (first == null) {
-//                    System.out.println("Wrong guest name");
-//                }
-//                if (second == null) {
-//                    System.out.println("Wrong number of days");
-//                }
-//
-//                out.write(srv.doBill(first, second));
-//                break;
-//
-//            case "p":
-//                out.write(srv.doPrint());
-//                break;
-//
-//            case "x":
-//                shutdown();
-//                break;
-//
-//        }
+////
+////        String[] split = msg.split(ProtocolMessages.DELIMITER);
+////        String command = split[0];
+////        String first = null;
+////        String second = null;
+////
+////        if (split.length > 1) {
+////            first = split[1];
+////            if (split.length > 2) {
+////                second = split[2];
+////
+////            }
+////        }
+////
+////        switch (command) {
+////            case "h":
+////                out.write(srv.getHello(first));
+////                break;
+////
+////            case "m":
+////                if (first == null) {
+////                    out.write("Move is invalid");
+////                } else {
+////                    out.write(srv.doMove(themarbles));
+////                }
+////                break;
+////
+////            case "o":
+////                if (first == null) {
+////                    System.out.println("Error Checking out");
+////                }
+////                out.write(srv.doOut(first));
+////                break;
+////
+////            case "r":
+////                if (first == null) {
+////                    System.out.println("ERROR");
+////                }
+////                out.write(srv.doRoom(first));
+////                break;
+////
+////            case "a":
+////                if (first == null) {
+////                    System.out.println("Wrong guest name");
+////                }
+////                out.write(srv.doAct(first, second));
+////                break;
+////
+////
+////            case "b":
+////                if (first == null) {
+////                    System.out.println("Wrong guest name");
+////                }
+////                if (second == null) {
+////                    System.out.println("Wrong number of days");
+////                }
+////
+////                out.write(srv.doBill(first, second));
+////                break;
+////
+////            case "p":
+////                out.write(srv.doPrint());
+////                break;
+////
+////            case "x":
+////                shutdown();
+////                break;
+////
+////        }
 //    }
 //
 //    /**
@@ -168,7 +165,7 @@
 //        try {
 //            in.close();
 //            out.close();
-//            sock.close();
+//            client.close();
 //        } catch (IOException e) {
 //            e.printStackTrace();
 //        }

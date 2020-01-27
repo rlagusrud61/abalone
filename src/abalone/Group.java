@@ -1,60 +1,67 @@
 package abalone;
 
+
+import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 public class Group {
 
-    public List<Coordinate> marbles;
+    public Coordinate[] marbles;
 
+    public int size;
 
     //Group of one marble
     public Group(Coordinate marble) {
-        marbles.add(marble);
+        marbles = new Coordinate[1];
+        marbles[0] = marble;
+        size = 1;
     }
 
     //Group of two marbles
     public Group(Coordinate marble1, Coordinate marble2) {
-        marbles.add(marble1);
-        marbles.add(marble2);
+        marbles = new Coordinate[2];
+        marbles[0] = marble1;
+        marbles[1] = marble2;
+        size = 2;
     }
 
     //Group of three marbles
     public Group(Coordinate marble1, Coordinate marble2, Coordinate marble3) {
-        marbles.add(marble1);
-        marbles.add(marble2);
-        marbles.add(marble3);
+        marbles = new Coordinate[3];
+        marbles[0] = marble1;
+        marbles[1] = marble2;
+        marbles[2] = marble3;
+        size = 3;
     }
 
-//    public List<Coordinate> getMarbles() {
-//        return Optional.ofNullable(this.marbles).stream().flatMap(Arrays::stream)
-//                .collect(Collectors.toList());
-//    }
-
-    public List<Coordinate> getCoordinates() {
-        return marbles;
+    public List<Coordinate> getMarbles() {
+        return Optional.ofNullable(this.marbles).stream().flatMap(Arrays::stream)
+                .collect(Collectors.toList());
     }
 
     public Group step(Move.Direction d) {
-        if (marbles.size() == 1) {
-            return new Group(getFstCoord().step(d));
-        } else if (marbles.size() == 2) {
-            return new Group(getFstCoord().step(d), getSndCoord().step(d));
-        } else if (marbles.size() == 3) {
-            return new Group(getFstCoord().step(d), getSndCoord().step(d), getTrdCoord().step(d));
+        if (size == 1) {
+            return new Group(getMarble1().step(d));
+        } else if (size == 2) {
+            return new Group(getMarble1().step(d), getMarble2().step(d));
+        } else if (size == 3) {
+            return new Group(getMarble1().step(d), getMarble2().step(d), getMarble3().step(d));
         }
         return null;
     }
 
-    public Coordinate getFstCoord() {
-        return marbles.get(0);
+    public Coordinate getMarble1() {
+        return marbles[0];
     }
 
-    public Coordinate getSndCoord() {
-        return marbles.get(1);
+    public Coordinate getMarble2() {
+        return marbles[1];
     }
 
-    public Coordinate getTrdCoord() {
-        return marbles.get(2);
+    public Coordinate getMarble3() {
+        return marbles[2];
     }
 
     public boolean isInLine() {
@@ -62,13 +69,13 @@ public class Group {
     }
 
     public Move.Direction getLineDirection() {
-        switch (marbles.size()) {
+        switch (size) {
             case 2:
-                return getLineDirection(getFstCoord(), getSndCoord());
+                return getLineDirection(getMarble1(), getMarble2());
             case 3:
-                return getLineDirection(getFstCoord(), getSndCoord(), getTrdCoord());
+                return getLineDirection(getMarble1(), getMarble2(), getMarble3());
             default:
-                throw new IllegalStateException("Unexpected value: " + marbles.size());
+                throw new IllegalStateException("Unexpected value: " + size);
         }
     }
 
@@ -118,8 +125,8 @@ public class Group {
     }
 
     public boolean isMarbleInGroup(Coordinate marble) {
-        for (int i = 0; i < marbles.size(); i++) {
-            if (marbles.get(i).equals(marble)) {
+        for (int i = 0; i < size; i++) {
+            if (marbles[i].equals(marble)) {
                 return true;
             }
         }

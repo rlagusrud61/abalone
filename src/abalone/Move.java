@@ -1,4 +1,4 @@
-package abalonegame;
+package abalone;
 
 public class Move {
 

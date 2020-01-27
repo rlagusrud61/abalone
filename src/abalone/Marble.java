@@ -1,4 +1,4 @@
-package abalonegame;
+package abalone;
 
 import java.util.List;
 

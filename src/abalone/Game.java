@@ -9,7 +9,10 @@ import utils.TextIO;
  * @author Theo Ruys en Arend Rensink
  */
 public class Game {
-    public static final int NUMBER_PLAYERS = 2;
+
+    public static final int TWO_PLAYERS = 2;
+    public static final int THREE_PLAYERS = 2;
+    public static final int FOUR_PLAYERS = 2;
 
     /**
      * The board.
@@ -41,9 +44,26 @@ public class Game {
      */
     public Game(Player s0, Player s1) {
         board = new Board();
-        players = new Player[NUMBER_PLAYERS];
+        players = new Player[TWO_PLAYERS];
         players[0] = s0;
         players[1] = s1;
+        current = 0;
+    }
+    public Game(Player s0, Player s1, Player s2) {
+        board = new Board();
+        players = new Player[THREE_PLAYERS];
+        players[0] = s0;
+        players[1] = s1;
+        players[2] = s2;
+        current = 0;
+    }
+    public Game(Player s0, Player s1, Player s2, Player s3) {
+        board = new Board();
+        players = new Player[FOUR_PLAYERS];
+        players[0] = s0;
+        players[1] = s1;
+        players[2] = s2;
+        players[3] = s3;
         current = 0;
     }
 
@@ -71,7 +91,12 @@ public class Game {
      */
     private void reset() {
         current = 0;
-        board.reset();
+        if(players.length == TWO_PLAYERS)
+            board.reset(BoardStates.getTwoPlayer());
+        else if (players.length == THREE_PLAYERS)
+            board.reset(BoardStates.getThreePlayer());
+        else if(players.length == FOUR_PLAYERS)
+            board.reset(BoardStates.getFourPlayer());
     }
 
     /**
@@ -83,10 +108,15 @@ public class Game {
     private void play() {
         while (!board.gameOver() && !board.hasWinner()) {
             board.setField(players[current].determineMove(board), players[current].getMarble());
-            current = (current == 0) ? 1 : 0;
+            if (current++ >= players.length) {
+                current = 0;
+            } else {
+                current++;
+                }
+            }
             update();
         }
-    }
+
 
     /**
      * Prints the game situation.

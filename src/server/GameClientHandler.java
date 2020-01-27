@@ -1,8 +1,9 @@
 
 package server;
 
+import client.GameClient;
 import protocol.ProtocolMessages;
-
+import java.util.List;
 import java.io.*;
 import java.net.Socket;
 
@@ -103,58 +104,46 @@ public class GameClientHandler implements Runnable {
 
         switch (command) {
             case "h":
-                out.write(srv.getHello(first));
+                if (isValidName(first) && isValidAmount(second))
+                    out.write(srv.getHello(first, Integer.parseInt(second)));
+
                 break;
 
             case "m":
                 if (first == null) {
                     out.write("Move is invalid");
                 } else {
-                    out.write(srv.doMove(themarbles));
+                    out.write(srv.doMove());
                 }
                 break;
 
-            case "o":
-                if (first == null) {
-                    System.out.println("Error Checking out");
-                }
-                out.write(srv.doOut(first));
-                break;
-
-            case "r":
-                if (first == null) {
-                    System.out.println("ERROR");
-                }
-                out.write(srv.doRoom(first));
-                break;
-
-            case "a":
-                if (first == null) {
-                    System.out.println("Wrong guest name");
-                }
-                out.write(srv.doAct(first, second));
-                break;
-
-
-            case "b":
-                if (first == null) {
-                    System.out.println("Wrong guest name");
-                }
-                if (second == null) {
-                    System.out.println("Wrong number of days");
-                }
-
-                out.write(srv.doBill(first, second));
-                break;
-
-            case "p":
-                out.write(srv.doPrint());
+            case "g":
+                out.write(srv.doStart());
                 break;
 
             case "x":
                 shutdown();
                 break;
 
+        }
+    }
+
+    private boolean isValidAmount(String playerAmount) {
+        int check = Integer.parseInt(playerAmount);
+        return check > 1 && check < 5;
+    }
+
+    private boolean isValidName(String name) {
+        if(!(srv.getClients() == null)) {
+            List<GameClientHandler> clients = srv.getClients();
+            for (GameClientHandler client : clients) {
+                if (client.getName().equals(name)) {
+                    return false;
+                }
+            }
+            return true;
+        } else {
+            return true;
         }
     }
 
@@ -173,5 +162,9 @@ public class GameClientHandler implements Runnable {
             e.printStackTrace();
         }
         srv.removeClient(this);
+    }
+
+    public String getName() {
+        return name;
     }
 }

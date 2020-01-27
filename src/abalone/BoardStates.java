@@ -11,16 +11,16 @@ public class BoardStates {
             fields[i] = Marble.EMPTY;
         }
         for (int i = 0; i < 11; i++) {
-            fields[i] = Marble.BLACK;
+            fields[i] = Marble.WHITE;
         }
         for (int i = 13; i < 16; i++) {
-            fields[i] = Marble.BLACK;
+            fields[i] = Marble.WHITE;
         }
         for (int i = 50; i < fields.length; i++) {
-            fields[i] = Marble.WHITE;
+            fields[i] = Marble.BLACK;
         }
         for (int i = 45; i < 48; i++) {
-            fields[i] = Marble.WHITE;
+            fields[i] = Marble.BLACK;
         }
 
         return fields;
@@ -42,15 +42,15 @@ public class BoardStates {
         for (int i = 0; i < 5; i++) {
             int rowSize = Board.ROW_SIZES[i];
 
-            fields[index] = Marble.WHITE;
-            fields[index + 1] = Marble.WHITE;
-            fields[index + rowSize - 2] = Marble.BLACK;
-            fields[index + rowSize - 1] = Marble.BLACK;
+            fields[index] = Marble.BLACK;
+            fields[index + 1] = Marble.BLACK;
+            fields[index + rowSize - 2] = Marble.WHITE;
+            fields[index + rowSize - 1] = Marble.WHITE;
             index += rowSize;
         }
 
-        fields[35] = Marble.WHITE;
-        fields[42] = Marble.BLACK;
+        fields[35] = Marble.BLACK;
+        fields[42] = Marble.WHITE;
 
         return fields;
     }
@@ -66,7 +66,7 @@ public class BoardStates {
         int[] whiteMarble4 = new int[]{27, 28, 29, 36, 37, 38, 44, 45, 51};
 
         for (int i : redMarble4) {
-            fields[i - 1] = Marble.RED;
+            fields[i - 1] = Marble.WHITE;
         }
         for (int i : blackMarble4) {
             fields[i - 1] = Marble.BLACK;
@@ -75,7 +75,7 @@ public class BoardStates {
             fields[i - 1] = Marble.BLUE;
         }
         for (int i : whiteMarble4) {
-            fields[i - 1] = Marble.WHITE;
+            fields[i - 1] = Marble.RED;
         }
         return fields;
 

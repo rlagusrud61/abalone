@@ -38,6 +38,7 @@ public class GameServer implements Runnable, ServerProtocol {
      * the view and the next_client_no.
      */
     public GameServer() {
+        if(clients.size() == 2)
         game = new Game((Player) clients[0], clients[1]);
         clients = new ArrayList<>();
         view = new GameServerTUI();
@@ -139,7 +140,7 @@ public class GameServer implements Runnable, ServerProtocol {
     }
 
     @Override
-    public synchronized String getHello(String name) {
+    public synchronized String getHello(String name, int playersAmount) {
         return ProtocolMessages.HELLO + ProtocolMessages.DELIMITER + name;
     }
 
@@ -172,5 +173,8 @@ public class GameServer implements Runnable, ServerProtocol {
     @Override
     public synchronized String noRematch() {
 
+    }
+    public List<GameClientHandler> getClients() {
+        return clients;
     }
 }

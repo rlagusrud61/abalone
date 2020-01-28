@@ -15,13 +15,13 @@ public interface ServerProtocol {
      *
      * @return String to be sent to client as a handshake response.
      */
-    public String getHello(String name);
+    public String getHello(String name, int playersAmount);
 
     String invalid();
 
-    String doStart();
+    String doStart(String name, int playersAmount);
 
-    String doMove();
+    String doMove(int direction, String marbles);
 
     String nextTurn();
 

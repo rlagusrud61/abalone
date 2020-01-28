@@ -12,13 +12,13 @@ public class HumanPlayer extends Player {
     }
 
     @Override
-    public Move makeChoice(Board board) {
+    public Move makeChoice(Board board, String input) {
         boolean isValidArg = true;
             String prompt = "> " + getName() + " (" + getMarble().toString() + ")"
                     + ", what is your choice? Give direction (0-5), and list the marbles separated by commas (without space).";
             System.out.println(prompt);
         do {
-            String text = TextIO.getln();
+            String text = input;
             int command = -1;
             String marbles;
             Integer[] marbleSplit = null;

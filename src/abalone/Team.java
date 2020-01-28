@@ -5,7 +5,7 @@ import java.util.List;
 
 public class Team {
 
-    private List<Marble> members = new ArrayList<>();
+    private List<Marble> marbles = new ArrayList<>();
     private int points;
 
 
@@ -17,11 +17,15 @@ public class Team {
         this.points += points;
     }
 
-    public Team(List<Marble> members) {
-        this.members = members;
+    public Team(List<Marble> marbles) {
+        this.marbles = marbles;
+    }
+
+    public List<Marble> getMarbles() {
+        return marbles;
     }
 
     public boolean teamHas(Marble marble) {
-        return members.contains(marble);
+        return marbles.contains(marble);
     }
 }

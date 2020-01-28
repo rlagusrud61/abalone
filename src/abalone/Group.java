@@ -1,6 +1,5 @@
 package abalone;
 
-
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
@@ -12,6 +11,13 @@ public class Group {
 
     public int size;
 
+    /**
+     * Constructs a group of one marble.
+     *
+     * @param marble Coordinate of the marble
+     * @invariant marbles.length == 1
+     * @invariant size == 1
+     */
     //Group of one marble
     public Group(Coordinate marble) {
         marbles = new Coordinate[1];
@@ -19,6 +25,12 @@ public class Group {
         size = 1;
     }
 
+    /**Constructs a group of two marbles.
+     * @invariant marbles.length == 2
+     * @invariant size == 2
+     * @param marble1 Coordinate of the first marble
+     * @param marble2 Coordinate of the second marble
+     */
     //Group of two marbles
     public Group(Coordinate marble1, Coordinate marble2) {
         marbles = new Coordinate[2];
@@ -27,6 +39,13 @@ public class Group {
         size = 2;
     }
 
+    /**Constructs a group of three marbles.
+     * @invariant marbles.length == 3
+     * @invariant size == 3
+     * @param marble1 Coordinate of the first marble
+     * @param marble2 Coordinate of the second marble
+     * @param marble3 Coordinate of the third marble
+     */
     //Group of three marbles
     public Group(Coordinate marble1, Coordinate marble2, Coordinate marble3) {
         marbles = new Coordinate[3];
@@ -41,6 +60,11 @@ public class Group {
                 .collect(Collectors.toList());
     }
 
+    /**Moves (steps) the group to the given direction.
+     * @requires d != null
+     * @param d Direction
+     * @return a new group of coordinates that steps each marbles in the group to the given direction.
+     */
     public Group step(Move.Direction d) {
         if (size == 1) {
             return new Group(getMarble1().step(d));
@@ -57,19 +81,31 @@ public class Group {
     }
 
     public Coordinate getMarble2() {
-        if (size < 2) return null;
+        if (size < 2) {
+            return null;
+        }
         return marbles[1];
     }
 
     public Coordinate getMarble3() {
-        if (size < 3) return null;
+        if (size < 3) {
+            return null;
+        }
         return marbles[2];
     }
 
+    /**Checks if the group of coordinates are in line.
+     *
+     * @return true if this.getLineDirection() != null, false if it this.getLineDirection() == null;
+     */
     public boolean isInLine() {
         return getLineDirection() != null;
     }
 
+    /**Gives the direction in which the group of coordinates are aligned.
+     * @requires size > 1
+     * @return
+     */
     public Move.Direction getLineDirection() {
         switch (size) {
             case 2:
@@ -111,13 +147,21 @@ public class Group {
 
             while (pawn.step(direction) != null) {
                 pawn = pawn.step((direction));
-                if (pawn.equals(coord2)) foundMarble2 = true;
-                if (pawn.equals(coord3)) foundMarble3 = true;
+                if (pawn.equals(coord2)) {
+                    foundMarble2 = true;
+                }
+                if (pawn.equals(coord3)) {
+                    foundMarble3 = true;
+                }
             }
             while (pawn.step(direction.opposite()) != null) {
                 pawn = pawn.step(direction.opposite());
-                if (pawn.equals(coord2)) foundMarble2 = true;
-                if (pawn.equals(coord3)) foundMarble3 = true;
+                if (pawn.equals(coord2)) {
+                    foundMarble2 = true;
+                }
+                if (pawn.equals(coord3)) {
+                    foundMarble3 = true;
+                }
             }
             if (foundMarble2 && foundMarble3) {
                 return direction;

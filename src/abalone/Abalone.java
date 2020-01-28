@@ -5,7 +5,18 @@ import utils.TextIO;
 import java.util.ArrayList;
 import java.util.List;
 
+
+/**
+ * Application to run the Abalone game.
+ */
+
 public class Abalone {
+    /**
+     * Main method of Abalone.
+     * The users input their names,
+     *
+     * @param args .
+     */
     public static void main(String[] args) {
         List<Player> players = new ArrayList<>();
         Game game;
@@ -17,15 +28,15 @@ public class Abalone {
         String name2 = TextIO.getln();
         players.add(new HumanPlayer(name2, Marble.BLACK));
 
-        System.out.println("Player 3? If not playing, type 'N'");
+        System.out.println("Player 3? If not playing, type 'n'");
         String name3 = TextIO.getln();
-        if (!name3.equals("N")) {
+        if (!name3.equals("n")) {
             players.add(new HumanPlayer(name3, Marble.BLUE));
         }
 
-        System.out.println("Player 4? If player 3 doesn't exist, you can't play. Type 'N'. ");
+        System.out.println("Player 4? If player 3 doesn't exist, you can't play. Type 'n'. ");
         String name4 = TextIO.getln();
-        if (!name4.equals("N")) {
+        if (!name4.equals("n")) {
             players.add(new HumanPlayer(name4, Marble.RED));
         }
 

@@ -15,7 +15,7 @@ public class HumanPlayer extends Player {
     public Move makeChoice(Board board, String input) {
         boolean isValidArg = true;
             String prompt = "> " + getName() + " (" + getMarble().toString() + ")"
-                    + ", what is your choice? Give direction (0-5), and list the marbles separated by commas (without space).";
+                    + ", what is your choice? Give direction (0-5), and a ; ,   and list the marbles separated by commas (without space).";
             System.out.println(prompt);
         do {
             String text = input;
@@ -29,7 +29,7 @@ public class HumanPlayer extends Player {
                 isValidArg = true;
             } catch (IllegalArgumentException e) {
                 isValidArg = false;
-                System.out.println("Not a valid argument!Write again");
+                System.out.println("Not a valid argument! Write again");
             }
             if (isValidArg) {
                 Move.Direction direction;

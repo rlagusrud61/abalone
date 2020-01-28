@@ -21,82 +21,29 @@ public class Board {
             "      // ┃ 05 ┃ 06 ┃ 07 ┃ 08 ┃ 09 ┃ 10 ┃ \\\\",
             "   // ┃ 11 ┃ 12 ┃ 13 ┃ 14 ┃ 15 ┃ 16 ┃ 17 ┃ \\\\",
             " // ┃ 18 ┃ 19 ┃ 20 ┃ 21 ┃ 22 ┃ 23 ┃ 24 ┃ 25 ┃ \\\\",
-            "// ┃ 26 ┃ 27 ┃ 28 ┃ 29 ┃ 30 ┃ 31 ┃ 32 ┃ 33 ┃ 34 ┃ \\\\",
+            "┃┃  26 ┃ 27 ┃ 28 ┃ 29 ┃ 30 ┃ 31 ┃ 32 ┃ 33 ┃ 34  ┃┃",
             "\\\\  ┃ 35 ┃ 36 ┃ 37 ┃ 38 ┃ 39 ┃ 40 ┃ 41 ┃ 42 ┃ //",
             "   \\\\  ┃ 43 ┃ 44 ┃ 45 ┃ 46 ┃ 47 ┃ 48 ┃ 49 ┃ //",
             "     \\\\  ┃ 50 ┃ 51 ┃ 52 ┃ 53 ┃ 54 ┃ 55 ┃ //",
             "       \\\\  ┃ 56 ┃ 57 ┃ 58 ┃ 59 ┃ 60 ┃ //"
     };
 
-    public static void main(String[] args) {
-        Board board = new Board();
-        board.reset(BoardStates.getFourPlayer());
-        printBoard();
-
-        // Game start
-        System.out.println(board.toString());
-//
-//        // Turn 1
-//        board.makeMove(new Move(Move.Direction.NW,
-//                new Group(
-//                        board.convertToCoordinate(32),
-//                        board.convertToCoordinate(23)),
-//                new Team(Arrays.asList(Marble.BLACK, Marble.RED))
-//        ));
-//        System.out.println(board.toString());
-//
-//        // Turn 2
-//        board.makeMove(new Move(Move.Direction.W,
-//                new Group(
-//                        board.convertToCoordinate(17),
-//                        board.convertToCoordinate(15),
-//                        board.convertToCoordinate(16)),
-//                new Team(Arrays.asList(Marble.BLACK, Marble.RED))
-//        ));
-//        System.out.println(board.toString());
-//
-//        // Turn 3
-//        board.makeMove(new Move(Move.Direction.NW,
-//                new Group(
-//                        board.convertToCoordinate(28),
-//                        board.convertToCoordinate(37)),
-//                new Team(Arrays.asList(Marble.BLACK, Marble.RED))
-//        ));
-//        System.out.println(board.toString());
-//
-//        // Turn 4
-//        board.makeMove(new Move(Move.Direction.NW,
-//                new Group(
-//                        board.convertToCoordinate(28),
-//                        board.convertToCoordinate(19)),
-//                new Team(Arrays.asList(Marble.BLACK, Marble.RED))
-//        ));
-//        System.out.println(board.toString());
-//
-//        // Turn 5
-//        System.out.println(board.makeMove(new Move(Move.Direction.W,
-//                new Group(
-//                        board.convertToCoordinate(14),
-//                        board.convertToCoordinate(15),
-//                        board.convertToCoordinate(16)),
-//                new Team(Arrays.asList(Marble.BLACK, Marble.WHITE))
-//        )));
-//        System.out.println(board.toString());
-//    }
-    }
-
-
+    /**
+     * Prints the indices of the board on the console.
+     *
+     * @invariant NUMBERING.length == 9
+     */
     public static void printBoard() {
         for (int i = 0; i < 9; i++) {
-            System.out.println(NUMBERING[i] + '\n');
+            System.out.println(NUMBERING[i]);
         }
     }
 
     /**
      * Converts a coordinate (row, column) into a int index.
      *
-     * @param coord
-     * @return
+     * @param coord Coordinate to be converted to index
+     * @return index form of the coordinate
      * @requires cord != null;
      */
 
@@ -109,7 +56,13 @@ public class Board {
         return result;
     }
 
-
+    /**
+     * Converts a given index to Coordinate form (x,y).
+     *@param index index to be converted to Coordinate
+     * @return Coordinate form of the index (x,y)
+     * @requires index >= 0 && index < 61
+     * @throws IndexOutOfBoundsException when index is out of bounds.
+     */
     public static Coordinate convertToCoordinate(int index) {
         int counter = 0;
 
@@ -146,6 +99,21 @@ public class Board {
         return null;
     }
 
+    /**
+     * Returns the content of the field referred to by the (row,col) pair.
+     *
+     * @param coord the coordinates of the field
+     * @return the mark on the field
+     * @requires (row, col) to be a valid field
+     * @ensures the result to be either EMPTY, WHITE, BLACK, or RED
+     */
+    public Marble getField(Coordinate coord) {
+        if (isField(coord)) {
+            return fields[convertToInt(coord)];
+        }
+        return null;
+    }
+
     public boolean isField(int index) {
         return 0 <= index && index < 62;
     }
@@ -155,20 +123,6 @@ public class Board {
                 && coord.x < ROW_SIZES[coord.y] && coord.x >= 0;
     }
 
-    /**
-     * Returns the content of the field referred to by the (row,col) pair.
-     *
-     * @param coord the coordinates of the field
-     * @return the mark on the field
-     * @requires (row, col) to be a valid field
-     * @ensures the result to be either EMPTY, XX or OO
-     */
-    public Marble getField(Coordinate coord) {
-        if (isField(coord)) {
-            return fields[convertToInt(coord)];
-        }
-        return null;
-    }
 
     /**
      * Returns true if the field i is empty.
@@ -221,6 +175,14 @@ public class Board {
         return s.toString();
     }
 
+    /**
+     * Prints every row of the board.
+     *
+     * @param rowindex index of the row
+     * @return String value of every row of the board.
+     * @invariant ROW_SIZES.length == 9
+     * @requires rowindex > 0
+     */
     public String rowToString(int rowindex) {
         StringBuilder s = new StringBuilder();
 
@@ -238,21 +200,29 @@ public class Board {
         this.fields = marbles;
     }
 
-
+    /**
+     * First checks if the move in the argument is valid, and if it is, makes the move and returns true.
+     * If the movement is invalid, it tries to make a sliding move (side-step) move and returns false fo
+     *
+     * @param move The move that the user wants to make
+     * @return true if the move was successful , false if the move was unsuccessful
+     */
     public boolean makeMove(Move move) {
-        // Check if in line
+        // Check if the marbles are in line ( if group size is 1, then it's always true)
         if (move.getGroup().size == 1 || move.getGroup().getLineDirection().isParallelTo(move.getDirection())) {
             Coordinate pawn = move.getGroup().getMarble1();
 
-            // Walk to Coordinate closest in move direction , within the group
+            // Make a pawn and walk to the Coordinate closest in the move direction , within the group
             Coordinate step = pawn.step(move.getDirection());
-            if (step == null) return false;
-            else while (move.getGroup().isMarbleInGroup(pawn.step(move.getDirection()))) {
-                pawn = pawn.step(move.getDirection());
+            if (step == null) {
+                return false;
+            } else {
+                while (move.getGroup().isMarbleInGroup(pawn.step(move.getDirection()))) {
+                    pawn = pawn.step(move.getDirection());
+                }
             }
 
-
-            // Calculate our push strength (own marbles + friendly marbles)
+            // Calculate friendlies' push strength (own marbles + friendly marbles)
             List<Coordinate> friendlies = new ArrayList<>();
             while (move.getTeam().teamHas(getField(pawn.step(move.getDirection())))) {
                 pawn = pawn.step(move.getDirection());
@@ -267,21 +237,26 @@ public class Board {
                 enemies.add(pawn);
             }
 
-            boolean last_empty = false;
-            boolean last_out_of_bounds = false;
+
+            boolean lastCoordEmpty = false;
+            boolean lastCoordOutOfBounds = false;
+            //if the last coordinate the pawn moves to is empty, then return lastCoordEmpty to true
             if (pawn.isValidStep(move.getDirection()) && getField(pawn.step(move.getDirection())) == Marble.EMPTY) {
-                last_empty = true;
+                lastCoordEmpty = true;
             }
+            //if the last coordinate the pawn moves to is null (out of bounds),
+            // then return lastCoordOutOfBounds to true.
             if (pawn.step(move.getDirection()) == null) {
-                last_out_of_bounds = true;
+                lastCoordOutOfBounds = true;
             }
 
+            // If friendly size > enemy size
             if (enemies.size() > 0) {
                 if (move.getGroup().getMarbles().size() + friendlies.size() > enemies.size()
-                        && (last_empty || last_out_of_bounds)) {
+                        && (lastCoordEmpty || lastCoordOutOfBounds)) {
                     // Successful push
 
-                    // Move enemy marbles
+                    // Move enemy marbles first
                     for (Coordinate enemy : enemies) {
                         Marble color = getField(enemy);
                         if (enemy.step(move.getDirection()) == null) {
@@ -292,19 +267,19 @@ public class Board {
                         }
                     }
 
-                    // Move friendly marbles
+                    // Move friendly marbles second
                     for (Coordinate friendly : friendlies) {
                         setField(friendly.step(move.getDirection()), getField(friendly));
                     }
 
-                    // Move player marbles
+                    // And lastly move marbles of the player
                     Marble color = getField(move.getGroup().getMarble1());
-                    Group move_group_dest = move.getGroup().step(move.getDirection());
+                    Group moveGroupDestination = move.getGroup().step(move.getDirection());
 
                     for (Coordinate coord : move.getGroup().getMarbles()) {
                         setField(coord, Marble.EMPTY);
                     }
-                    for (Coordinate coord : move_group_dest.getMarbles()) {
+                    for (Coordinate coord : moveGroupDestination.getMarbles()) {
                         setField(coord, color);
                     }
                     moveCounter++;
@@ -315,22 +290,22 @@ public class Board {
             } else {
                 // Case: No enemies
                 if (friendlies.size() > 0) {
-                    // Case: Pushing friendlies
 
-                    if (last_out_of_bounds) {
+                    // Case: Pushing friendlies
+                    if (lastCoordOutOfBounds) {
                         return false;
-                    } else if (last_empty) {
+                    } else if (lastCoordEmpty) {
                         // Move friendly marbles
                         for (Coordinate friendly : friendlies) {
                             setField(friendly.step(move.getDirection()), getField(friendly));
                         }
 
                         // Move player marbles
-                        Group move_group_dest = move.getGroup().step(move.getDirection());
+                        Group moveGroupDestination = move.getGroup().step(move.getDirection());
                         for (Coordinate coord : move.getGroup().getMarbles()) {
                             setField(coord, Marble.EMPTY);
                         }
-                        for (Coordinate coord : move_group_dest.getMarbles()) {
+                        for (Coordinate coord : moveGroupDestination.getMarbles()) {
                             setField(coord, getField(move.getGroup().getMarble1()));
                         }
                         moveCounter++;
@@ -341,8 +316,8 @@ public class Board {
                     // Case: Normal move
                     Marble color = getField(move.getGroup().getMarble1());
 
-                    for (Coordinate original_marble : move.getGroup().getMarbles()) {
-                        setField(original_marble, Marble.EMPTY);
+                    for (Coordinate originalMarble : move.getGroup().getMarbles()) {
+                        setField(originalMarble, Marble.EMPTY);
                     }
 
                     for (Coordinate destination : move.getGroup().step(move.getDirection()).getMarbles()) {
@@ -353,7 +328,7 @@ public class Board {
                 }
             }
         } else {
-            // Marbles cannot push in this direction
+            // Marbles cannot push in this direction, hence side-step move
             return makeMoveSlide(move);
         }
 
@@ -387,8 +362,8 @@ public class Board {
 
     private boolean isNeighbour(Coordinate coord1, Coordinate coord2) {
         if (Math.abs(coord1.x - coord2.x) == 1) {
-            int yDiff = Math.abs(coord1.y - coord2.y);
-            return yDiff == 0 || yDiff == 1;
+            int diffY = Math.abs(coord1.y - coord2.y);
+            return diffY == 0 || diffY == 1;
         }
 
         if (Math.abs(coord1.x - coord2.x) == 0) {
@@ -398,6 +373,12 @@ public class Board {
         return false;
     }
 
+    /**
+     * Checks if the board has a winner.
+     *
+     * @return true if there is a team with 6 points.
+     * @requires playingTeams != null;
+     */
     public boolean hasWinner() {
         for (Team team : playingTeams) {
             if (team.getPoints() > 5) {
@@ -407,34 +388,65 @@ public class Board {
         return false;
     }
 
+    /**
+     * Checks if the given marble color is the winner of the board.
+     *
+     * @param marble color of the marble
+     * @return true if there is a winner in the board, and if
+     * @requires marble != null
+     */
     public boolean isWinner(Marble marble) {
         if (hasWinner()) {
             for (Team team : playingTeams) {
-                return team.teamHas(marble);
+                if (team.getPoints() > 5) {
+                    return team.teamHas(marble);
+                }
             }
         }
         return false;
     }
 
+    /**
+     * Checks if the game is over in the board.
+     *
+     * @return true if there is a winner in the board or when the number of moves exceed 96.
+     */
     public boolean gameOver() {
         return hasWinner() || (moveCounter > 97);
     }
 
+    /**
+     * Checks if the group of marbles that the user chose are valid.
+     *
+     * @param group the group of marbles that the user chose.
+     * @return true if (group.getMarbles.size() == 1 || (group.size() == 2 && marble1 and marble2 are neighbouring) ||
+    (group.size() == 3 && marbles 1,2,3 are in a line)) else, return false.
+     * @ensures group.getMarbles().size >= 1
+     * @requires group != null && group.getMarbles().size > 1
+     */
     public boolean isValidSelection(Group group) {
-        if (group.getMarbles().size() == 1) return true;
-        else if (group.getMarbles().size() == 2) {
+        if (group.getMarbles().size() == 1) {
+            return true;
+        } else if (group.getMarbles().size() == 2) {
             return isNeighbour(group.getMarble1(), group.getMarble2());
         } else if (group.getMarbles().size() == 3) {
             int neighbours = 0;
 
-            if (isNeighbour(group.getMarble1(), group.getMarble2())) neighbours++;
-            if (isNeighbour(group.getMarble1(), group.getMarble3())) neighbours++;
-            if (isNeighbour(group.getMarble2(), group.getMarble3())) neighbours++;
+            if (isNeighbour(group.getMarble1(), group.getMarble2())) {
+                neighbours++;
+            }
+            if (isNeighbour(group.getMarble1(), group.getMarble3())) {
+                neighbours++;
+            }
+            if (isNeighbour(group.getMarble2(), group.getMarble3())) {
+                neighbours++;
+            }
 
             return neighbours == 2 && group.isInLine();
         }
 
         System.out.println("Not a valid set of marbles");
+
         return false;
     }
 }

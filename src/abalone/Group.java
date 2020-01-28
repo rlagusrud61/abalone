@@ -57,10 +57,12 @@ public class Group {
     }
 
     public Coordinate getMarble2() {
+        if (size < 2) return null;
         return marbles[1];
     }
 
     public Coordinate getMarble3() {
+        if (size < 3) return null;
         return marbles[2];
     }
 

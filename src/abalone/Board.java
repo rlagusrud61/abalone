@@ -245,8 +245,9 @@ public class Board {
             Coordinate pawn = move.getGroup().getMarble1();
 
             // Walk to Coordinate closest in move direction , within the group
-
-            while (move.getGroup().isMarbleInGroup(pawn.step(move.getDirection()))) {
+            Coordinate step = pawn.step(move.getDirection());
+            if (step == null) return false;
+            else while (move.getGroup().isMarbleInGroup(pawn.step(move.getDirection()))) {
                 pawn = pawn.step(move.getDirection());
             }
 

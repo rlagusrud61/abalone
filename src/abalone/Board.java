@@ -444,9 +444,6 @@ public class Board {
 
             return neighbours == 2 && group.isInLine();
         }
-
-        System.out.println("Not a valid set of marbles");
-
         return false;
     }
 }

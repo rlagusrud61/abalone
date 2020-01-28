@@ -14,11 +14,10 @@ public class HumanPlayer extends Player {
     @Override
     public Move makeChoice(Board board) {
         boolean isValidArg = true;
-        do {
             String prompt = "> " + getName() + " (" + getMarble().toString() + ")"
                     + ", what is your choice? Give direction (0-5), and list the marbles separated by commas (without space).";
-
             System.out.println(prompt);
+        do {
             String text = TextIO.getln();
             int command = -1;
             String marbles;
@@ -27,9 +26,10 @@ public class HumanPlayer extends Player {
                 command = Integer.parseInt(text.split(";")[0]);
                 marbles = text.split(";")[1];
                 marbleSplit = Arrays.stream(marbles.split(",")).map(Integer::parseInt).toArray(Integer[]::new);
+                isValidArg = true;
             } catch (IllegalArgumentException e) {
                 isValidArg = false;
-                e.getMessage();
+                System.out.println("Not a valid argument!Write again");
             }
             if (isValidArg) {
                 Move.Direction direction;
@@ -76,6 +76,7 @@ public class HumanPlayer extends Player {
                 return choice;
             }
         } while (!isValidArg);
+        System.out.println("Not a valid argument!");
         return null;
     }
 }

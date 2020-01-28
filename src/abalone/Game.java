@@ -14,8 +14,8 @@ import java.util.List;
 public class Game {
 
     public static final int TWO_PLAYERS = 2;
-    public static final int THREE_PLAYERS = 2;
-    public static final int FOUR_PLAYERS = 2;
+    public static final int THREE_PLAYERS = 3;
+    public static final int FOUR_PLAYERS = 4;
 
     /**
      * The board.
@@ -128,7 +128,7 @@ public class Game {
      * the user does not want to play anymore.
      */
     public void start() {
-        board.printBoard();
+        Board.printBoard();
         boolean continueGame = true;
         while (continueGame) {
             reset();
@@ -159,19 +159,38 @@ public class Game {
      * After each move, the changed game situation is printed.
      */
     private void play() {
-        while (!board.gameOver() && !board.hasWinner()) {
+        while (!board.gameOver()) {
+            boolean moveMade = false;
             update();
-            if (current >= players.length) {
-                current = 0;
-            } else {
-                board.makeMove(players[current].makeChoice(board));
-                current++;
+
+            while (!moveMade) {
+                if (current >= players.length) {
+                    current = 0;
+                } else {
+                    Move choice = players[current].makeChoice(board);
+                    boolean isValidColor = false;
+                    if (players[current].getMarble().equals(board.getField(choice.getGroup().getMarble1()))
+                            && (choice.getGroup().getMarble2() == null || players[current].getMarble().equals(board.getField(choice.getGroup().getMarble2())))
+                            && (choice.getGroup().getMarble3() == null || players[current].getMarble().equals(board.getField(choice.getGroup().getMarble3())))) {
+                        isValidColor = true;
+                    }
+                    if (isValidColor && board.isValidSelection(choice.getGroup())
+                            && board.makeMove(choice)) {
+                        current++;
+                        moveMade = true;
+                    } else {
+                        System.out.println("Selection is invalid!");
+                    }
+                }
             }
+
         }
+
         update();
         if (board.gameOver()) {
             printResult();
         }
+
     }
 
 
@@ -199,9 +218,4 @@ public class Game {
         }
     }
 
-    private void assignTeam(Player player) {
-        if (players.length == 2) {
-
-        }
-    }
 }

@@ -96,32 +96,33 @@ public class Group {
                 }
             }
         }
-        throw new IllegalStateException("They're not in line!");
 
+        return null;
     }
 
     private Move.Direction getLineDirection(Coordinate coord1, Coordinate coord2, Coordinate coord3) {
         for (Move.Direction direction : Move.Direction.values()) {
             Coordinate pawn = new Coordinate(coord1);
-            int encounters = 0;
+
+            boolean foundMarble2 = false;
+            boolean foundMarble3 = false;
+
             while (pawn.step(direction) != null) {
                 pawn = pawn.step((direction));
-                if (pawn.equals(coord2) || pawn.equals(coord3)) {
-                    encounters += 1;
-                }
+                if (pawn.equals(coord2)) foundMarble2 = true;
+                if (pawn.equals(coord3)) foundMarble3 = true;
             }
             while (pawn.step(direction.opposite()) != null) {
                 pawn = pawn.step(direction.opposite());
-                if (pawn.equals(coord2) || pawn.equals(coord3)) {
-                    encounters += 1;
-                }
+                if (pawn.equals(coord2)) foundMarble2 = true;
+                if (pawn.equals(coord3)) foundMarble3 = true;
             }
-            if (encounters == 2) {
+            if (foundMarble2 && foundMarble3) {
                 return direction;
             }
         }
-        throw new IllegalStateException("They're not in line!");
 
+        return null;
     }
 
     public boolean isMarbleInGroup(Coordinate marble) {

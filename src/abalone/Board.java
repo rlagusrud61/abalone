@@ -22,10 +22,10 @@ public class Board {
             "   // ┃ 11 ┃ 12 ┃ 13 ┃ 14 ┃ 15 ┃ 16 ┃ 17 ┃ \\\\",
             " // ┃ 18 ┃ 19 ┃ 20 ┃ 21 ┃ 22 ┃ 23 ┃ 24 ┃ 25 ┃ \\\\",
             "// ┃ 26 ┃ 27 ┃ 28 ┃ 29 ┃ 30 ┃ 31 ┃ 32 ┃ 33 ┃ 34 ┃ \\\\",
-            "\\\\ ┃ 35 ┃ 36 ┃ 37 ┃ 38 ┃ 39 ┃ 40 ┃ 41 ┃ 42 ┃ //",
-            "   \\\\ ┃ 43 ┃ 44 ┃ 45 ┃ 46 ┃ 47 ┃ 48 ┃ 49 ┃ //",
-            "     \\\\ ┃ 50 ┃ 51 ┃ 52 ┃ 53 ┃ 54 ┃ 55 ┃ //",
-            "       \\\\ ┃ 56 ┃ 57 ┃ 58 ┃ 59 ┃ 60 ┃ //"
+            "\\\\  ┃ 35 ┃ 36 ┃ 37 ┃ 38 ┃ 39 ┃ 40 ┃ 41 ┃ 42 ┃ //",
+            "   \\\\  ┃ 43 ┃ 44 ┃ 45 ┃ 46 ┃ 47 ┃ 48 ┃ 49 ┃ //",
+            "     \\\\  ┃ 50 ┃ 51 ┃ 52 ┃ 53 ┃ 54 ┃ 55 ┃ //",
+            "       \\\\  ┃ 56 ┃ 57 ┃ 58 ┃ 59 ┃ 60 ┃ //"
     };
 
     public static void main(String[] args) {
@@ -240,17 +240,12 @@ public class Board {
 
 
     public boolean makeMove(Move move) {
-
-
-        // Check if neighbours
+        // Check if in line
         if (move.getGroup().size == 1 || move.getGroup().getLineDirection().isParallelTo(move.getDirection())) {
             Coordinate pawn = move.getGroup().getMarble1();
 
             // Walk to Coordinate closest in move direction , within the group
 
-//            while (pawn.step(move.getDirection()).equals(move.getGroup().getMarble1())
-//                    || move.getGroup().size >= 2 && pawn.step(move.getDirection()).equals(move.getGroup().getMarble2())
-//                    || move.getGroup().size >= 3 && pawn.step(move.getDirection()).equals(move.getGroup().getMarble3())) {
             while (move.getGroup().isMarbleInGroup(pawn.step(move.getDirection()))) {
                 pawn = pawn.step(move.getDirection());
             }
@@ -424,11 +419,20 @@ public class Board {
         return hasWinner() || (moveCounter > 97);
     }
 
-    public boolean isValidGroup(Move move) {
-        List<Coordinate> group = move.getGroup().getMarbles();
-        for (Coordinate marble : group) {
-            return marble != null;
+    public boolean isValidSelection(Group group) {
+        if (group.getMarbles().size() == 1) return true;
+        else if (group.getMarbles().size() == 2) {
+            return isNeighbour(group.getMarble1(), group.getMarble2());
+        } else if (group.getMarbles().size() == 3) {
+            int neighbours = 0;
+
+            if (isNeighbour(group.getMarble1(), group.getMarble2())) neighbours++;
+            if (isNeighbour(group.getMarble1(), group.getMarble3())) neighbours++;
+            if (isNeighbour(group.getMarble2(), group.getMarble3())) neighbours++;
+
+            return neighbours == 2 && group.isInLine();
         }
+
         System.out.println("Not a valid set of marbles");
         return false;
     }

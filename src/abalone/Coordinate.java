@@ -74,7 +74,7 @@ public class Coordinate {
             case NE:
                 if (y == 0)
                     return null;
-                if (x == Board.ROW_SIZES[y] - 1)
+                if (x == Board.ROW_SIZES[y] - 1 && y <= 4)
                     return null;
 
                 if (Board.ROW_SIZES[y - 1] > Board.ROW_SIZES[y])
@@ -90,7 +90,7 @@ public class Coordinate {
             case SE:
                 if (y == Board.ROW_SIZES.length - 1)
                     return null;
-                if (x == Board.ROW_SIZES[y] - 1)
+                if (x == Board.ROW_SIZES[y] - 1 && y >= 4)
                     return null;
 
                 if (Board.ROW_SIZES[y + 1] > Board.ROW_SIZES[y])
@@ -100,7 +100,7 @@ public class Coordinate {
             case SW:
                 if (y == Board.ROW_SIZES.length - 1)
                     return null;
-                if (x == 0)
+                if (x == 0 && y >= 4)
                     return null;
 
                 if (Board.ROW_SIZES[y + 1] < Board.ROW_SIZES[y])
@@ -116,7 +116,7 @@ public class Coordinate {
             case NW:
                 if (y == 0)
                     return null;
-                if (x == 0)
+                if (x == 0 && y <= 4)
                     return null;
 
                 if (Board.ROW_SIZES[y - 1] < Board.ROW_SIZES[y])

@@ -11,20 +11,15 @@ public abstract class Player {
     private Marble marble;
     private Team team;
 
-    public Team getTeam() {
-        return team;
-    }
 
-    public void setTeam(Team team) {
-        this.team = team;
-    }
-// -- Constructors -----------------------------------------------
+    // -- Constructors -----------------------------------------------
 
     /**
      * Creates a new abalone.Player object.
      *
      * @requires name is not null
-     * @requires mark is either XX or OO
+     * @requires mark is not EMPTY
+     * @requires mark is either WHITE, BLACK, BLUE, or RED
      * @ensures the Name of this player will be name
      * @ensures the abalone.Marble of this player will be marble
      */
@@ -38,16 +33,29 @@ public abstract class Player {
     /**
      * Returns the name of the player.
      */
-
     public String getName() {
         return name;
     }
 
     /**
-     * Returns the mark of the player.
+     * Returns the marble of the player.
      */
     public Marble getMarble() {
         return marble;
+    }
+
+    /**
+     * Returns the team of the player.
+     */
+    public Team getTeam() {
+        return team;
+    }
+
+    /**
+     * Sets a player in a team.
+     */
+    public void setTeam(Team team) {
+        this.team = team;
     }
 
     /**
@@ -55,26 +63,9 @@ public abstract class Player {
      *
      * @param board the current game board
      * @return the player's choice
-     * @requires board is not null and not full
-     * @ensures the returned in is a valid field index and that field is empty
+     * @requires board is not null
      */
     public abstract Move makeChoice(Board board);
 
-    // -- Commands ---------------------------------------------------
-//
-//    /**
-//     * Makes a move on the board. <br>
-//     *
-//     * @param board the current board
-//     * @requires board is not null and not full
-//     */
-//    public void makeMove(Board board) {
-//        int[] choice = determineMove(board);
-//        for (int i = 0; i < choice.length - 1; i++) {
-//            System.out.println(choice[i]);
-//            board.setField(choice[i], getMarble());
-//        }
-//    }
-//
 
 }

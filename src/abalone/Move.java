@@ -6,6 +6,13 @@ public class Move {
     private Group group;
     private Team team;
 
+    /**
+     * Constructs a Move.
+     *
+     * @param direction of which the group will move to
+     * @param group     selected by the player
+     * @param team      which the marble belongs to
+     */
     public Move(Direction direction, Group group, Team team) {
         this.direction = direction;
         this.group = group;
@@ -35,17 +42,26 @@ public class Move {
 
 
     /**
-     * ENUM DIRECTION
+     * Direction of the Coordinates.
      */
     public enum Direction {
         NE(0), E(1), SE(2), SW(3), W(4), NW(5);
 
         public final int val;
 
+        /**
+         * Constructs a Direction.
+         * @param val of the Direction.
+         */
         Direction(int val) {
             this.val = val;
         }
 
+        /**
+         * Takes an integer and converts into Enum of Direction.
+         * @param integer to be converted
+         * @return Direction value of the integer.
+         */
         static Direction intToDirection(int integer) {
             switch (integer) {
                 case 0:
@@ -65,6 +81,10 @@ public class Move {
             }
         }
 
+        /**
+         * Gives the opposite direction.
+         * @return opposite value of this direction
+         */
         Direction opposite() {
             switch (this) {
                 case NE:
@@ -83,6 +103,12 @@ public class Move {
                     throw new IllegalStateException();
             }
         }
+
+        /**
+         * Checks if the given direction is parallel (in line) with a direction.
+         * @param direction to be compared with
+         * @return true if the direction is on the same axis as the other direction.
+         */
 
         boolean isParallelTo(Move.Direction direction) {
             switch (this) {

@@ -11,22 +11,27 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 class BoardTest {
     int index;
     Board board = new Board();
-    Coordinate coordindex;
+    Coordinate coordinate;
 
     @BeforeEach
     void setUp() {
+
         index = 10;
     }
 
     @Test
     void convertToIntAndConvertToCoordinate() {
-        coordindex = board.convertToCoordinate(index);
-        assertEquals(board.convertToInt(coordindex), 10);
+        coordinate = board.convertToCoordinate(index);
+        assertEquals(board.convertToInt(coordinate), 10);
     }
 
 
     @Test
     void makeMove() {
         //TODO
+    }
+
+    @Test
+    void name() {
     }
 }

@@ -5,18 +5,36 @@ import utils.TextIO;
 import java.util.Arrays;
 
 public class HumanPlayer extends Player {
+    /**
+     * Creates a new Human Player object.
+     *
+     * @param name   Name of the human player
+     * @param marble Marble color assigned to this player
+     * @requires name is not null
+     * @requires mark is either WHITE, BLUE, BLACK, or RED
+     * @ensures the Name of this player will be name
+     * @ensures the abalone.Marble of this player will be marble
+     */
 
-
-    public HumanPlayer(String name1, Marble marble) {
-        super(name1, marble);
+    public HumanPlayer(String name, Marble marble) {
+        super(name, marble);
     }
 
+    /**
+     * The player must give a direction and the marbles selected in the form of
+     * "direction;marble1,marble2,marble3". The input is processed and split into different strings,
+     * then a new Move is made based on this information.
+     *
+     * @param board the current game board
+     * @return selected move that is to be made and checked on the board.
+     */
     @Override
     public Move makeChoice(Board board) {
         boolean isValidArg = true;
-            String prompt = "> " + getName() + " (" + getMarble().toString() + ")"
-                    + ", what is your choice? Give direction (0-5), and a ; ,   and list the marbles separated by commas (without space).";
-            System.out.println(prompt);
+        String prompt = "> " + getName() + " (" + getMarble().toString() + ")"
+                + ", what is your choice? Give direction (0-5), and a ; , "
+                + "  and list the marbles separated by commas (without space).";
+        System.out.println(prompt);
         do {
             String text = TextIO.getln();
             int command = -1;
@@ -69,7 +87,8 @@ public class HumanPlayer extends Player {
                     if (marbleSplit.length > 2) {
                         int thirdMarble = marbleSplit[2];
                         Coordinate thirdMarbleCoordinate = Board.convertToCoordinate(thirdMarble);
-                        Group trioGroup = new Group(firstMarbleCoordinate, secondMarbleCoordinate, thirdMarbleCoordinate);
+                        Group trioGroup = new Group(firstMarbleCoordinate, secondMarbleCoordinate,
+                                thirdMarbleCoordinate);
                         choice = new Move(direction, trioGroup, this.getTeam());
                     }
                 }

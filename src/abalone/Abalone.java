@@ -5,7 +5,6 @@ import utils.TextIO;
 import java.util.ArrayList;
 import java.util.List;
 
-
 /**
  * Application to run the Abalone game.
  */

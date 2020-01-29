@@ -18,6 +18,15 @@ public class ComputerPlayer extends Player {
         super(name, marble);
     }
 
+    /**
+     * Takes a random (single) marble, generates a random direction and index and checks if it is valid. If it is valid,
+     * takes the move.
+     *
+     * @param board the current game board
+     * @return the chosen move
+     * @requires board != null
+     */
+
     @Override
     public Move makeChoice(Board board) {
         Board boardCopy = new Board(board);

@@ -27,6 +27,54 @@ public class ComputerPlayer extends Player {
      * @requires board != null
      */
 
+//    @Override
+//    public Move makeChoice(Board board) {
+//        Board boardCopy = new Board(board);// make a copy of the board
+//        Move move = null;
+//        Coordinate cord1 = null;
+////        Coordinate cord2;
+////        Coordinate cord3;
+//        boolean isValid = false;
+//        while (!isValid) {
+//            int index = (int) (Math.random() * 60);
+//            System.out.println("Selected index = " + index);
+//            int dir = (int) (Math.random() * 6);
+//            System.out.println("Selected direction = " + dir);
+//            if (cord1.isValidStep(Move.Direction.intToDirection(dir)) && !boardCopy.getField(index).equals(this.getMarble())) {
+//                cord1 = Board.convertToCoordinate(index);
+//                Group group = new Group(cord1);
+//                move = new Move(Move.Direction.intToDirection(dir), group, this.getTeam());
+//                continue;
+//            }
+//
+////            boolean isValid2 = false;
+////            while (!isValid2) {
+////                Move.Direction direction = Move.Direction.intToDirection((int) (Math.random() * 6));
+////                cord2 = new Coordinate(cord1.step(direction));
+////                boolean validCoord2 = cord2.isValidStep(direction);
+////                if (validCoord2 && !board.getField(Board.convertToInt(cord2)).equals(this.getMarble())) {
+////                    Group duo = new Group(cord1, cord2);
+////                    move = new Move(direction, duo, this.getTeam());
+////                    continue;
+////                }
+////                boolean isValid3 = false;
+////                while (!isValid3) {
+////                    cord3 = new Coordinate(cord2.step(direction));
+////                    boolean validCoord3 = cord3.isValidStep(direction);
+////                    if (validCoord3 && !board.getField(Board.convertToInt(cord3)).equals(this.getMarble())) {
+////                        Group trio = new Group(cord1, cord2, cord3);
+////                        move = new Move(direction, trio, this.getTeam());
+////                        isValid3 = true;
+////                        continue;
+////                    }
+////                }
+////                isValid2 = true;
+////            }
+////            isValid = true;
+////        }
+//        }
+//            return move;
+//    }
     @Override
     public Move makeChoice(Board board) {
         Board boardCopy = new Board(board);
@@ -35,13 +83,20 @@ public class ComputerPlayer extends Player {
         boolean isValid = false;
 
         while (!isValid) {
-            int index = (int) (Math.random() * 60);
+            int index = -1;
+            boolean rightIndex = false;
+            while (!rightIndex) {
+                index = (int) (Math.random() * 60);
+                if (boardCopy.getField(index).equals(this.getMarble())) {
+                    rightIndex = true;
+                }
+            }
             System.out.println("Selected index = " + index);
-            int dir = (int) (Math.random() * 6);
-            System.out.println("Selected direction = " + dir);
-            Move.Direction direction = Move.Direction.intToDirection(dir);
+            Move.Direction direction = Move.Direction.intToDirection((int) (Math.random() * 6));
+            System.out.println("Selected direction = " + direction);
 
-            if (!board.getField(index).equals(this.getMarble())) {
+
+            if (boardCopy.getField(index).equals(this.getTeam())) {
                 continue;
             }
 
@@ -49,8 +104,8 @@ public class ComputerPlayer extends Player {
             Group solo = new Group(cord1);
             move = new Move(direction, solo, this.getTeam());
             isValid = boardCopy.makeMove(move);
-        }
 
+        }
         return move;
     }
 }

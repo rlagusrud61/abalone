@@ -60,10 +60,12 @@ public class Coordinate {
         }
     }
 
-    /**Steps the coordinate to a given direction.
-     * @invariant x >=0 && y >=0
+    /**
+     * Steps the coordinate to a given direction.
+     *
      * @param direction direction of the movement.
      * @return Coordinate of this coordinate after moving with the direction.
+     * @invariant x >=0 && y >=0
      */
     public Coordinate step(Move.Direction direction) {
         int x = this.xxCord;
@@ -78,7 +80,7 @@ public class Coordinate {
                     return null;
                 }
 
-                if (Board.ROW_SIZES[y - 1] > Board.ROW_SIZES[y]) {
+                if (y > 4) {
                     x += 1;
                 }
                 y -= 1;
@@ -98,10 +100,10 @@ public class Coordinate {
                     return null;
                 }
 
-                if (Board.ROW_SIZES[y + 1] > Board.ROW_SIZES[y]) {
+                if (y < 4) {
                     x += 1;
-                    y += 1;
                 }
+                y += 1;
                 break;
             case SW:
                 if (y == Board.ROW_SIZES.length - 1) {
@@ -111,10 +113,10 @@ public class Coordinate {
                     return null;
                 }
 
-                if (Board.ROW_SIZES[y + 1] < Board.ROW_SIZES[y]) {
+                if (y >= 4) {
                     x -= 1;
-                    y += 1;
                 }
+                y += 1;
                 break;
             case W:
                 if (x == 0) {
@@ -131,10 +133,10 @@ public class Coordinate {
                     return null;
                 }
 
-                if (Board.ROW_SIZES[y - 1] < Board.ROW_SIZES[y]) {
+                if (y <= 4) {
                     x -= 1;
-                    y -= 1;
                 }
+                y -= 1;
                 break;
             default:
                 break;

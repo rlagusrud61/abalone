@@ -20,7 +20,7 @@ public class Game {
      *
      * @invariant board is never null
      */
-    private Board board;
+    public Board board;
 
     /**
      * List of the players.
@@ -160,7 +160,7 @@ public class Game {
      * Resets the game. <br>
      * The board is emptied and player[0] becomes the current player.
      */
-    private void reset() {
+    public void reset() {
         current = 0;
         if (players.length == TWO_PLAYERS) {
             board.reset(BoardStates.getTwoPlayer());
@@ -180,7 +180,7 @@ public class Game {
      * @requires players.length > 0
      * @requires board != null
      */
-    private void play() {
+    public void play() {
         while (!board.gameOver()) {
             boolean moveMade = false;
             update();
@@ -223,7 +223,7 @@ public class Game {
      *
      * @requires board != null;
      */
-    private void update() {
+    public void update() {
         System.out.println("\ncurrent game situation: \n\n" + board.toString()
                 + "\n");
     }
@@ -233,7 +233,7 @@ public class Game {
      *
      * @requires the game to be over
      */
-    private void printResult() {
+    public void printResult() {
         if (board.hasWinner()) {
             Player winner = board.isWinner(players[0].getMarble()) ? players[0]
                     : players[1];

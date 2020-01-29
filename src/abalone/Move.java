@@ -28,17 +28,10 @@ public class Move {
         return group;
     }
 
-    public void setGroup(Group group) {
-        this.group = group;
-    }
-
     public Team getTeam() {
         return team;
     }
 
-    public void setTeam(Team team) {
-        this.team = team;
-    }
 
 
     /**
@@ -62,7 +55,7 @@ public class Move {
          * @param integer to be converted
          * @return Direction value of the integer.
          */
-        static Direction intToDirection(int integer) {
+        public static Direction intToDirection(int integer) {
             switch (integer) {
                 case 0:
                     return NE;
@@ -77,15 +70,16 @@ public class Move {
                 case 5:
                     return NW;
                 default:
-                    throw new IllegalArgumentException("put valid integer");
+                    return null;
             }
         }
+
 
         /**
          * Gives the opposite direction.
          * @return opposite value of this direction
          */
-        Direction opposite() {
+        public Direction opposite() {
             switch (this) {
                 case NE:
                     return SW;
@@ -110,7 +104,7 @@ public class Move {
          * @return true if the direction is on the same axis as the other direction.
          */
 
-        boolean isParallelTo(Move.Direction direction) {
+        public boolean isParallelTo(Move.Direction direction) {
             switch (this) {
                 case NE:
                 case SW:

@@ -27,9 +27,9 @@ public class GameServer implements Runnable, ServerProtocol {
      */
     private List<GameClientHandler> clients;
 
-    private List<String> TwoPlayerQueue = new ArrayList<>();
-    private List<String> ThreePlayerQueue = new ArrayList<>();
-    private List<String> FourPlayerQueue = new ArrayList<>();
+    private List<String> twoPlayerQueue = new ArrayList<>();
+    private List<String> threePlayerQueue = new ArrayList<>();
+    private List<String> fourPlayerQueue = new ArrayList<>();
 
 
     private Player player1;
@@ -40,7 +40,7 @@ public class GameServer implements Runnable, ServerProtocol {
     /**
      * Next client number, increasing for every new connection
      */
-    private int next_client_no;
+    private int nextClientNo;
 
     private GameServerTUI view;
 
@@ -54,7 +54,7 @@ public class GameServer implements Runnable, ServerProtocol {
     public GameServer(int playersAmount) {
         clients = new ArrayList<>();
         view = new GameServerTUI();
-        next_client_no = 1;
+        nextClientNo = 1;
 
     }
 
@@ -81,7 +81,7 @@ public class GameServer implements Runnable, ServerProtocol {
                 setup();
                 while (true) {
                     Socket sock = ssock.accept();
-                    String name = "[Client " + next_client_no + " ]";
+                    String name = "[Client " + nextClientNo + " ]";
                     view.showMessage("New client [" + name + "] connected!");
                     GameClientHandler handler =
                             new GameClientHandler(sock, this, name);
@@ -161,11 +161,11 @@ public class GameServer implements Runnable, ServerProtocol {
                 }
             }
         if(playersAmount == 2) {
-            TwoPlayerQueue.add(player);
+            twoPlayerQueue.add(player);
         } else if (playersAmount == 3) {
-            ThreePlayerQueue.add(player);
+            threePlayerQueue.add(player);
         } else if (playersAmount == 4) {
-            FourPlayerQueue.add(player);
+            fourPlayerQueue.add(player);
         }
         doJoin(player);
 
@@ -181,9 +181,9 @@ public class GameServer implements Runnable, ServerProtocol {
     @Override
     public synchronized String doStart(String name, int playerAmount) {
 
-        if (TwoPlayerQueue.size() >= 2) {
-            player1 = new HumanPlayer(TwoPlayerQueue.get(0), Marble.WHITE);
-            player2 = new HumanPlayer(TwoPlayerQueue.get(1), Marble.BLACK);
+        if (twoPlayerQueue.size() >= 2) {
+            player1 = new HumanPlayer(twoPlayerQueue.get(0), Marble.WHITE);
+            player2 = new HumanPlayer(twoPlayerQueue.get(1), Marble.BLACK);
 
             Thread thread = new Thread(new Runnable() {
                 @Override
@@ -194,10 +194,10 @@ public class GameServer implements Runnable, ServerProtocol {
             });
             thread.start();
         }
-        if (ThreePlayerQueue.size() >= 3) {
-            player1 = new HumanPlayer(ThreePlayerQueue.get(0), Marble.WHITE);
-            player2 = new HumanPlayer(ThreePlayerQueue.get(1), Marble.BLACK);
-            player3 = new HumanPlayer(ThreePlayerQueue.get(2), Marble.BLUE);
+        if (threePlayerQueue.size() >= 3) {
+            player1 = new HumanPlayer(threePlayerQueue.get(0), Marble.WHITE);
+            player2 = new HumanPlayer(threePlayerQueue.get(1), Marble.BLACK);
+            player3 = new HumanPlayer(threePlayerQueue.get(2), Marble.BLUE);
 
 
             Thread thread = new Thread(new Runnable() {
@@ -210,11 +210,11 @@ public class GameServer implements Runnable, ServerProtocol {
             thread.start();
 
         }
-        if (FourPlayerQueue.size() >= 4) {
-           player1 = new HumanPlayer(FourPlayerQueue.get(0), Marble.WHITE);
-           player2 = new HumanPlayer(FourPlayerQueue.get(1), Marble.BLACK);
-           player3 = new HumanPlayer(FourPlayerQueue.get(2), Marble.BLUE);
-           player4 = new HumanPlayer(FourPlayerQueue.get(3), Marble.RED);
+        if (fourPlayerQueue.size() >= 4) {
+            player1 = new HumanPlayer(fourPlayerQueue.get(0), Marble.WHITE);
+            player2 = new HumanPlayer(fourPlayerQueue.get(1), Marble.BLACK);
+            player3 = new HumanPlayer(fourPlayerQueue.get(2), Marble.BLUE);
+            player4 = new HumanPlayer(fourPlayerQueue.get(3), Marble.RED);
 
 
             Thread thread = new Thread(new Runnable() {
@@ -257,21 +257,21 @@ return null;
             }
         }
         try {
-            if (TwoPlayerQueue.contains(newPlayer)) {
+            if (twoPlayerQueue.contains(newPlayer)) {
                 for (GameClientHandler client : clients) {
                     BufferedWriter out = new BufferedWriter(new OutputStreamWriter(client.getSock().getOutputStream()));
                     System.out.println("joined");
                     out.write(ProtocolMessages.JOIN + ProtocolMessages.DELIMITER + newPlayer);
                 }
 
-            } else if (ThreePlayerQueue.contains(newPlayer)) {
+            } else if (threePlayerQueue.contains(newPlayer)) {
                 for (GameClientHandler client : clients) {
                     BufferedWriter out = new BufferedWriter(new OutputStreamWriter(client.getSock().getOutputStream()));
 
                     out.write(ProtocolMessages.JOIN + ProtocolMessages.DELIMITER + newPlayer);
                 }
 
-            } else if (FourPlayerQueue.contains(newPlayer)) {
+            } else if (fourPlayerQueue.contains(newPlayer)) {
                 for (GameClientHandler client : clients) {
                     BufferedWriter out = new BufferedWriter(new OutputStreamWriter(client.getSock().getOutputStream()));
 

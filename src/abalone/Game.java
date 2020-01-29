@@ -25,7 +25,7 @@ public class Game {
     private Board board;
 
 
-    private Player[] players;
+    public Player[] players;
     private List<Team> teams = new ArrayList<>();
 
     /**
@@ -33,7 +33,7 @@ public class Game {
      *
      * @invariant the index is always between 0 and NUMBER_PLAYERS
      */
-    private int current;
+    public int current;
 
     // -- Constructors -----------------------------------------------
 

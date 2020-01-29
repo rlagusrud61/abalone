@@ -46,7 +46,7 @@ public class Move {
             this.val = val;
         }
 
-        Direction intToDirection(int integer) {
+        static Direction intToDirection(int integer) {
             switch (integer) {
                 case 0:
                     return NE;

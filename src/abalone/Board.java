@@ -16,6 +16,13 @@ public class Board {
         fields = new Marble[61];
     }
 
+    public Board(Board board) {
+        this.fields = new Marble[board.fields.length];
+        System.arraycopy(board.fields, 0, this.fields, 0, board.fields.length);
+        this.moveCounter = board.moveCounter;
+        this.playingTeams = board.playingTeams;
+    }
+
     private static final String[] NUMBERING = {
             "        // ┃ 00 ┃ 01 ┃ 02 ┃ 03 ┃ 04 ┃ \\\\",
             "      // ┃ 05 ┃ 06 ┃ 07 ┃ 08 ┃ 09 ┃ 10 ┃ \\\\",
@@ -224,9 +231,13 @@ public class Board {
 
             // Calculate friendlies' push strength (own marbles + friendly marbles)
             List<Coordinate> friendlies = new ArrayList<>();
-            while (move.getTeam().teamHas(getField(pawn.step(move.getDirection())))) {
+            while (pawn.isValidStep(move.getDirection()) && move.getTeam().teamHas(getField(pawn.step(move.getDirection())))) {
                 pawn = pawn.step(move.getDirection());
                 friendlies.add(pawn);
+
+                if (getField(pawn).equals(getField(move.getGroup().getMarble1()))) {
+                    return false;
+                }
             }
 
             // Calculate enemy strength
@@ -290,6 +301,8 @@ public class Board {
             } else {
                 // Case: No enemies
                 if (friendlies.size() > 0) {
+//                    if (friendlies.stream().allMatch(f -> getField(f).equals(getField(move.getGroup().getMarble1()))))
+//                        return false;
 
                     // Case: Pushing friendlies
                     if (lastCoordOutOfBounds) {

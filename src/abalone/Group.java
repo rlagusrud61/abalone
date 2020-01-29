@@ -128,7 +128,7 @@ public class Group {
             case 3:
                 return getLineDirection(getMarble1(), getMarble2(), getMarble3());
             default:
-                throw new IllegalStateException("Unexpected value: " + size);
+                return null;
         }
     }
 

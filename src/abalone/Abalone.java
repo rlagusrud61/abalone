@@ -21,6 +21,7 @@ public class Abalone {
         Game game;
         System.out.println("Player 1?");
         String name1 = TextIO.getln();
+        players.add(new HumanPlayer("AI", Marble.WHITE));
         players.add(new HumanPlayer(name1, Marble.WHITE));
 
         System.out.println("Player 2?");

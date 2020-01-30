@@ -19,7 +19,9 @@ public interface ServerProtocol {
 
     String invalid();
 
-    String doStart(String name, int playersAmount);
+    String doStart();
+
+    void doJoin(String name);
 
     String doMove(int direction, String marbles);
 

@@ -65,7 +65,7 @@ public abstract class Player {
      * @return the player's choice
      * @requires board is not null
      */
-    public abstract Move makeChoice(Board board);
+    public abstract Move makeChoice(Board board, String input);
 
 
 }

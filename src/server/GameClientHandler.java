@@ -2,6 +2,7 @@
 package server;
 
 
+import abalone.Game;
 import protocol.ProtocolMessages;
 import java.util.List;
 import java.io.*;
@@ -24,6 +25,7 @@ public class GameClientHandler implements Runnable {
     private BufferedReader in;
     private BufferedWriter out;
     private Socket sock;
+    private Game game;
 
 
     /**
@@ -109,7 +111,9 @@ public class GameClientHandler implements Runnable {
             case "h":
                 if (isValidName(first) && isValidAmount(second)) {
                     out.write(srv.getHello(first, Integer.parseInt(second)));
+                    out.write(srv.doStart());
                     this.name = first;
+
                 }  else {
 
                     out.write("invalid name or invalid amount of players (must be between 2-4");
@@ -126,11 +130,11 @@ public class GameClientHandler implements Runnable {
                 break;
 
             case "g":
-                out.write(srv.doStart(first, Integer.parseInt(second)));
+                out.write(srv.doStart());
 
                 break;
 
-            case "x":
+            case "d":
                 out.write(srv.doExit());
                 shutdown();
                 break;
@@ -179,5 +183,15 @@ public class GameClientHandler implements Runnable {
     }
     public Socket getSock() {
         return sock;
+    }
+
+    public BufferedReader getInput() {
+        return in;
+    }
+    public Game getGame() {
+        return game;
+    }
+    public void setGame(Game game) {
+       this.game = game;
     }
 }

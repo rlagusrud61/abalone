@@ -5,11 +5,9 @@ import utils.TextIO;
 import java.util.ArrayList;
 import java.util.List;
 
+
 /**
- * Class for maintaining the Tic Tac Toe game.
- * Lab assignment Module 2
- *
- * @author Theo Ruys en Arend Rensink
+ * Class for maintaining the Abalone game.
  */
 public class Game {
 
@@ -22,11 +20,12 @@ public class Game {
      *
      * @invariant board is never null
      */
-    private Board board;
+    public Board board;
 
-
+    /**
+     * List of the players.
+     */
     public Player[] players;
-    private List<Team> teams = new ArrayList<>();
 
     /**
      * Index of the current player.
@@ -65,6 +64,14 @@ public class Game {
 
     }
 
+    /**
+     * Creates a new Game object.
+     *
+     * @param s0 the first player
+     * @param s1 the second player
+     * @param s2 the third player
+     * @requires s0 ,s1 and s2 to be non-null
+     */
     public Game(Player s0, Player s1, Player s2) {
         board = new Board();
         players = new Player[THREE_PLAYERS];
@@ -93,6 +100,17 @@ public class Game {
         current = 0;
     }
 
+    /**
+     * Creates a new Game object.
+     *
+     * @param s0 the first player
+     * @param s1 the second player
+     * @param s2 the third player
+     * @param s3 the fourth player
+     * @ensures s0 and s2 are in the same team
+     * @ensures s1 and s3 are in the same team
+     * @requires s0, s1, s2 and s3 to be non-null
+     */
     public Game(Player s0, Player s1, Player s2, Player s3) {
         board = new Board();
         players = new Player[FOUR_PLAYERS];
@@ -142,23 +160,27 @@ public class Game {
      * Resets the game. <br>
      * The board is emptied and player[0] becomes the current player.
      */
-    private void reset() {
+    public void reset() {
         current = 0;
-        if (players.length == TWO_PLAYERS)
+        if (players.length == TWO_PLAYERS) {
             board.reset(BoardStates.getTwoPlayer());
-        else if (players.length == THREE_PLAYERS)
+        } else if (players.length == THREE_PLAYERS) {
             board.reset(BoardStates.getThreePlayer());
-        else if (players.length == FOUR_PLAYERS)
+        } else if (players.length == FOUR_PLAYERS) {
             board.reset(BoardStates.getFourPlayer());
+        }
     }
 
     /**
-     * Plays the Tic Tac Toe game. <br>
-     * First the (still empty) board is shown. Then the game is played
+     * Plays the Abalone game. <br>
+     * First the initial board (according to the number of players) is shown. Then the game is played
      * until it is over. Players can make a move one after the other.
      * After each move, the changed game situation is printed.
+     *
+     * @requires players.length > 0
+     * @requires board != null
      */
-    private void play() {
+    public void play() {
         while (!board.gameOver()) {
             boolean moveMade = false;
             update();
@@ -174,8 +196,10 @@ public class Game {
                     Move choice = players[current].makeChoice(board, input);
                     boolean isValidColor = false;
                     if (players[current].getMarble().equals(board.getField(choice.getGroup().getMarble1()))
-                            && (choice.getGroup().getMarble2() == null || players[current].getMarble().equals(board.getField(choice.getGroup().getMarble2())))
-                            && (choice.getGroup().getMarble3() == null || players[current].getMarble().equals(board.getField(choice.getGroup().getMarble3())))) {
+                            && (choice.getGroup().getMarble2() == null || players[current].getMarble()
+                            .equals(board.getField(choice.getGroup().getMarble2())))
+                            && (choice.getGroup().getMarble3() == null || players[current]
+                            .getMarble().equals(board.getField(choice.getGroup().getMarble3())))) {
                         isValidColor = true;
                     }
                     if (isValidColor && board.isValidSelection(choice.getGroup())
@@ -200,8 +224,10 @@ public class Game {
 
     /**
      * Prints the game situation.
+     *
+     * @requires board != null;
      */
-    private void update() {
+    public void update() {
         System.out.println("\ncurrent game situation: \n\n" + board.toString()
                 + "\n");
     }
@@ -211,7 +237,7 @@ public class Game {
      *
      * @requires the game to be over
      */
-    private void printResult() {
+    public void printResult() {
         if (board.hasWinner()) {
             Player winner = board.isWinner(players[0].getMarble()) ? players[0]
                     : players[1];

@@ -7,13 +7,14 @@ public enum Marble {
     BLUE,
     RED;
 
-//
-//    private List<Marble> friendlyMarbles;
-//    private List<Marble> enemyMarbles;
-
     public static final String RESET = "\u001B[0m";
 
-
+    /**
+     * Prints the marble according to its color.
+     * This is to facilitate the view and the interaction of the users with the game.
+     *
+     * @return colored marbles to be printed on the console
+     */
     public String draw() {
         String marble;
         switch (this) {

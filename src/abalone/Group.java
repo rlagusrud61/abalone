@@ -76,16 +76,32 @@ public class Group {
         return null;
     }
 
+    /**
+     * Returns the first marble.
+     *
+     * @return the first marble.
+     * @requires marbles[0] != null;
+     */
     public Coordinate getMarble1() {
         return marbles[0];
     }
 
+    /**Returns the second marble.
+     * @ensures size > 1
+     * @returns the second marble.
+     */
     public Coordinate getMarble2() {
         if (size < 2) {
             return null;
         }
         return marbles[1];
     }
+
+    /**Returns the third marble.
+     * @ensures size > 2
+     * @returns the third marble.
+     */
+
 
     public Coordinate getMarble3() {
         if (size < 3) {
@@ -95,7 +111,6 @@ public class Group {
     }
 
     /**Checks if the group of coordinates are in line.
-     *
      * @return true if this.getLineDirection() != null, false if it this.getLineDirection() == null;
      */
     public boolean isInLine() {
@@ -104,7 +119,7 @@ public class Group {
 
     /**Gives the direction in which the group of coordinates are aligned.
      * @requires size > 1
-     * @return
+     * @return direction of the line
      */
     public Move.Direction getLineDirection() {
         switch (size) {
@@ -113,7 +128,7 @@ public class Group {
             case 3:
                 return getLineDirection(getMarble1(), getMarble2(), getMarble3());
             default:
-                throw new IllegalStateException("Unexpected value: " + size);
+                return null;
         }
     }
 
@@ -171,6 +186,11 @@ public class Group {
         return null;
     }
 
+    /**
+     * Checks if the given coordinate is in the selected group.
+     * @param marble the coordinate of the marble
+     * @return true if the marble belongs to the group, else false.
+     */
     public boolean isMarbleInGroup(Coordinate marble) {
         for (int i = 0; i < size; i++) {
             if (marbles[i].equals(marble)) {

@@ -7,15 +7,23 @@ public class Board {
 
     public static final int[] ROW_SIZES = new int[]{5, 6, 7, 8, 9, 8, 7, 6, 5};
 
-    private Marble[] fields;
+
+    public Marble[] fields;
     public List<Team> playingTeams = new ArrayList<>(); // The teams that are currently playing in this board
-    private int moveCounter;
+
+
+    public int moveCounter;
 
 
     public Board() {
         fields = new Marble[61];
     }
 
+    /**
+     * Constructor of the board. Makes a copy of a given board.
+     *
+     * @param board board to be copied.
+     */
     public Board(Board board) {
         this.fields = new Marble[board.fields.length];
         System.arraycopy(board.fields, 0, this.fields, 0, board.fields.length);
@@ -35,6 +43,7 @@ public class Board {
             "       \\\\  ┃ 56 ┃ 57 ┃ 58 ┃ 59 ┃ 60 ┃ //"
     };
 
+
     /**
      * Prints the indices of the board on the console.
      *
@@ -46,6 +55,7 @@ public class Board {
         }
     }
 
+
     /**
      * Converts a coordinate (row, column) into a int index.
      *
@@ -56,19 +66,20 @@ public class Board {
 
     public static int convertToInt(Coordinate coord) {
         int result = 0;
-        for (int i = 0; i < coord.y; i++) {
+        for (int i = 0; i < coord.yyCord; i++) {
             result += ROW_SIZES[i];
         }
-        result += coord.x;
+        result += coord.xxCord;
         return result;
     }
 
     /**
      * Converts a given index to Coordinate form (x,y).
-     *@param index index to be converted to Coordinate
+     *
+     * @param index index to be converted to Coordinate
      * @return Coordinate form of the index (x,y)
-     * @requires index >= 0 && index < 61
      * @throws IndexOutOfBoundsException when index is out of bounds.
+     * @requires index >= 0 && index < 61
      */
     public static Coordinate convertToCoordinate(int index) {
         int counter = 0;
@@ -82,8 +93,7 @@ public class Board {
                 counter += 1;
             }
         }
-
-        throw new IndexOutOfBoundsException();
+        return null;
     }
 
     public void addTeamToBoard(Team team) {
@@ -122,12 +132,12 @@ public class Board {
     }
 
     public boolean isField(int index) {
-        return 0 <= index && index < 62;
+        return 0 <= index && index < 61;
     }
 
     private boolean isField(Coordinate coord) {
-        return coord.y >= 0 && coord.y < ROW_SIZES.length
-                && coord.x < ROW_SIZES[coord.y] && coord.x >= 0;
+        return coord.yyCord >= 0 && coord.yyCord < ROW_SIZES.length
+                && coord.xxCord < ROW_SIZES[coord.yyCord] && coord.xxCord >= 0;
     }
 
 
@@ -173,6 +183,7 @@ public class Board {
      *
      * @return the game situation as String
      */
+    @Override
     public String toString() {
         StringBuilder s = new StringBuilder();
         for (int i = 0; i < ROW_SIZES.length; i++) {
@@ -231,9 +242,13 @@ public class Board {
 
             // Calculate friendlies' push strength (own marbles + friendly marbles)
             List<Coordinate> friendlies = new ArrayList<>();
-            while (pawn.isValidStep(move.getDirection()) && move.getTeam().teamHas(getField(pawn.step(move.getDirection())))) {
+            while (move.getTeam().teamHas(getField(pawn.step(move.getDirection())))) {
                 pawn = pawn.step(move.getDirection());
                 friendlies.add(pawn);
+                //if my own marbles + friendly is greater than three
+                if (friendlies.size() > 3) {
+                    return false;
+                }
 
                 if (getField(pawn).equals(getField(move.getGroup().getMarble1()))) {
                     return false;
@@ -271,7 +286,7 @@ public class Board {
                     for (Coordinate enemy : enemies) {
                         Marble color = getField(enemy);
                         if (enemy.step(move.getDirection()) == null) {
-                            move.getTeam().addPoints(1);
+                            move.getTeam().addPoint();
                         } else {
                             setField(enemy.step(move.getDirection()), getField(enemy));
 
@@ -293,6 +308,7 @@ public class Board {
                     for (Coordinate coord : moveGroupDestination.getMarbles()) {
                         setField(coord, color);
                     }
+                    System.out.println(getField(move.getGroup().getMarble1()) + "PUSHED!");
                     moveCounter++;
 
                 } else {
@@ -301,10 +317,8 @@ public class Board {
             } else {
                 // Case: No enemies
                 if (friendlies.size() > 0) {
-//                    if (friendlies.stream().allMatch(f -> getField(f).equals(getField(move.getGroup().getMarble1()))))
-//                        return false;
-
                     // Case: Pushing friendlies
+
                     if (lastCoordOutOfBounds) {
                         return false;
                     } else if (lastCoordEmpty) {
@@ -323,7 +337,7 @@ public class Board {
                         }
                         moveCounter++;
                     } else {
-                        throw new IllegalStateException("wa da fuq????");
+                        throw new IllegalStateException("wa?????");
                     }
                 } else {
                     // Case: Normal move
@@ -348,7 +362,7 @@ public class Board {
         return true;
     }
 
-    private boolean makeMoveSlide(Move move) {
+    public boolean makeMoveSlide(Move move) {
         Group marbles = move.getGroup();
         Group destination = marbles.step(move.getDirection());
 
@@ -373,14 +387,14 @@ public class Board {
         return true;
     }
 
-    private boolean isNeighbour(Coordinate coord1, Coordinate coord2) {
-        if (Math.abs(coord1.x - coord2.x) == 1) {
-            int diffY = Math.abs(coord1.y - coord2.y);
+    public boolean isNeighbour(Coordinate coord1, Coordinate coord2) {
+        if (Math.abs(coord1.xxCord - coord2.xxCord) == 1) {
+            int diffY = Math.abs(coord1.yyCord - coord2.yyCord);
             return diffY == 0 || diffY == 1;
         }
 
-        if (Math.abs(coord1.x - coord2.x) == 0) {
-            return Math.abs(coord1.y - coord2.y) == 1;
+        if (Math.abs(coord1.xxCord - coord2.xxCord) == 0) {
+            return Math.abs(coord1.yyCord - coord2.yyCord) == 1;
         }
 
         return false;
@@ -433,13 +447,13 @@ public class Board {
      *
      * @param group the group of marbles that the user chose.
      * @return true if (group.getMarbles.size() == 1 || (group.size() == 2 && marble1 and marble2 are neighbouring) ||
-    (group.size() == 3 && marbles 1,2,3 are in a line)) else, return false.
+     * (group.size() == 3 && marbles 1,2,3 are in a line)) else, return false.
      * @ensures group.getMarbles().size >= 1
      * @requires group != null && group.getMarbles().size > 1
      */
     public boolean isValidSelection(Group group) {
         if (group.getMarbles().size() == 1) {
-            return true;
+            return isField(group.getMarble1());
         } else if (group.getMarbles().size() == 2) {
             return isNeighbour(group.getMarble1(), group.getMarble2());
         } else if (group.getMarbles().size() == 3) {
@@ -448,9 +462,7 @@ public class Board {
             if (isNeighbour(group.getMarble1(), group.getMarble2())) {
                 neighbours++;
             }
-            if (isNeighbour(group.getMarble1(), group.getMarble3())) {
-                neighbours++;
-            }
+
             if (isNeighbour(group.getMarble2(), group.getMarble3())) {
                 neighbours++;
             }

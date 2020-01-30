@@ -6,6 +6,13 @@ public class Move {
     private Group group;
     private Team team;
 
+    /**
+     * Constructs a Move.
+     *
+     * @param direction of which the group will move to
+     * @param group     selected by the player
+     * @param team      which the marble belongs to
+     */
     public Move(Direction direction, Group group, Team team) {
         this.direction = direction;
         this.group = group;
@@ -21,32 +28,34 @@ public class Move {
         return group;
     }
 
-    public void setGroup(Group group) {
-        this.group = group;
-    }
-
     public Team getTeam() {
         return team;
     }
 
-    public void setTeam(Team team) {
-        this.team = team;
-    }
 
 
     /**
-     * ENUM DIRECTION
+     * Direction of the Coordinates.
      */
     public enum Direction {
         NE(0), E(1), SE(2), SW(3), W(4), NW(5);
 
         public final int val;
 
+        /**
+         * Constructs a Direction.
+         * @param val of the Direction.
+         */
         Direction(int val) {
             this.val = val;
         }
 
-        static Direction intToDirection(int integer) {
+        /**
+         * Takes an integer and converts into Enum of Direction.
+         * @param integer to be converted
+         * @return Direction value of the integer.
+         */
+        public static Direction intToDirection(int integer) {
             switch (integer) {
                 case 0:
                     return NE;
@@ -61,11 +70,16 @@ public class Move {
                 case 5:
                     return NW;
                 default:
-                    throw new IllegalArgumentException("put valid integer");
+                    return null;
             }
         }
 
-        Direction opposite() {
+
+        /**
+         * Gives the opposite direction.
+         * @return opposite value of this direction
+         */
+        public Direction opposite() {
             switch (this) {
                 case NE:
                     return SW;
@@ -84,7 +98,13 @@ public class Move {
             }
         }
 
-        boolean isParallelTo(Move.Direction direction) {
+        /**
+         * Checks if the given direction is parallel (in line) with a direction.
+         * @param direction to be compared with
+         * @return true if the direction is on the same axis as the other direction.
+         */
+
+        public boolean isParallelTo(Move.Direction direction) {
             switch (this) {
                 case NE:
                 case SW:

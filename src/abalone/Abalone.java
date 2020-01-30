@@ -5,7 +5,6 @@ import utils.TextIO;
 import java.util.ArrayList;
 import java.util.List;
 
-
 /**
  * Application to run the Abalone game.
  */
@@ -23,6 +22,7 @@ public class Abalone {
         System.out.println("Player 1?");
         String name1 = TextIO.getln();
         players.add(new HumanPlayer("AI", Marble.WHITE));
+        players.add(new HumanPlayer(name1, Marble.WHITE));
 
         System.out.println("Player 2?");
         String name2 = TextIO.getln();

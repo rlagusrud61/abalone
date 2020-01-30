@@ -167,7 +167,11 @@ public class Game {
                 if (current >= players.length) {
                     current = 0;
                 } else {
-                    Move choice = players[current].makeChoice(board);
+                    String prompt = "> " + players[current].getName() + " (" + players[current].getMarble().toString() + ")"
+                            + ", what is your choice? Give direction (0-5), and a ; ,   and list the marbles separated by commas (without space).";
+                    System.out.println(prompt);
+                    String input = TextIO.getlnString();
+                    Move choice = players[current].makeChoice(board, input);
                     boolean isValidColor = false;
                     if (players[current].getMarble().equals(board.getField(choice.getGroup().getMarble1()))
                             && (choice.getGroup().getMarble2() == null || players[current].getMarble().equals(board.getField(choice.getGroup().getMarble2())))
@@ -218,4 +222,7 @@ public class Game {
         }
     }
 
+    public Board getBoard() {
+        return this.board;
+    }
 }

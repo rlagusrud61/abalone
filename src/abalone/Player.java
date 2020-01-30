@@ -58,7 +58,7 @@ public abstract class Player {
      * @requires board is not null and not full
      * @ensures the returned in is a valid field index and that field is empty
      */
-    public abstract Move makeChoice(Board board);
+    public abstract Move makeChoice(Board board, String input);
 
     // -- Commands ---------------------------------------------------
 //

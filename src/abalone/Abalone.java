@@ -22,16 +22,16 @@ public class Abalone {
         Game game;
         System.out.println("Player 1?");
         String name1 = TextIO.getln();
-        players.add(new ComputerPlayer("AI", Marble.WHITE));
+        players.add(new HumanPlayer("AI", Marble.WHITE));
 
         System.out.println("Player 2?");
         String name2 = TextIO.getln();
-        players.add(new ComputerPlayer(name2, Marble.BLACK));
+        players.add(new HumanPlayer(name2, Marble.BLACK));
 
         System.out.println("Player 3? If not playing, type 'n'");
         String name3 = TextIO.getln();
         if (!name3.equals("n")) {
-            players.add(new ComputerPlayer(name3, Marble.BLUE));
+            players.add(new HumanPlayer(name3, Marble.BLUE));
         }
 
         System.out.println("Player 4? If player 3 doesn't exist, you can't play. Type 'n'. ");

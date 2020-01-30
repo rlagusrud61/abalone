@@ -4,6 +4,7 @@ import exceptions.ExitProgram;
 import exceptions.ProtocolException;
 import exceptions.ServerUnavailableException;
 import protocol.ProtocolMessages;
+import server.GameServer;
 
 import java.io.*;
 import java.net.InetAddress;
@@ -22,13 +23,17 @@ public class GameClient {
     private GameClientTUI view;
     private String name;
     private int playerAmount;
+    private GameServer srv;
+    private Boolean gameStarted = false;
 
 
     /**
      * Constructs a new HotelClient. Initialises the view.
      */
     public GameClient() {
+        ;
         view = new GameClientTUI(this);
+
     }
 
 
@@ -57,6 +62,7 @@ public class GameClient {
                     name = view.getString("what is your name");
             playerAmount = view.getInt("with how many players do you want to play");
             handleHello(name,playerAmount);
+
             view.start();
         } catch (ExitProgram e) {
 
@@ -239,8 +245,12 @@ public class GameClient {
     }
 
 
-    public void sendJoin(String name, int playerAmount) throws ServerUnavailableException {
-        sendMessage(ProtocolMessages.NEW_GAME + ProtocolMessages.DELIMITER + name + ProtocolMessages.DELIMITER + playerAmount);
+    public void sendJoin(String name) throws ServerUnavailableException {
+        sendMessage(ProtocolMessages.JOIN + ProtocolMessages.DELIMITER + name);
+        System.out.println("> " + readLineFromServer());
+    }
+    public void sendStart() throws  ServerUnavailableException {
+        sendMessage(String.valueOf(ProtocolMessages.START));
         System.out.println("> " + readLineFromServer());
     }
 
@@ -249,5 +259,32 @@ public class GameClient {
         sendMessage(String.valueOf(ProtocolMessages.EXIT));
         closeConnection();
     }
+    public void listenToServer() {
+        String msg;
+        try {
+            msg = in.readLine();
+            while (!(msg == null || msg.equals(""))) {
+                if (msg.contains("g;")) {
+                    gameStarted = true;
+                    System.out.println("starting");
+                    out.newLine();
+                    out.flush();
+                    msg = in.readLine();
+                } else {
+                    System.out.println(msg + "\n");
+                    out.newLine();
+                    out.flush();
+                    msg = in.readLine();
+                }
+            }
 
+        } catch (IOException e) {
+
+        }
+    }
+
+    public boolean getGameStarted() {
+        return  gameStarted;
+    }
 }
+

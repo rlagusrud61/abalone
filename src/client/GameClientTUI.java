@@ -3,6 +3,8 @@ package client;
 import exceptions.ExitProgram;
 import exceptions.ServerUnavailableException;
 import protocol.ProtocolMessages;
+import server.GameServer;
+import utils.TextIO;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -17,6 +19,7 @@ public class GameClientTUI implements GameClientView {
     private GameClient client;
     private BufferedReader in;
     private PrintWriter out;
+    private GameServer srv;
 
     public GameClientTUI(GameClient client) {
         this.client = client;
@@ -26,19 +29,23 @@ public class GameClientTUI implements GameClientView {
 
     @Override
     public void start() throws ServerUnavailableException {
-        try {
-            System.out.println("Input command : ");
-            String input = in.readLine();
-            System.out.println("input comes thru");
-            while (true) {
-                handleUserInput(input);
-                System.out.println("Input command : ");
-                input = in.readLine();
+
+        while (true) {
+
+
+                System.out.println("wait for the game to start...");
+                client.listenToServer();
+                while(client.getGameStarted()) {
+
+                System.out.println("input move:");
+                String input = TextIO.getlnString();
+                try {
+                    handleUserInput(input);
+                } catch (ExitProgram e) {
+                    System.out.println("oops");
+                }
             }
-        } catch (ExitProgram e) {
-            client.sendExit();
-        } catch (ServerUnavailableException | IOException e) {
-            e.printStackTrace();
+
         }
     }
 
@@ -65,14 +72,14 @@ public class GameClientTUI implements GameClientView {
             System.out.println(param);
             switch (command) {
                 case "h":
-                   client.start();
+                    client.start();
                     break;
                 case "m":
                     System.out.println("working");
                     client.sendMove(Integer.parseInt(param), secparam);
-                break;
+                    break;
                 case "g":
-                    client.sendJoin(param, Integer.parseInt(secparam));
+                    client.sendStart();
 
                 case "d":
                     throw new ExitProgram("Exiting the game...");
@@ -156,4 +163,5 @@ public class GameClientTUI implements GameClientView {
         System.out.println("d ....... disconnect from server");
 
     }
+
 }

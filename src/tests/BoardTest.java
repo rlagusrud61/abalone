@@ -107,7 +107,6 @@ class BoardTest {
 
     @Test
     void makeMoveTest2() {
-        Board board = new Board();
         List<Marble> marbleList = new ArrayList<>();
         marbleList.add(Marble.WHITE);
         marbleList.add(Marble.BLUE);
@@ -141,7 +140,6 @@ class BoardTest {
 
     @Test
     void makeMovePushTest() {
-        Board board = new Board();
         List<Marble> marbleList = new ArrayList<>();
         marbleList.add(Marble.WHITE);
         marbleList.add(Marble.BLUE);
@@ -176,7 +174,6 @@ class BoardTest {
 
     @Test
     void pushFriendlyTest() {
-        Board board = new Board();
         List<Marble> marbleList = new ArrayList<>();
         marbleList.add(Marble.WHITE);
         marbleList.add(Marble.BLUE);
@@ -206,6 +203,32 @@ class BoardTest {
                 new Coordinate(Board.convertToCoordinate(23)),
                 new Coordinate(Board.convertToCoordinate(32))};
         Arrays.stream(coordinates).forEach(field -> assertEquals(board.getField(field), Marble.WHITE));
+    }
+
+    @Test
+    void moveTest2() {
+        List<Marble> marbleList = new ArrayList<>();
+        marbleList.add(Marble.WHITE);
+        marbleList.add(Marble.BLUE);
+        Team team1 = new Team(marbleList);
+
+        List<Marble> marbleList2 = new ArrayList<>();
+        marbleList2.add(Marble.BLACK);
+        marbleList2.add(Marble.RED);
+        Team team2 = new Team(marbleList2);
+
+        board.addTeamToBoard(team1);
+        board.addTeamToBoard(team2);
+
+        board.reset(BoardStates.getFourPlayer());
+
+        Move.Direction dir = Move.Direction.SW;
+        Group trio = new Group((new Coordinate(Board.convertToCoordinate(3))),
+                (new Coordinate(Board.convertToCoordinate(8))),
+                (new Coordinate(Board.convertToCoordinate(14))));
+
+        Move move = new Move(dir, trio, team1);
+        board.makeMove(move);
     }
 
     @Test

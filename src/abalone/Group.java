@@ -55,6 +55,11 @@ public class Group {
         size = 3;
     }
 
+    /**
+     * Moves (steps) the group to the given direction.
+     *
+     * @return the list form of the marbles.
+     */
     public List<Coordinate> getMarbles() {
         return Optional.ofNullable(this.marbles).stream().flatMap(Arrays::stream)
                 .collect(Collectors.toList());

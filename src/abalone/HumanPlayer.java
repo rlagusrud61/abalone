@@ -29,9 +29,13 @@ public class HumanPlayer extends Player {
      * @return selected move that is to be made and checked on the board.
      */
     @Override
-    public Move makeChoice(Board board, String input) {
+    public Move makeChoice(Board board) {
         boolean isValidArg = true;
+        String prompt = "> " + this.getName() + " (" + this.getMarble().toString() + ")"
+                + ", what is your choice? Give direction (0-5), and a ; ,   and list the marbles separated by commas (without space).";
+        System.out.println(prompt);
         do {
+            String input = TextIO.getlnString();
             String text = input;
             int command = -1;
             String marbles;

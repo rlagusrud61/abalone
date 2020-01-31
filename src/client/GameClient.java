@@ -51,7 +51,6 @@ public class GameClient {
      * HELLO handshake as defined in the protocol. After a successful
      * connection and handshake, the view is started. The view asks for
      * used input and handles all further calls to methods of this class.
-     * <p>
      * When errors occur, or when the user terminates a server connection, the
      * user is asked whether a new connection should be made.
      */
@@ -59,12 +58,12 @@ public class GameClient {
         try {
             createConnection();
 
-                    name = view.getString("what is your name");
+            name = view.getString("what is your name");
             playerAmount = view.getInt("with how many players do you want to play");
-            handleHello(name,playerAmount);
+            handleHello(name, playerAmount);
 
             view.start();
-        } catch (ExitProgram e) {
+        } catch (ExitProgram ignored) {
 
         } catch (ServerUnavailableException e) {
             System.out.println("Server is unavailable at the moment!");
@@ -81,7 +80,6 @@ public class GameClient {
     /**
      * Creates a connection to the server. Requests the IP and port to
      * connect to at the view (TUI).
-     * <p>
      * The method continues to ask for an IP and port and attempts to connect
      * until a connection is established or until the user indicates to exit
      * the program.
@@ -121,7 +119,6 @@ public class GameClient {
 
     /**
      * Resets the serverSocket and In- and OutputStreams to null.
-     * <p>
      * Always make sure to close current connections via shutdown()
      * before calling this method!
      */
@@ -249,7 +246,8 @@ public class GameClient {
         sendMessage(ProtocolMessages.JOIN + ProtocolMessages.DELIMITER + name);
         System.out.println("> " + readLineFromServer());
     }
-    public void sendStart() throws  ServerUnavailableException {
+
+    public void sendStart() throws ServerUnavailableException {
         sendMessage(String.valueOf(ProtocolMessages.START));
         System.out.println("> " + readLineFromServer());
     }
@@ -259,6 +257,7 @@ public class GameClient {
         sendMessage(String.valueOf(ProtocolMessages.EXIT));
         closeConnection();
     }
+
     public void listenToServer() {
         String msg;
         try {
@@ -284,7 +283,7 @@ public class GameClient {
     }
 
     public boolean getGameStarted() {
-        return  gameStarted;
+        return gameStarted;
     }
 }
 

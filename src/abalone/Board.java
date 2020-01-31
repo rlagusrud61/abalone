@@ -182,6 +182,7 @@ public class Board {
      * situation, the String also shows the numbering of the fields.
      *
      * @return the game situation as String
+     * @invariant ROW_SIZES.length == 9
      */
     @Override
     public String toString() {
@@ -230,7 +231,7 @@ public class Board {
         if (move.getGroup().size == 1 || move.getGroup().getLineDirection().isParallelTo(move.getDirection())) {
             Coordinate pawn = move.getGroup().getMarble1();
 
-            // Make a pawn and walk to the Coordinate closest in the move direction , within the group
+            // Make a pawn and walk to the Coordinate closest in the move direction, within the group
             Coordinate step = pawn.step(move.getDirection());
             if (step == null) {
                 return false;
@@ -417,10 +418,10 @@ public class Board {
     /**
      * Checks if the game is over in the board.
      *
-     * @return true if there is a winner in the board or when the number of moves exceed 96.
+     * @return true if there is a winner in the board or when the number of moves reaches 96.
      */
     public boolean gameOver() {
-        return hasWinner() || (moveCounter > 97);
+        return hasWinner() || (moveCounter > 95);
     }
 
     /**

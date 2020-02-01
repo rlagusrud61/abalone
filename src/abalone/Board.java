@@ -257,8 +257,8 @@ public class Board {
 
             // Calculate enemy strength
             List<Coordinate> enemies = new ArrayList<>();
-            while (pawn.isValidStep(move.getDirection()) && !isEmpty(pawn.step(move.getDirection()))
-                    && !move.getTeam().teamHas(getField(pawn.step(move.getDirection())))) {
+            while (pawn.isValidStep(move.getDirection()) && !isEmpty(pawn.step(move.getDirection())) //if it's valid step and it aint empty
+                    && !move.getTeam().teamHas(getField(pawn.step(move.getDirection())))) { // if it's enemymarble
                 pawn = pawn.step(move.getDirection());
                 enemies.add(pawn);
             }
@@ -287,6 +287,7 @@ public class Board {
                         Marble color = getField(enemy);
                         if (enemy.step(move.getDirection()) == null) {
                             move.getTeam().addPoint();
+                            System.out.println(getField(move.getGroup().getMarble1()) + " PUSHED TO THE VOID!");
                         } else {
                             setField(enemy.step(move.getDirection()), getField(enemy));
 
@@ -308,9 +309,8 @@ public class Board {
                     for (Coordinate coord : moveGroupDestination.getMarbles()) {
                         setField(coord, color);
                     }
-                    System.out.println(getField(move.getGroup().getMarble1()) + "PUSHED!");
                     moveCounter++;
-
+                    return true;
                 } else {
                     return false;
                 }
@@ -318,49 +318,30 @@ public class Board {
                 // Case: No enemies
                 if (friendlies.size() > 0) {
                     // Case: Pushing friendlies
-
-                    if (lastCoordOutOfBounds) {
-                        return false;
-                    } else if (lastCoordEmpty) {
-                        // Move friendly marbles
-                        for (Coordinate friendly : friendlies) {
-                            setField(friendly.step(move.getDirection()), getField(friendly));
-                        }
-
-                        // Move player marbles
-                        Group moveGroupDestination = move.getGroup().step(move.getDirection());
-                        for (Coordinate coord : move.getGroup().getMarbles()) {
-                            setField(coord, Marble.EMPTY);
-                        }
-                        for (Coordinate coord : moveGroupDestination.getMarbles()) {
-                            setField(coord, getField(move.getGroup().getMarble1()));
-                        }
-                        moveCounter++;
-                    } else {
-                        throw new IllegalStateException("wa?????");
-                    }
-                } else {
-                    // Case: Normal move
-                    Marble color = getField(move.getGroup().getMarble1());
-
-                    for (Coordinate originalMarble : move.getGroup().getMarbles()) {
-                        setField(originalMarble, Marble.EMPTY);
-                    }
-
-                    for (Coordinate destination : move.getGroup().step(move.getDirection()).getMarbles()) {
-                        setField(destination, color);
-
-                    }
-                    moveCounter++;
+                    return false;
                 }
+
+                // Case: Normal move
+                Marble color = getField(move.getGroup().getMarble1());
+
+                for (Coordinate originalMarble : move.getGroup().getMarbles()) {
+                    setField(originalMarble, Marble.EMPTY);
+                }
+
+                for (Coordinate destination : move.getGroup().step(move.getDirection()).getMarbles()) {
+                    setField(destination, color);
+
+                }
+
+                moveCounter++;
+                return true;
             }
         } else {
             // Marbles cannot push in this direction, hence side-step move
             return makeMoveSlide(move);
         }
-
-        return true;
     }
+
 
     public boolean makeMoveSlide(Move move) {
         Group marbles = move.getGroup();

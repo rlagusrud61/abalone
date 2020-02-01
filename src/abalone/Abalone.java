@@ -19,11 +19,13 @@ public class Abalone {
     public static void main(String[] args) {
         List<Player> players = new ArrayList<>();
         Game game;
-        System.out.println("Player 1?");
+
+        System.out.println("Player 1 name?");
         String name1 = TextIO.getln();
         players.add(new HumanPlayer(name1, Marble.WHITE));
 
-        System.out.println("Player 2?");
+
+        System.out.println("Player 2 name?");
         String name2 = TextIO.getln();
         players.add(new HumanPlayer(name2, Marble.BLACK));
 

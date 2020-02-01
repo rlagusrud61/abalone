@@ -29,7 +29,6 @@ public enum Marble {
                 break;
             case WHITE:
                 marble = "\u001B[30m" + "⚫" + RESET;
-                // BTW, BOLD "\033[1;30m" + BLACK  = WHITE??????????????
                 break;
             default:
                 marble = "⚪" + RESET;

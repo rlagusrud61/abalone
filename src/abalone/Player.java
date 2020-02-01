@@ -11,7 +11,6 @@ public abstract class Player {
     private Marble marble;
     private Team team;
 
-
     // -- Constructors -----------------------------------------------
 
     /**
@@ -54,7 +53,7 @@ public abstract class Player {
     /**
      * Sets a player in a team.
      */
-    public void setTeam(Team team) {
+    void setTeam(Team team) {
         this.team = team;
     }
 

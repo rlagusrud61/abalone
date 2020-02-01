@@ -23,11 +23,11 @@ public interface ServerProtocol {
 
     void doJoin(String name);
 
-    String doMove(int direction, String marbles);
+    String doMove(String name, int direction, String marbles);
 
-    String nextTurn();
+    boolean sendTurn(int current);
 
     String doExit();
 
-    String noRematch();
+    String sendBoard();
 }

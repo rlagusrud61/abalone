@@ -9,6 +9,7 @@ import protocol.ServerProtocol;
 import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
+import java.io.PrintWriter;
 import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -48,11 +49,14 @@ public class GameServer implements Runnable, ServerProtocol {
 
     private Board board;
 
+    private GameServer srv;
+
     /**
      * Constructs a new HotelServer. Initializes the clients list,
      * the view and the next_client_no.
      */
     public GameServer() {
+        srv = this;
         clients = new ArrayList<>();
         view = new GameServerTUI();
         nextClientNo = 1;
@@ -86,8 +90,9 @@ public class GameServer implements Runnable, ServerProtocol {
                     view.showMessage("New client [" + name + "] connected!");
                     GameClientHandler handler =
                             new GameClientHandler(sock, this, name);
-                    new Thread(handler).start();
+
                     clients.add(handler);
+                    new Thread(handler).start();
                     System.out.println("do the do join");
                     doJoin(name);
                 }
@@ -199,7 +204,11 @@ public class GameServer implements Runnable, ServerProtocol {
             Thread thread = new Thread(new Runnable() {
                 @Override
                 public void run() {
-                    Game game = new Game(player1, player2);
+                    Game game = new Game(srv, player1, player2);
+                    twoPlayerQueue.get(0).setGame(game);
+                    twoPlayerQueue.get(1).setGame(game);
+                    twoPlayerQueue.get(0).setPlayerIndex(0);
+                    twoPlayerQueue.get(1).setPlayerIndex(1);
                     games.add(game);
                     game.start();
                 }
@@ -227,8 +236,15 @@ public class GameServer implements Runnable, ServerProtocol {
             Thread thread = new Thread(new Runnable() {
                 @Override
                 public void run() {
-                    Game game = new Game(player1, player2, player3);
+                    Game game = new Game(srv, player1, player2, player3);
                     games.add(game);
+                    threePlayerQueue.get(0).setGame(game);
+                    threePlayerQueue.get(1).setGame(game);
+                    threePlayerQueue.get(2).setGame(game);
+                    threePlayerQueue.get(0).setPlayerIndex(0);
+                    threePlayerQueue.get(1).setPlayerIndex(1);
+                    threePlayerQueue.get(2).setPlayerIndex(2);
+
                     game.start();
                 }
             });
@@ -255,7 +271,15 @@ public class GameServer implements Runnable, ServerProtocol {
             Thread thread = new Thread(new Runnable() {
                 @Override
                 public void run() {
-                    Game game = new Game(player1, player2, player3, player4);
+                    Game game = new Game(srv, player1, player2, player3, player4);
+                    fourPlayerQueue.get(0).setGame(game);
+                    fourPlayerQueue.get(1).setGame(game);
+                    fourPlayerQueue.get(2).setGame(game);
+                    fourPlayerQueue.get(3).setGame(game);
+                    fourPlayerQueue.get(0).setPlayerIndex(0);
+                    fourPlayerQueue.get(1).setPlayerIndex(1);
+                    fourPlayerQueue.get(2).setPlayerIndex(2);
+                    fourPlayerQueue.get(3).setPlayerIndex(3);
                     games.add(game);
                     game.start();
                 }
@@ -267,6 +291,7 @@ public class GameServer implements Runnable, ServerProtocol {
                     out.write(ProtocolMessages.START + ProtocolMessages.DELIMITER + player1.getName() + ProtocolMessages.DELIMITER + player2.getName() + ProtocolMessages.DELIMITER + player3.getName() + ProtocolMessages.DELIMITER + player4.getName());
                     out.newLine();
                     out.flush();
+                    out.close();
                 }
             } catch (IOException e) {
             }
@@ -277,8 +302,17 @@ public class GameServer implements Runnable, ServerProtocol {
     }
 
     @Override
-    public synchronized String doMove(int direction, String marbles) {
+    public synchronized String doMove(String name, int direction, String marbles) {
         String input = direction + ";" + marbles;
+    for(GameClientHandler client : clients) {
+    if(client.getName().equals(name)) {
+
+          client.getGame().validMove(client.getGame().players[client.getPlayerIndex()].makeChoice(client.getGame().getBoard(),input));
+      }
+
+
+
+    }
 
 
         System.out.println("move is working tho");
@@ -286,8 +320,27 @@ public class GameServer implements Runnable, ServerProtocol {
     }
 
     @Override
-    public synchronized String nextTurn() {
-        return null;
+    public synchronized boolean sendTurn(int current) {
+        System.out.println("turn sent");
+        for(GameClientHandler client : clients) {
+
+                try {
+                    System.out.println("turn is alright");
+                    BufferedWriter out = new BufferedWriter(new OutputStreamWriter(client.getSock().getOutputStream()));
+                    if(client.getPlayerIndex() == current) {
+                        out.write(ProtocolMessages.NEXT);
+                        out.newLine();
+                        out.flush();
+                    }
+
+
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+
+
+        return true;
     }
 
     @Override
@@ -296,8 +349,19 @@ public class GameServer implements Runnable, ServerProtocol {
     }
 
     @Override
-    public synchronized String noRematch() {
-        return null;
+    public synchronized String sendBoard() {
+        for(GameClientHandler client : clients) {
+            try {
+                BufferedWriter out = new BufferedWriter(new OutputStreamWriter(client.getSock().getOutputStream()));
+               out.write(client.getGame().clientUpdate());
+               out.newLine();
+               out.flush();
+                System.out.println("out write not working again");
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        return "sending board";
     }
 
     @Override
@@ -313,6 +377,7 @@ public class GameServer implements Runnable, ServerProtocol {
                     out.write(ProtocolMessages.JOIN + ProtocolMessages.DELIMITER + name);
                     out.newLine();
                     out.flush();
+
                 }
 
             } else if (threePlayerQueue.contains(name)) {

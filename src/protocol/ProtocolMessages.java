@@ -21,17 +21,12 @@ public class ProtocolMessages {
      */
     public static final char JOIN = 'j';
     public static final char INVALID = 'e';
-    public static final String IV_MOVE = "iv";
-    public static final String IV_COM = "im";
     public static final char START = 'g';
     public static final char MOVE = 'm';
     public static final char BOARD = 'b';
     public static final char NEXT = 'n';
     public static final char EXIT = 'x';
-    public static final char YES = 'y';
-    public static final char NO = 'n';
-    public static final char REMATCH = 'r';
-    public static final char NEW_GAME = 'g';
+    public static final char GAME = 'g';
     public static final char DISCONNECT = 'd';
 
 }

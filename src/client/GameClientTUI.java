@@ -30,23 +30,7 @@ public class GameClientTUI implements GameClientView {
     @Override
     public void start() throws ServerUnavailableException {
 
-        while (true) {
-
-
-                System.out.println("wait for the game to start...");
-                client.listenToServer();
-                while(client.getGameStarted()) {
-
-                System.out.println("input move:");
-                String input = TextIO.getlnString();
-                try {
-                    handleUserInput(input);
-                } catch (ExitProgram e) {
-                    System.out.println("oops");
-                }
-            }
-
-        }
+        while (true)
     }
 
 

@@ -1,14 +1,13 @@
 package abalone;
 
+import server.GameServer;
 import utils.TextIO;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import static java.lang.Thread.sleep;
 
-/**
- * Class for maintaining the Abalone game.
- */
 public class Game {
 
     public static final int TWO_PLAYERS = 2;
@@ -33,6 +32,8 @@ public class Game {
      * @invariant the index is always between 0 and NUMBER_PLAYERS
      */
     public int current;
+    public Boolean moveMade;
+    public GameServer srv;
 
     // -- Constructors -----------------------------------------------
 
@@ -43,7 +44,8 @@ public class Game {
      * @param s1 the second player
      * @requires s0 and s1 to be non-null
      */
-    public Game(Player s0, Player s1) {
+    public Game(GameServer srv, Player s0, Player s1) {
+        this.srv = srv;
         board = new Board();
         players = new Player[TWO_PLAYERS];
         players[0] = s0;
@@ -72,7 +74,8 @@ public class Game {
      * @param s2 the third player
      * @requires s0 ,s1 and s2 to be non-null
      */
-    public Game(Player s0, Player s1, Player s2) {
+    public Game(GameServer srv, Player s0, Player s1, Player s2) {
+        this.srv = srv;
         board = new Board();
         players = new Player[THREE_PLAYERS];
         players[0] = s0;
@@ -111,7 +114,8 @@ public class Game {
      * @ensures s1 and s3 are in the same team
      * @requires s0, s1, s2 and s3 to be non-null
      */
-    public Game(Player s0, Player s1, Player s2, Player s3) {
+    public Game(GameServer srv, Player s0, Player s1, Player s2, Player s3) {
+        this.srv = srv;
         board = new Board();
         players = new Player[FOUR_PLAYERS];
         players[0] = s0;
@@ -181,34 +185,29 @@ public class Game {
      * @requires board != null
      */
     public void play() {
-        while (!board.gameOver()) {
-            boolean moveMade = false;
-            update();
+        moveMade = true;
 
+        while (!board.gameOver()) {
+            if (current >= players.length) {
+                current = 0;
+            }
+            if (moveMade) {
+                update();
+                srv.sendBoard();
+                srv.sendTurn(current);
+                moveMade = false;
+            }
             while (!moveMade) {
-                if (current >= players.length) {
-                    current = 0;
-                } else {
-                    Move choice = players[current].makeChoice(board);
-                    boolean isValidColor = false;
-                    if (players[current].getMarble().equals(board.getField(choice.getGroup().getMarble1()))
-                            && (choice.getGroup().getMarble2() == null || players[current].getMarble()
-                            .equals(board.getField(choice.getGroup().getMarble2())))
-                            && (choice.getGroup().getMarble3() == null || players[current]
-                            .getMarble().equals(board.getField(choice.getGroup().getMarble3())))) {
-                        isValidColor = true;
-                    }
-                    if (isValidColor && board.isValidSelection(choice.getGroup())
-                            && board.makeMove(choice)) {
-                        current++;
-                        moveMade = true;
-                    } else {
-                        System.out.println("Selection is invalid!");
-                    }
+                try {
+                    sleep(1000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
                 }
             }
-
+            current++;
         }
+
+
         update();
         if (board.gameOver()) {
             printResult();
@@ -225,6 +224,10 @@ public class Game {
     public void update() {
         System.out.println("\ncurrent game situation: \n\n" + board.toString()
                 + "\n");
+    }
+    public String clientUpdate() {
+        return "\ncurrent game situation: \n\n" + board.toString()
+                + "\n";
     }
 
     /**
@@ -245,5 +248,37 @@ public class Game {
 
     public Board getBoard() {
         return this.board;
+    }
+
+    public int getCurrent() {
+        return current;
+    }
+
+    public Player getPlayer(int i) {
+        return players[i];
+    }
+
+    public boolean validMove(Move choice) {
+        boolean isValidColor = false;
+        if (players[current].getMarble().equals(board.getField(choice.getGroup().getMarble1()))
+                && (choice.getGroup().getMarble2() == null || players[current].getMarble()
+                .equals(board.getField(choice.getGroup().getMarble2())))
+                && (choice.getGroup().getMarble3() == null || players[current]
+                .getMarble().equals(board.getField(choice.getGroup().getMarble3())))) {
+            isValidColor = true;
+        }
+        if (isValidColor && board.isValidSelection(choice.getGroup())
+                && board.makeMove(choice)) {
+            System.out.println("move is valid");
+            moveMade = true;
+            return true;
+        } else {
+
+            System.out.println("move is invalid");
+
+            return false;
+        }
+
+
     }
 }

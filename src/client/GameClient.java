@@ -25,6 +25,7 @@ public class GameClient {
     private int playerAmount;
     private GameServer srv;
     private Boolean gameStarted = false;
+    private Boolean myTurn = false;
 
 
     /**
@@ -229,7 +230,7 @@ public class GameClient {
             throws ServerUnavailableException, ProtocolException {
         sendMessage(String.valueOf(ProtocolMessages.HELLO + ProtocolMessages.DELIMITER + name + ProtocolMessages.DELIMITER + playerAmount));
         if (readLineFromServer().contains(String.valueOf(ProtocolMessages.HELLO))) {
-            System.out.println("Welcome to the Hotel booking system of hotel! Press 'h' for help menu: ");
+            System.out.println("Welcome to Abalone:");
         } else {
             throw new ProtocolException("Can't do the handshake");
         }
@@ -269,7 +270,12 @@ public class GameClient {
                     out.newLine();
                     out.flush();
                     msg = in.readLine();
-                } else {
+                } else if (msg.contains(String.valueOf(ProtocolMessages.NEXT))) {
+                    myTurn = true;
+                    out.newLine();
+                    out.flush();
+                    msg = in.readLine();
+                }  else {
                     System.out.println(msg + "\n");
                     out.newLine();
                     out.flush();
@@ -284,6 +290,14 @@ public class GameClient {
 
     public boolean getGameStarted() {
         return gameStarted;
+    }
+
+    public Boolean getMyTurn() {
+        return myTurn;
+    }
+
+    public void setMyTurn(Boolean myTurn) {
+        this.myTurn = myTurn;
     }
 }
 

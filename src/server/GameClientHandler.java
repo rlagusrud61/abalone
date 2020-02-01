@@ -26,6 +26,7 @@ public class GameClientHandler implements Runnable {
     private BufferedWriter out;
     private Socket sock;
     private Game game;
+    private int playerIndex;
 
 
     /**
@@ -110,9 +111,10 @@ public class GameClientHandler implements Runnable {
         switch (command) {
             case "h":
                 if (isValidName(first) && isValidAmount(second)) {
+                    this.name = first;
                     out.write(srv.getHello(first, Integer.parseInt(second)));
                     out.write(srv.doStart());
-                    this.name = first;
+
 
                 }  else {
 
@@ -125,7 +127,7 @@ public class GameClientHandler implements Runnable {
                 if (first == null || second == null) {
                     out.write("Move is invalid");
                 } else {
-                    out.write(srv.doMove(Integer.parseInt(first), second));
+                    out.write(srv.doMove(name, Integer.parseInt(first), second));
                 }
                 break;
 
@@ -191,7 +193,14 @@ public class GameClientHandler implements Runnable {
     public Game getGame() {
         return game;
     }
+
     public void setGame(Game game) {
        this.game = game;
+    }
+    public void setPlayerIndex(int i) {
+        playerIndex = i;
+    }
+    public int getPlayerIndex() {
+        return playerIndex;
     }
 }

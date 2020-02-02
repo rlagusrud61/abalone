@@ -17,6 +17,8 @@ import static protocol.ProtocolMessages.*;
 
 public class Server {
 
+    private ServerTUI view = new ServerTUI();
+
     private List<ClientHandler> handlers;
 
     private List<GameRequest> twoPlayerQueue = new ArrayList<>();
@@ -28,43 +30,58 @@ public class Server {
     private boolean running = false;
     private int port = -1;
 
-    public Server(int port) {
+    public Server() {
         this.handlers = new ArrayList<>();
-        this.port = port;
     }
 
-    public static void main(String[] args) {
-        Server server = new Server(8888);
-        try {
-            server.start();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+    public synchronized static void main(String[] args) {
+        Server server = new Server();
+        server.start();
     }
 
-    public void start() throws IOException {
+
+    public void start() {
         running = true;
 
-        System.out.println(String.format("Starting server on port %s", port));
-        ServerSocket socket = new ServerSocket(port);
+        ServerSocket socket = null;
+
+        while (socket == null) {
+            port = view.getInt("Put a valid port number.");
+            System.out.println(String.format("Starting server on port %s", port));
+
+            try {
+                socket = new ServerSocket(port);
+            } catch (IOException e) {
+                System.err.println(String.format("Could not bind to port %s", port));
+            } catch (IllegalArgumentException e) {
+                System.err.println(String.format("Invalid port %s", port));
+            }
+        }
 
         while (running) {
-            Socket client = socket.accept();
+            Socket client = null;
+            try {
+                client = socket.accept();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
 
-            System.out.println("Client connected");
+            System.out.println("A new client connected!");
             ClientHandler handler = new ClientHandler(client, this);
             handler.start();
             handlers.add(handler);
         }
 
         System.out.println("Shutting down...");
-
         // TODO: stop threads?
-
-        socket.close();
+        try {
+            socket.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
-    public void sendGameMessage(Game game, String message) {
+    public synchronized void sendGameMessage(Game game, String message) {
         List<String> ids = Arrays.stream(game.players).map(Player::getName).collect(Collectors.toList());
 
         for (ClientHandler handler : handlers) {
@@ -74,24 +91,23 @@ public class Server {
         }
     }
 
-    public void sendGameNext(Game game, String id) {
+    public synchronized void sendGameNext(Game game, String id) {
         sendGameMessage(game, NEXT + DELIMITER + id);
     }
 
-    public Game getGame(String id) {
+    public synchronized Game getGame(String id) {
         Optional<Game> game = games.stream().filter(g ->
                 Arrays.stream(g.players).map(Player::getName).anyMatch(n -> n.equals(id))
         ).findFirst();
-        //if some errors happen it's definitely here
         return game.get();
     }
 
-    public Player getPlayer(String id) {
+    public synchronized Player getPlayer(String id) {
         Game game = getGame(id);
         return Arrays.stream(game.players).filter(p -> p.getName().equals(id)).findFirst().get();
     }
 
-    public void doGameRequest(GameRequest request) {
+    public synchronized void doGameRequest(GameRequest request) {
         if (request.getSize() == 2) twoPlayerQueue.add(request);
         if (request.getSize() == 3) threePlayerQueue.add(request);
         if (request.getSize() == 4) fourPlayerQueue.add(request);
@@ -151,4 +167,9 @@ public class Server {
         }
     }
 
+    public synchronized void removeClient(ClientHandler client) {
+        this.handlers.remove(client);
+    }
+
 }
+

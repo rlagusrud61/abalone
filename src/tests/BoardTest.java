@@ -29,7 +29,7 @@ class BoardTest {
     }
 
     @Test
-    void FieldTest() {
+    void fieldTest() {
         Marble field = board.getField(new Coordinate(420, 69));
         assertNull(field);
         board.setField(new Coordinate(0, 0), Marble.BLUE);
@@ -55,11 +55,11 @@ class BoardTest {
     @Test
     void convertToIntAndConvertToCoordinateTest() {
         int index = 10;
-        Coordinate coordinate = Board.convertToCoordinate(index);
+        Coordinate coordinate = new Coordinate(5, 1);
         assertEquals(Board.convertToInt(coordinate), 10);
 
         coordinate = new Coordinate(4, 3);
-        index = Board.convertToInt(coordinate);
+        index = 22;
         assertEquals(Board.convertToCoordinate(index), coordinate);
         assertEquals(Board.convertToCoordinate(0), new Coordinate(0, 0));
         assertNull(Board.convertToCoordinate(31232198));
@@ -75,10 +75,14 @@ class BoardTest {
         marbleList.add(Marble.BLACK);
         marbleList.add(Marble.RED);
         Team team2 = new Team(marbleList2);
+        Team teamNotAdded = new Team(marbleList2);
+
         board.addTeamToBoard(team1);
         board.addTeamToBoard(team2);
+        //Don't add teamNotAdded to the board
         assertTrue(board.playingTeams.contains(team1));
         assertTrue(board.playingTeams.contains(team2));
+        assertFalse(board.playingTeams.contains(teamNotAdded));
     }
 
     @Test
@@ -206,7 +210,7 @@ class BoardTest {
     }
 
     @Test
-    void moveTest2() {
+    void moveTrioTestFourPlayer() {
         List<Marble> marbleList = new ArrayList<>();
         marbleList.add(Marble.WHITE);
         marbleList.add(Marble.BLUE);
@@ -228,7 +232,7 @@ class BoardTest {
                 (new Coordinate(Board.convertToCoordinate(14))));
 
         Move move = new Move(dir, trio, team1);
-        board.makeMove(move);
+        assertTrue(board.makeMove(move));
     }
 
     @Test
@@ -281,7 +285,10 @@ class BoardTest {
     void isNeighbourTest() {
         Coordinate c1 = new Coordinate(4, 3);
         Coordinate c2 = new Coordinate(5, 3);
+        Coordinate c3 = new Coordinate(5, 7);
         assertTrue(board.isNeighbour(c1, c2));
+        assertFalse(board.isNeighbour(c1, c3));
+        assertFalse(board.isNeighbour(c2, c3));
     }
 
     @Test
@@ -312,20 +319,22 @@ class BoardTest {
         Team team = new Team(marbleList);
         board.addTeamToBoard(team);
 
+        board.moveCounter = 4;
+        assertFalse(board.gameOver());
+
         board.playingTeams.get(0).addPoint();
         board.playingTeams.get(0).addPoint();
         assertFalse(board.isWinner(Marble.WHITE));
-        assertFalse(board.hasWinner());
         board.playingTeams.get(0).addPoint();
         board.playingTeams.get(0).addPoint();
         board.playingTeams.get(0).addPoint();
         board.playingTeams.get(0).addPoint();
 
         assertTrue(board.isWinner(Marble.WHITE));
+        assertTrue(board.gameOver());
         assertFalse(board.isWinner(Marble.BLACK));
 
         board.moveCounter = 97;
-
         assertTrue(board.gameOver());
     }
 
@@ -345,7 +354,4 @@ class BoardTest {
         assertFalse(board.isValidSelection(wrongGroup));
     }
 
-    @Test
-    void name() {
-    }
 }

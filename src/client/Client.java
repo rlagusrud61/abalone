@@ -97,6 +97,12 @@ public class Client implements Runnable, ClientProtocol {
         String message = null;
         try {
             message = in.readLine();
+
+            if (message == null) {
+                System.err.println("Server closed connection");
+                close();
+                return;
+            }
         } catch (IOException e) {
             System.err.println("Lost connection to server");
             socket = null;
@@ -249,6 +255,14 @@ public class Client implements Runnable, ClientProtocol {
                 }
 
                 return;
+            case "x":
+                System.out.println("Game is Over!");
+                try {
+                    close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                break;
             default:
                 System.err.println("Invalid command \"" + message + "\"");
         }

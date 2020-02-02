@@ -41,6 +41,12 @@ public class ClientHandler extends Thread {
             try {
                 System.out.println("Listening to the client...");
                 message = in.readLine();
+
+//                if (message == null) {
+//                    System.err.println("Client/Server closed connection");
+//                    running = false;
+//                    break;
+//                }
             } catch (IOException e) {
                 System.err.println("Something went wrong while listening to client " + id);
                 running = false;
@@ -73,6 +79,10 @@ public class ClientHandler extends Thread {
 
                     if (isValid) {
                         server.sendGameMessage(game, message);
+                    }
+
+                    if (game.current >= game.players.length) {
+                        game.current = 0;
                     }
 
                     if (!game.board.gameOver()) {

@@ -218,6 +218,10 @@ public class Game {
     }
 
     public boolean doMove(Move choice) {
+        if (current >= players.length) {
+            current = 0;
+        }
+
         boolean isValidColor = false;
         if (players[current].getMarble().equals(board.getField(choice.getGroup().getMarble1()))
                 && (choice.getGroup().getMarble2() == null || players[current].getMarble()

@@ -1,12 +1,12 @@
 package client;
 
 import abalone.*;
+import protocol.ClientProtocol;
 import server.DummyPlayer;
 
 import java.io.*;
 import java.net.InetAddress;
 import java.net.Socket;
-import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -14,34 +14,32 @@ import java.util.List;
 import static protocol.ProtocolMessages.DELIMITER;
 import static protocol.ProtocolMessages.HELLO;
 
-public class Client implements Runnable {
+public class Client implements Runnable, ClientProtocol {
 
     private Game game;
     private String id;
-    private GameClientTUI tui;
+    private ClientTUI view;
     private boolean running = false;
 
     private BufferedReader in;
     private PrintWriter out;
 
-    public Client() {
-        tui = new GameClientTUI();
-    }
 
     public static void main(String[] args) {
         Client client = new Client();
         client.start();
     }
 
+    public Client() {
+        view = new ClientTUI();
+    }
+
+    @Override
     public void run() {
         // User input - connection
-        InetAddress ip = null; // tui.getIp();
-        try {
-            ip = InetAddress.getLocalHost();
-        } catch (UnknownHostException e) {
-            e.printStackTrace();
-        }
-        int port = 8888; // tui.getInt("Port?");
+        InetAddress ip = view.getIp();
+        int port = view.getInt("Enter a valid port number.");
+
 
         Socket socket = null;
         try {
@@ -51,14 +49,19 @@ public class Client implements Runnable {
         } catch (IOException e) {
             e.printStackTrace();
         }
+        takeCommands();
+    }
 
+
+    public void takeCommands() {
         while (running) {
             // Check if in game
             if (game == null) {
                 // Make game request
-                id = tui.getString("What is your name?");
-                int size = tui.getInt("How many players should be in your game?");
+                id = view.getString("What is your name?");
+                int size = view.getInt("How many players should be in your game?");
                 out.println(HELLO + DELIMITER + id + DELIMITER + size);
+                view.showMessage("Please wait until the game starts...");
             }
 
             String message = null;
@@ -107,7 +110,7 @@ public class Client implements Runnable {
                 case "n":
                     System.out.println(String.format("[SERVER] It is %s's turn", parts[1]));
                     if (id.equals(parts[1])) {
-                        String input = tui.getString("Move?");
+                        String input = view.getString("Move?");
                         // TODO validate
                         out.println(input);
                     }
@@ -131,13 +134,17 @@ public class Client implements Runnable {
 
                     // Print board
                     game.update();
+                case "d":
+
                 default:
                     System.err.println("Invalid command \"" + message + "\"");
+
             }
         }
     }
 
-    private void start() {
+    @Override
+    public void start() {
         running = true;
         run();
     }

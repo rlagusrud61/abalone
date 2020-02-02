@@ -17,6 +17,8 @@ import static protocol.ProtocolMessages.*;
 
 public class Server {
 
+    private ServerTUI view = new ServerTUI();
+
     private List<ClientHandler> handlers;
 
     private List<GameRequest> twoPlayerQueue = new ArrayList<>();
@@ -28,13 +30,12 @@ public class Server {
     private boolean running = false;
     private int port = -1;
 
-    public Server(int port) {
+    public Server() {
         this.handlers = new ArrayList<>();
-        this.port = port;
     }
 
-    public static void main(String[] args) {
-        Server server = new Server(8888);
+    public synchronized static void main(String[] args) {
+        Server server = new Server();
         try {
             server.start();
         } catch (IOException e) {
@@ -42,8 +43,10 @@ public class Server {
         }
     }
 
+
     public void start() throws IOException {
         running = true;
+        port = view.getInt("Put a valid port number.");
 
         System.out.println(String.format("Starting server on port %s", port));
         ServerSocket socket = new ServerSocket(port);
@@ -51,20 +54,18 @@ public class Server {
         while (running) {
             Socket client = socket.accept();
 
-            System.out.println("Client connected");
+            System.out.println("A new client connected!");
             ClientHandler handler = new ClientHandler(client, this);
             handler.start();
             handlers.add(handler);
         }
 
         System.out.println("Shutting down...");
-
         // TODO: stop threads?
-
         socket.close();
     }
 
-    public void sendGameMessage(Game game, String message) {
+    public synchronized void sendGameMessage(Game game, String message) {
         List<String> ids = Arrays.stream(game.players).map(Player::getName).collect(Collectors.toList());
 
         for (ClientHandler handler : handlers) {
@@ -74,7 +75,7 @@ public class Server {
         }
     }
 
-    public void sendGameNext(Game game, String id) {
+    public synchronized void sendGameNext(Game game, String id) {
         sendGameMessage(game, NEXT + DELIMITER + id);
     }
 
@@ -82,7 +83,6 @@ public class Server {
         Optional<Game> game = games.stream().filter(g ->
                 Arrays.stream(g.players).map(Player::getName).anyMatch(n -> n.equals(id))
         ).findFirst();
-        //if some errors happen it's definitely here
         return game.get();
     }
 
@@ -91,7 +91,7 @@ public class Server {
         return Arrays.stream(game.players).filter(p -> p.getName().equals(id)).findFirst().get();
     }
 
-    public void doGameRequest(GameRequest request) {
+    public synchronized void doGameRequest(GameRequest request) {
         if (request.getSize() == 2) twoPlayerQueue.add(request);
         if (request.getSize() == 3) threePlayerQueue.add(request);
         if (request.getSize() == 4) fourPlayerQueue.add(request);
@@ -151,4 +151,9 @@ public class Server {
         }
     }
 
+    public synchronized void removeClient(ClientHandler client) {
+        this.handlers.remove(client);
+    }
+
 }
+

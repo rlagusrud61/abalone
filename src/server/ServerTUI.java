@@ -1,25 +1,29 @@
-package client;
+package server;
 
-import java.net.InetAddress;
-import java.net.UnknownHostException;
+import java.io.PrintWriter;
 import java.util.Scanner;
 
-public class GameClientTUI {
 
+public class ServerTUI implements ServerView {
+
+    /**
+     * The PrintWriter to write messages to
+     */
+    private PrintWriter console;
+
+    /**
+     * Constructs a new ServerTUI. Initializes the console.
+     */
+    public ServerTUI() {
+        console = new PrintWriter(System.out, true);
+    }
+
+    @Override
     public void showMessage(String message) {
-        System.out.println(message);
+        console.println(message);
     }
 
-    public InetAddress getIp() {
-        String input = getString("Put a valid IP");
-        try {
-            return InetAddress.getByName(input);
-        } catch (UnknownHostException e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
-
+    @Override
     public String getString(String question) {
         showMessage(question);
         Scanner userInput = new Scanner(System.in);
@@ -32,6 +36,7 @@ public class GameClientTUI {
         return null;
     }
 
+    @Override
     public int getInt(String question) {
         showMessage(question);
         Scanner userInput = new Scanner(System.in);
@@ -44,13 +49,14 @@ public class GameClientTUI {
         return 0;
     }
 
+    @Override
     public boolean getBoolean(String question) {
         Scanner userInput = new Scanner(System.in);
         String input = userInput.nextLine();
         showMessage(question);
-        if (input.contentEquals("yes")) {
+        if (input.contentEquals("y")) {
             return true;
-        } else if (input.contentEquals("no")) {
+        } else if (input.contentEquals("n")) {
             return false;
         } else {
             userInput.close();
@@ -59,16 +65,4 @@ public class GameClientTUI {
 
         return false;
     }
-
-    public void printHelpMenu() {
-
-        System.out.println("Welcome to Abalone");
-        System.out.println("Commands:");
-        System.out.println("h;name;playerAmount ............... connect with server");
-        System.out.println("m;direction,marbles ............ move marbles");
-        System.out.println("g;name;playerAmount ............... start new game");
-        System.out.println("d ....... disconnect from server");
-
-    }
-
 }

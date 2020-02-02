@@ -22,7 +22,6 @@ public class ProtocolMessages {
     public static final char JOIN = 'j';
     public static final char INVALID = 'e';
     public static final String IV_MOVE = "iv";
-    public static final String IV_COM = "im";
     public static final char START = 's';
     public static final char MOVE = 'm';
     public static final char BOARD = 'b';

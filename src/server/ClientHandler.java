@@ -85,6 +85,12 @@ public class ClientHandler extends Thread {
 
                     server.doGameRequest(new GameRequest(this.id, Integer.parseInt(parts[2])));
                     break;
+                case "d":
+                    this.id = parts[1];
+                    System.out.println(String.format("[%s] GAME_REQUEST %s", this.id, parts[2]));
+
+                    server.doGameRequest(new GameRequest(this.id, Integer.parseInt(parts[2])));
+                    break;
                 default:
                     System.err.println("Invalid command \"" + message + "\"");
                     break;
@@ -106,9 +112,11 @@ public class ClientHandler extends Thread {
         try {
             this.in.close();
             this.out.close();
+
         } catch (IOException e) {
             e.printStackTrace();
         }
+        server.removeClient(this);
     }
 
 }

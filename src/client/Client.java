@@ -31,6 +31,15 @@ public class Client implements Runnable, ClientProtocol {
     private BufferedReader in;
     private PrintWriter out;
 
+    /**
+     * initialises the view of the client
+     */
+    public Client() {
+        tui = new GameClientTUI();
+    }
+/**
+ * starts a new client.
+ */
     // Server info
     private InetAddress ip;
     private int port = -1;

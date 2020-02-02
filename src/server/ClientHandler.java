@@ -19,7 +19,11 @@ public class ClientHandler extends Thread {
 
     private BufferedReader in;
     private PrintWriter out;
-
+/**
+* creates a new clienthandler
+ * @param socket the socket of the client
+ * @param server the server to which the client is connected
+ */
     public ClientHandler(Socket socket, Server server) {
         this.server = server;
 
@@ -122,14 +126,25 @@ public class ClientHandler extends Thread {
         close();
     }
 
+    /**
+     * sends a message to the server
+     * @param message message to be sent
+     */
     public void sendMessage(String message) {
         out.println(message);
     }
 
+    /**
+     *
+     * @return id index or id of the ClientHandler.
+     */
     public String getHandlerId() {
         return id;
     }
 
+    /**
+     * closes the connection between client and server.
+     */
     private void close() {
         try {
             this.in.close();

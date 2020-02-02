@@ -19,11 +19,18 @@ public class Move {
         this.team = team;
     }
 
+    /**
+     *
+     * @return direction the direction in which to move
+     */
     public Direction getDirection() {
         return direction;
     }
 
-
+    /**
+     *
+     * @return group the group of marbles to be moved
+     */
     public Group getGroup() {
         return group;
     }

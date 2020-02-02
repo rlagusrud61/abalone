@@ -12,14 +12,9 @@ public class ClientTUI implements ClientView {
     }
 
     @Override
-    public InetAddress getIp() {
+    public InetAddress getIp() throws UnknownHostException {
         String input = getString("Put a valid IP");
-        try {
-            return InetAddress.getByName(input);
-        } catch (UnknownHostException e) {
-            e.printStackTrace();
-        }
-        return null;
+        return InetAddress.getByName(input);
     }
 
     @Override

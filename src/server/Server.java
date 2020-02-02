@@ -36,23 +36,35 @@ public class Server {
 
     public synchronized static void main(String[] args) {
         Server server = new Server();
-        try {
-            server.start();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        server.start();
     }
 
 
-    public void start() throws IOException {
+    public void start() {
         running = true;
-        port = view.getInt("Put a valid port number.");
 
-        System.out.println(String.format("Starting server on port %s", port));
-        ServerSocket socket = new ServerSocket(port);
+        ServerSocket socket = null;
+
+        while (socket == null) {
+            port = view.getInt("Put a valid port number.");
+            System.out.println(String.format("Starting server on port %s", port));
+
+            try {
+                socket = new ServerSocket(port);
+            } catch (IOException e) {
+                System.err.println(String.format("Could not bind to port %s", port));
+            } catch (IllegalArgumentException e) {
+                System.err.println(String.format("Invalid port %s", port));
+            }
+        }
 
         while (running) {
-            Socket client = socket.accept();
+            Socket client = null;
+            try {
+                client = socket.accept();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
 
             System.out.println("A new client connected!");
             ClientHandler handler = new ClientHandler(client, this);
@@ -62,7 +74,11 @@ public class Server {
 
         System.out.println("Shutting down...");
         // TODO: stop threads?
-        socket.close();
+        try {
+            socket.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     public synchronized void sendGameMessage(Game game, String message) {
@@ -79,14 +95,14 @@ public class Server {
         sendGameMessage(game, NEXT + DELIMITER + id);
     }
 
-    public Game getGame(String id) {
+    public synchronized Game getGame(String id) {
         Optional<Game> game = games.stream().filter(g ->
                 Arrays.stream(g.players).map(Player::getName).anyMatch(n -> n.equals(id))
         ).findFirst();
         return game.get();
     }
 
-    public Player getPlayer(String id) {
+    public synchronized Player getPlayer(String id) {
         Game game = getGame(id);
         return Arrays.stream(game.players).filter(p -> p.getName().equals(id)).findFirst().get();
     }

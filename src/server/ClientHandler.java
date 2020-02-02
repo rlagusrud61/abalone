@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static protocol.ProtocolMessages.DELIMITER;
+import static protocol.ProtocolMessages.EXIT;
 
 public class ClientHandler extends Thread {
 
@@ -74,9 +75,23 @@ public class ClientHandler extends Thread {
                         server.sendGameMessage(game, message);
                     }
 
-                    // Give new turn
-                    String nextPlayer = game.players[game.current].getName();
-                    server.sendGameNext(game, nextPlayer);
+                    if (!game.board.gameOver()) {
+                        // Give new turn
+                        String nextPlayer = game.players[game.current].getName();
+                        server.sendGameNext(game, nextPlayer);
+                    } else {
+                        List<String> winners = new ArrayList<>();
+                        for (Player player : game.players) {
+                            if (game.board.isWinner(player.getMarble())) {
+                                winners.add(player.getName());
+                            }
+                        }
+
+                        server.sendGameMessage(game, EXIT + DELIMITER + String.format("[%s]",
+                                String.join(",", winners)));
+
+                        running = false;
+                    }
 
                     break;
                 case "h":
@@ -86,10 +101,7 @@ public class ClientHandler extends Thread {
                     server.doGameRequest(new GameRequest(this.id, Integer.parseInt(parts[2])));
                     break;
                 case "d":
-                    this.id = parts[1];
-                    System.out.println(String.format("[%s] GAME_REQUEST %s", this.id, parts[2]));
 
-                    server.doGameRequest(new GameRequest(this.id, Integer.parseInt(parts[2])));
                     break;
                 default:
                     System.err.println("Invalid command \"" + message + "\"");

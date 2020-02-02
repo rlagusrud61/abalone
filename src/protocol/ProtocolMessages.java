@@ -28,9 +28,6 @@ public class ProtocolMessages {
     public static final char BOARD = 'b';
     public static final char NEXT = 'n';
     public static final char EXIT = 'x';
-    public static final char YES = 'y';
-    public static final char NO = 'n';
-    public static final char REMATCH = 'r';
     public static final char NEW_GAME = 'g';
     public static final char DISCONNECT = 'd';
 

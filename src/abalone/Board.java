@@ -288,7 +288,7 @@ public class Board {
                         Marble color = getField(enemy);
                         if (enemy.step(move.getDirection()) == null) {
                             move.getTeam().addPoint();
-                            System.out.println(getField(move.getGroup().getMarble1()) + " PUSHED TO THE VOID!");
+                            System.out.println(getField(move.getGroup().getMarble1()) + " PUSHED A MARBLE TO THE VOID!");
                         } else {
                             setField(enemy.step(move.getDirection()), getField(enemy));
 

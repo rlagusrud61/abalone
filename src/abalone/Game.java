@@ -217,6 +217,25 @@ public class Game {
 
     }
 
+    public boolean doMove(Move choice) {
+        boolean isValidColor = false;
+        if (players[current].getMarble().equals(board.getField(choice.getGroup().getMarble1()))
+                && (choice.getGroup().getMarble2() == null || players[current].getMarble()
+                .equals(board.getField(choice.getGroup().getMarble2())))
+                && (choice.getGroup().getMarble3() == null || players[current]
+                .getMarble().equals(board.getField(choice.getGroup().getMarble3())))) {
+            isValidColor = true;
+        }
+
+        if (isValidColor && board.isValidSelection(choice.getGroup())
+                && board.makeMove(choice)) {
+            current++;
+            return true;
+        } else {
+            return false;
+        }
+    }
+
 
     /**
      * Prints the game situation.

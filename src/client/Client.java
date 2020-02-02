@@ -24,10 +24,15 @@ public class Client implements Runnable {
     private BufferedReader in;
     private PrintWriter out;
 
+    /**
+     * initialises the view of the client
+     */
     public Client() {
         tui = new GameClientTUI();
     }
-
+/**
+ * starts a new client.
+ */
     public static void main(String[] args) {
         Client client = new Client();
         client.start();
